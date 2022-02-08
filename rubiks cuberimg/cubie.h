@@ -27,7 +27,7 @@ public:
 		std::cout << "\n\nThe edge positions are: \n";
 		for (short i = 0; i != No_edge; i++) {
 			std::string pos = edge_pos[i];
-			std::cout << "Pos: " << pos << "\tCubie: " << edge_perm[i];
+			std::cout << "Pos: " << pos << "\t\tCubie: " << edge_perm[i];
 			std::cout << "\tOrientation: " << edge_ori[i] << "\n";
 		}
 	}
@@ -54,7 +54,7 @@ public:
 	//are there or not
 	short get_ud_slice() {
 		short ud_slice = 0;
-		for (short i = )
+		//for (short i = )
 
 
 	}
