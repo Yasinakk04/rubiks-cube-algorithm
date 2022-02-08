@@ -54,7 +54,7 @@ public:
 	//are there or not
 	short get_ud_slice() {
 		short ud_slice = 0;
-		for (short i = )
+		//for (short i = )
 
 
 	}

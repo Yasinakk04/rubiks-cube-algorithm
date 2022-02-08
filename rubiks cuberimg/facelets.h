@@ -190,7 +190,7 @@ public:
 		short ori{};
 		bool corner_check;
 
-		for (short i = 0; i != corner; i++) {
+		for (short i = 0; i != No_corner; i++) {
 
 			std::array <short, 3> face = cornerFacelet[i];
 			corner_check = false;
@@ -214,7 +214,7 @@ public:
 
 			//The 2 adjacent facelets to the U or D face are defined above
 
-			for (short j = 0; j != corner; j++) {
+			for (short j = 0; j != No_corner; j++) {
 				if (colour1 == cornerColour[j][1] && colour2 == cornerColour[j][2]) {
 					cc.corn_perm[i] = j;
 					cc.corn_ori[i] = ori;
@@ -237,7 +237,7 @@ public:
 
 
 		//Calculating the edge cubie arrangement 
-		for (short k = 0; k < edge; k++) { //This first loop is to loop through each 
+		for (short k = 0; k < No_edge; k++) { //This first loop is to loop through each 
 											//cubie position
 
 
@@ -246,7 +246,7 @@ public:
 			//This variable is used to check if an edge is or isn't present
 
 
-			for (short l = 0; l < edge; l++) {  //The second loop is to loop through each
+			for (short l = 0; l < No_edge; l++) {  //The second loop is to loop through each
 													//possible edge colour combination
 													// or cubie
 
