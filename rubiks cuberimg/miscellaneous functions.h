@@ -11,7 +11,7 @@ short short_pow(short num, short exp) {
 }
 
 short b_coefficient(short n, short k) {
-	if (n - k > k) { k = n-k;}
+	if (n - k > k) { k = n - k;}
 
 	//I was going to use the
 	//std::max function however it requires 

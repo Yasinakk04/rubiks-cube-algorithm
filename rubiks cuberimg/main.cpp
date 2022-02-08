@@ -20,5 +20,5 @@ int main() {
 
 	//std::cout << cube.get_flip();
 
-	std::cout << b_coefficient(5, 2);
+	std::cout << b_coefficient(5, 0);
 }
