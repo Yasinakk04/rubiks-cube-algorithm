@@ -16,20 +16,38 @@ public:
 	std::array <short, 8> corn_ori;
 	std::array <short, 12> edge_ori;
 
-	void output_cubie() {
+	void output_cubie_corners() {
 		std::cout << "The corner positions are: \n";
 		for (short i = 0; i != No_corner; i++) {
 			std::string pos = corn_pos[i];
-			std::cout << "Pos: " << pos << "\tCubie: " << corn_perm[i];
-			std::cout << "\tOrientation: " << corn_ori[i] << "\n";
+			if (corn_pos[i] == "-1") {
+				std::cout << "Pos: " << pos << "\tCubie: " << corn_perm[i];
+			}
+			else {
+				std::cout << "Pos: " << pos << "\tCubie: " << corn_pos[corn_perm[i]];
+			}
+			std::cout << "\tOrientation: " << corn_pos[corn_ori[i]] << "\n";
 		}
+	}
 
+
+	void output_cubie_edges(){
 		std::cout << "\n\nThe edge positions are: \n";
 		for (short i = 0; i != No_edge; i++) {
 			std::string pos = edge_pos[i];
-			std::cout << "Pos: " << pos << "\t\tCubie: " << edge_perm[i];
+			if (edge_pos[i] == "-1") {
+				std::cout << "Pos: " << pos << "\tCubie: " << edge_perm[i];
+			}
+			else {
+				std::cout << "Pos: " << pos << "\tCubie: " << edge_pos[edge_perm[i]];
+			}
 			std::cout << "\tOrientation: " << edge_ori[i] << "\n";
 		}
+	}
+
+	void output_cubie() {
+		output_cubie_corners();
+		output_cubie_edges();
 	}
 
 	short get_twist() {
