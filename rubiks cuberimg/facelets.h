@@ -214,6 +214,12 @@ public:
 			//The 2 adjacent facelets to the U or D face are defined above
 
 			for (short j = 0; j != No_corner; j++) {
+
+
+>>>>>>>>> Temporary merge branch 2
+
+
+>>>>>>>>> Temporary merge branch 2
 				if (colour1 == cornerColour[j][1] && colour2 == cornerColour[j][2]) {
 					cc.corn_perm[i] = j;
 					cc.corn_ori[i] = ori;
