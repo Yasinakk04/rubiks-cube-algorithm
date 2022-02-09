@@ -29,6 +29,13 @@ short b_coefficient(short n, short k) {
 		final_value /= j;
 		j++;
 	}
+	short final_value = n;
+	short j = 1;
+	for (short i = k + 1; i < n; i++) {
+		final_value *= i;
+		final_value /= j;
+		j++;
+	}
 
 	final_value /= j;
 	return final_value;

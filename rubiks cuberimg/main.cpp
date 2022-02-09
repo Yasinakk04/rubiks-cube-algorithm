@@ -14,7 +14,7 @@ const std::string edge_pos[12] = { "UR", "UF", "UL", "UB", "DR", "DF", "DL", "DB
 int main() {
 	facelet a("URBLUDRRURRLLRBUBFDBFUFFBBLLLFFDDRFLBDFDLLDUDUURUBFDRB");
 
-	cubie cube = a.to_cubie();
+	//cubie cube = a.to_cubie();
 
 	cube.output_cubie();
 
