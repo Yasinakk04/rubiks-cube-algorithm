@@ -211,7 +211,6 @@ public:
 
 			short colour1 = facelet_rep[face[(ori + 1) % 3]];
 			short colour2 = facelet_rep[face[(ori + 2) % 3]];
-
 			//The 2 adjacent facelets to the U or D face are defined above
 
 			for (short j = 0; j != No_corner; j++) {
@@ -224,7 +223,7 @@ public:
 			}
 
 			if (corner_check == false) {
-				std::cout << "corner at position " << i << " is invalid";
+				std::cout << "corner at position " << i << " is invalid\n";
 				return cc;
 			}
 
@@ -237,7 +236,7 @@ public:
 
 
 		//Calculating the edge cubie arrangement 
-		for (short k = 0; k < No_edge; k++) { //This first loop is to loop through each 
+		for (short k = 0; k != No_edge; k++) { //This first loop is to loop through each 
 											//cubie position
 
 
@@ -246,11 +245,10 @@ public:
 			//This variable is used to check if an edge is or isn't present
 
 
-			for (short l = 0; l < No_edge; l++) {  //The second loop is to loop through each
+			for (short l = 0; l != No_edge; l++) {  //The second loop is to loop through each
 													//possible edge colour combination
 													// or cubie
-
-				if (facelet_rep[(edgeFacelet[k][0])] == edgeColour[l][0] && \
+				if (facelet_rep[(edgeFacelet[k][0])] == edgeColour[l][0] && 
 					facelet_rep[(edgeFacelet[k][1])] == edgeColour[l][1]) {
 
 					cc.edge_perm[k] = l;
@@ -260,8 +258,8 @@ public:
 					break;
 				}
 
-				else if (facelet_rep[(edgeFacelet[k][1])] == edgeColour[l][1] && \
-					facelet_rep[(edgeFacelet[k][0])] == edgeColour[l][0]) {
+				else if (facelet_rep[(edgeFacelet[k][1])] == edgeColour[l][0] && 
+					facelet_rep[(edgeFacelet[k][0])] == edgeColour[l][1]) {
 
 					cc.edge_perm[k] = l;
 					cc.edge_ori[k] = 1;
@@ -278,7 +276,7 @@ public:
 			}
 
 			if (edge_check == false) {
-				std::cout << "Edge" << k << "has not been defined \n\n";
+				std::cout << "Edge " << k << " has not been defined \n\n";
 				return cc;
 			}
 		}
