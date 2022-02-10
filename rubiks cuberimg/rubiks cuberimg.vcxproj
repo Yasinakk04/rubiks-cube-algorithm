@@ -144,6 +144,7 @@
     <ClInclude Include="facelets.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="miscellaneous functions.h" />
+    <ClInclude Include="turns.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

@@ -12,7 +12,7 @@ const std::string corn_pos[8] = { "URF", "UFL", "ULB", "UBR", "DFR", "DLF", "DBL
 const std::string edge_pos[12] = { "UR", "UF", "UL", "UB", "DR", "DF", "DL", "DB", "FR", "FL", "BL", "BR" };
 
 int main() {
-	facelet a("LRDDURRFLUBFLRLBRRDUFBFUUDDBFLFDURFUBLFULDDRRBLFBBBUDL");
+	facelet a("RRRUUUUUURRDRRDRRDFFFFFFFFFDDDDDDLLLULLULLULLBBBBBBBBB");
 
 	cubie cube = a.to_cubie();
 	cube.output_cubie();

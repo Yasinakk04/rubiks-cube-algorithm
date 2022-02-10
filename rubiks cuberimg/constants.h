@@ -5,6 +5,9 @@
 #include <array>
 
 
+const short No_corner = 8;
+const short No_edge = 12;
+
 extern const std::string corn_pos[8];
 extern const std::string edge_pos[12];
 

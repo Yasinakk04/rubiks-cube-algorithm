@@ -98,6 +98,3 @@ enum move : short {
 //std::array <std::array <int, 3>, 12>  edgeFacelet =
 
 
-
-const short No_corner = 8;
-const short No_edge = 12;

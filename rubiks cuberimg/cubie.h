@@ -10,11 +10,11 @@
 
 class cubie {
 public:
-	std::array <short, 8> corn_perm; //There are 8 corners and 12 edge pieces
-	std::array <short, 12> edge_perm;
+	std::array <short, No_corner> corn_perm; //There are 8 corners and 12 edge pieces
+	std::array <short, No_edge> edge_perm;
 
-	std::array <short, 8> corn_ori;
-	std::array <short, 12> edge_ori;
+	std::array <short, No_corner> corn_ori;
+	std::array <short, No_edge> edge_ori;
 
 	void output_cubie_corners() {
 		std::cout << "The corner positions are: \n";
@@ -26,7 +26,7 @@ public:
 			else {
 				std::cout << "Pos: " << pos << "\tCubie: " << corn_pos[corn_perm[i]];
 			}
-			std::cout << "\tOrientation: " << corn_pos[corn_ori[i]] << "\n";
+			std::cout << "\tOrientation: " << corn_ori[i] << "\n";
 		}
 	}
 
@@ -115,13 +115,69 @@ public:
 
 	}
 
-	void multiply() {
+	void corner_multiply(cubie B) {
+		short c_perm;
+		short c_ori;
 
+		for (short i = 0; i != No_corner; i++) {
+			c_perm = corn_perm[B.corn_perm[i]];
 
+			short oriA = corn_ori[B.corn_perm[i]];
+			short oriB = B.corn_ori[i];
 
+			if (oriA < 3 && oriB < 3) {
+				//In this scenario neither
+				//cube is a symmetry cube
+				c_ori = oriA + oriB;
+				if (c_ori >= 3) {
+					//Non symmetry cubes can 
+					//only multiply to produce other
+					//non symmetry cubes
+					//so the final orientation should be
+					//between 0 and 2
+					c_ori -= 3;
+				}
+			}
+
+			else if (oriA < 3 && oriB >= 3) {
+				//This is the scenario where A is a normal cube
+				//and B is a symmetry cube
+				c_ori = oriA + oriB;
+				if (c_ori >= 6) {
+					c_ori -= 3;
+					//Products of symmetry cubes cannot take
+					//values greater than 5
+				}
+			}
+
+			else if (oriA >= 3 && oriB < 3) {
+				//This is the scenario where A is a symmetry cube and
+				//B is not
+				c_ori = oriA - oriB;
+				if (c_ori < 3) {
+					c_ori += 3;
+					//If the orientation were less than 3 
+					//It would stop being a symmetry cube
+					//which cannot be
+				}
+			}
+
+			else if (oriA >= 3 && oriB > 3) {
+				c_ori = oriA - oriB;
+				if (c_ori < 0) {
+					c_ori += 3;
+					//The product of 2 symmetry cubes must be 1 
+					//normal cube
+					//so its orientation will be between 0 and 2
+				}
+			}
+
+			corn_ori[i] = c_ori;
+		}
 	}
 };
 
-
+cubie U;
+U.corn_perm = { 0,0,0,0,0,0,0,0 };
 
 #endif
