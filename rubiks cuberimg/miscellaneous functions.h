@@ -18,6 +18,17 @@ short b_coefficient(short n, short k) {
 	//that you pass in ints
 	//which are 2 bytes as oppose to 1
 
+	if (k >= n) {
+		return 1;
+	}
+
+	short final_value = n;
+	short j = 1;
+	for (short i = k + 1; i < n; i++) {
+		final_value *= i;
+		final_value /= j;
+		j++;
+	}
 	short final_value = n;
 	short j = 1;
 	for (short i = k + 1; i < n; i++) {
