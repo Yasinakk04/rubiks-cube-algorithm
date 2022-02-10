@@ -16,4 +16,12 @@ int main() {
 
 	cubie cube = a.to_cubie();
 	cube.output_cubie();
+	//std::cout << cube.get_flip();
+
+	std::cout << b_coefficient(5, 0);
+>>>>>>>>> Temporary merge branch 2
+	//std::cout << cube.get_flip();
+
+	std::cout << b_coefficient(5, 0);
+>>>>>>>>> Temporary merge branch 2
 }
