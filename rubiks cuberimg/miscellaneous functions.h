@@ -1,16 +1,21 @@
 #pragma once
-#include <algorithm>
+#include <array>
 
-
-short short_pow(short num, short exp) {
+inline short short_pow(short num, short exp) {
 	short sum = 1;
+	if (exp == 0) { return 1; }
+
 	for (short i = 0; i != exp; i++) {
 		sum *= num;
 	}
 	return sum;
 }
 
-short b_coefficient(short n, short k) {
+inline short b_coefficient(short n, short k) {
+	if (k < 0) { return 0; }
+
+	else if (k == 0) { return 1; }
+
 	if (n - k > k) { k = n - k;}
 
 	//I was going to use the
@@ -31,4 +36,24 @@ short b_coefficient(short n, short k) {
 	}
 	final_value /= j;
 	return final_value;
+}
+
+inline std::array <short, 4> rotate_left_4(std::array <short, 4> some_array) {
+	short temp = some_array[0];
+	for (short i = 0; i != 4; i++) {
+		some_array[i] = some_array[i + 1];
+	}
+	some_array[3] = temp;
+	
+	return some_array;
+}
+
+inline std::array <short, 4> rotate_right_4(std::array <short, 4> some_array) {
+	short temp = some_array[3];
+	for (short i = 4; i != 0; i--) {
+		some_array[i] = some_array[i - 1];
+	}
+	some_array[0] = temp;
+
+	return some_array;
 }

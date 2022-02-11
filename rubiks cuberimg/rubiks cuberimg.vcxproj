@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="coord.h" />
     <ClInclude Include="cubie.h" />
     <ClInclude Include="enums.h" />
     <ClInclude Include="facelets.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="turns.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="moves.h" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -110,9 +110,8 @@ public:
 					std::cout << "more or less than 9 of some colour\n\n";
 					return error;
 				}
-				return facelet_rep;
 			}
-			return error;
+			return facelet_rep;
 		}
 	}
 
@@ -280,9 +279,6 @@ public:
 				return cc;
 			}
 		}
-
 		return cc;
-
-
 	}
 };

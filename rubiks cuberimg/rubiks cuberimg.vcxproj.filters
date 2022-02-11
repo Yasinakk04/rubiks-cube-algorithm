@@ -33,10 +33,16 @@
     <ClInclude Include="turns.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="coord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="moves.h">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
