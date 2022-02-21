@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <vector>
 
 inline short short_pow(short num, short exp) {
 	short sum = 1;
@@ -37,6 +38,45 @@ inline short b_coefficient(short n, short k) {
 	final_value /= j;
 	return final_value;
 }
+
+
+inline std::vector <short> rotate_right(std::vector <short> some_vector, short start, short end) {
+	short temp = some_vector[end];
+	for (short i = end - 1; i != start - 1; i--) {
+		some_vector[i + 1] = some_vector[i];
+	}
+	some_vector[start] = temp;
+	return some_vector;
+}
+
+inline std::vector <short> rotate_right(std::vector <short> some_vector) {
+	some_vector.insert(some_vector.begin(), some_vector.back());
+	some_vector.pop_back();
+
+	return some_vector;
+}
+
+inline std::vector <short> rotate_left(std::vector <short> some_vector, short start, short end) {
+	short temp = some_vector[start];
+	for (short i = start; i != end; i++) {
+		some_vector[i] = some_vector[i + 1];
+	}
+	some_vector[end] = temp;
+	return some_vector;
+}
+
+inline std::vector <short> rotate_left(std::vector <short> some_vector) {
+	short temp = some_vector[0];	
+	for (short i = 0; i != some_vector.size() - 1; i++) {
+		some_vector[i] = some_vector[i + 1];
+	}
+	some_vector.back() = temp;
+	return some_vector;
+}
+
+
+
+
 
 inline std::array <short, 4> rotate_left_4(std::array <short, 4> some_array) {
 	short temp = some_array[0];

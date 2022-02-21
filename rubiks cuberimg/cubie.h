@@ -4,27 +4,52 @@
 #define CUBE_H
 #include <iostream>
 #include <array>
+#include <vector>
+
 #include "miscellaneous functions.h"
 #include "enums.h"
 #include "constants.h"
+
+
 //#include "facelets.h"
 
 
 class cubie {
 public:
+
 	std::array <short, No_corner> corn_perm; //There are 8 corners and 12 edge pieces
 	std::array <short, No_edge> edge_perm;
 
 	std::array <short, No_corner> corn_ori;
 	std::array <short, No_edge> edge_ori;
-
+public:
 	cubie() {
-		corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
-		corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		//corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
+		//corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-		edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		//edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		//edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	}
+
+	
+	// ------------------------------------------------
+	//set cube attributes 
+	void set_corn_perm(std::array <short, No_corner> cp) {
+		corn_perm = cp;
+	}
+
+	void set_edge_perm(std::array <short, No_edge> ep) {
+		edge_perm = ep;
+	}
+
+	void set_corn_ori(std::array <short, No_corner> co) {
+		corn_ori = co;
+	}
+
+	void set_edge_ori(std::array <short, No_edge> eo) {
+		edge_ori = eo;
+	}
+	// ------------------------------------------------
 
 	void output_cubie_corners() {
 		std::cout << "The corner positions are: \n";
@@ -60,6 +85,8 @@ public:
 		output_cubie_edges();
 	}
 
+	// ------------------------------------------------
+
 	short get_twist() {
 		short twist = 0;
 		for (short i = 0; i != 7; i++) {
@@ -90,6 +117,8 @@ public:
 		corn_ori[7] = 3 - (ori_sum % 3);
 	}
 
+
+	// ------------------------------------------------
 	short get_flip() {
 		short flip = 0;
 		for (short i = 0; i != 11; i++) {
@@ -115,6 +144,8 @@ public:
 		edge_ori[11] = flip_sum % 2;
 	}
 
+	// ------------------------------------------------
+
 
 
 	//The purpose of this function is only to determine 
@@ -127,9 +158,11 @@ public:
 
 	}
 
+
+	// ------------------------------------------------
 	short get_corners() {
-		short corners_val = 0;
-		short count = 0;
+		int corners_val = 0;
+		short count;
 		for (short i = 7; i != 0; i--) {
 			//You ignore the corner in position 0
 			//as there's nothing left of it
@@ -141,6 +174,8 @@ public:
 				}
 			}
 			corners_val = i * (count + corners_val);
+
+			std::cout << "Ok\n\n\n";
 		}
 
 		//Kociemba defines the natural corner order as
@@ -157,10 +192,38 @@ public:
 		return corners_val;
 	}
 
-	void set_corners(short                                                                                                                                                                             corners_val) {
+	short get_corners_with_rotation() {
+		int corners_val = 0;
+		short rotations;
+		std::vector <short> cp;
+
+		std::cout << "hello";
+
+		for (short i = 0; i != No_corner; i++) { cp.push_back(corn_perm[i]); }
+
+		for (short i = 7; i != 0; i--) {
+			rotations = 0;
+			while (cp[i] != i) {
+				rotate_left(cp, 0, i);
+				rotations++;
+			}
+
+			corners_val = i * (rotations + corners_val);
+		}
+		std::cout << "Ok\n\n\n";
+		return corners_val;
+
 
 	}
 
+	void set_corners(short                                                                                                                                                                             corners_val) {
+
+		//for
+
+
+	}
+
+	// ------------------------------------------------
 
 	//The below function outputs just the locations
 	//of the middle slice edges as a number

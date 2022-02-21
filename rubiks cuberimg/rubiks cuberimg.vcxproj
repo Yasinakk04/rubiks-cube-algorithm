@@ -148,7 +148,7 @@
     <ClInclude Include="turns.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="moves.h" />
+    <ClCompile Include="moves.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

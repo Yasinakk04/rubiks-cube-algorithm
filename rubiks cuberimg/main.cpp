@@ -1,19 +1,47 @@
 #include <iostream>
 #include <string>
 #include <array>
+#include <vector>
 
 #include "enums.h"
 #include "cubie.h"
-#include "moves.h"
 #include "facelets.h"
 #include "constants.h"
 #include "miscellaneous functions.h"
 #include "coord.h"
 
+#include "moves.cpp"
+
+
 const std::string corn_pos[8] = { "URF", "UFL", "ULB", "UBR", "DFR", "DLF", "DBL", "DRB" };
 const std::string edge_pos[12] = { "UR", "UF", "UL", "UB", "DR", "DF", "DL", "DB", "FR", "FL", "BL", "BR" };
 
+cubie cube = cubie();
+
 int main() {
+
+
+	cubie a;
+	a.corn_perm = { UFL, DFR, ULB, DLF, DBL, UBR, DRB, URF };
+
+	std::cout << a.get_corners() << std::endl;
+	std::cout << "okfihadfih\n";
+	std::cout << a.get_corners_with_rotation() << std::endl;
+
+
+
+
+
+	//std::vector <short> something = { 1, 2, 3, 4, 5, 6, 7 };
+
+	//something = rotate_right(something);
+
+	//for (short i = 0; i != something.size(); i++) {
+	//	std::cout << something[i];
+	//}
+
+
+	//cube.set_corn_perm({});
 	//facelet a("X");
 
 	//facelet cube1("URBLUDRRURRLLRBUBFDBFUFFBBLLLFFDDRFLBDFDLLDUDBRDFDURUU");
