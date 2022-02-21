@@ -41,7 +41,7 @@ public:
 	}
 
 
-	void output_cubie_edges(){
+	void output_cubie_edges() {
 		std::cout << "\n\nThe edge positions are: \n";
 		for (short i = 0; i != No_edge; i++) {
 			std::string pos = edge_pos[i];
@@ -73,6 +73,23 @@ public:
 		return twist;
 	}
 
+	void set_twist(short twist_val) {
+		short ori_sum = 0;
+		short ori;
+		for (short i = 6; i != -1; i--) {
+			//if you think about the twist value
+			//as a ternary number
+			//doing mod 3 gives us the last digit
+			ori = twist_val % 3;
+			corn_ori[i] = ori;
+			ori_sum += ori;
+			twist_val /= 3;
+			//
+		}
+
+		corn_ori[7] = 3 - (ori_sum % 3);
+	}
+
 	short get_flip() {
 		short flip = 0;
 		for (short i = 0; i != 11; i++) {
@@ -84,6 +101,20 @@ public:
 
 		return flip;
 	}
+
+	void set_flip(short flip_val) {
+		short flip_sum = 0;
+		short flip;
+		for (short i = 10; i != 0; i--) {
+			flip = flip_sum % 2;
+			edge_ori[i] = flip;
+			flip_sum += flip;
+			flip_val /= 2;
+		}
+
+		edge_ori[11] = flip_sum % 2;
+	}
+
 
 
 	//The purpose of this function is only to determine 
@@ -124,6 +155,10 @@ public:
 		//factorial for that corner
 
 		return corners_val;
+	}
+
+	void set_corners(short                                                                                                                                                                             corners_val) {
+
 	}
 
 
@@ -189,23 +224,15 @@ public:
 
 	}
 
-	//SSSSSSSSSEEEEEEETTTTTTTTTTTTEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRSSSSSSSSSSSSSSSS
+	//////////////////////////////////////////////////////////////////////////
 
-	void set_twist() {
-
-	}
-
-	void set_flip() {
-
-	}
+	
 
 	void set_ud_slice() {
 
 	}
 
-	void set_corners() {
-
-	}
+	
 
 	void set_ud_slice_sorted() {
 

@@ -24,11 +24,6 @@ int main() {
 	cube.edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 	std::cout << cube.get_ud_slice_phase_2();*/
 
-	std::cout << b_coefficient(3, 2) << "\n";
-	std::cout << b_coefficient(3, 1) << "\n";
-	std::cout << b_coefficient(5, 2) << "\n";
-	std::cout << b_coefficient(5, 3) << "\n";
-
 	//cube.edge_multiply(F_turn);
 
 	//cube.multiply(U_turn);
