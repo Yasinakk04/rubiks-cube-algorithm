@@ -22,10 +22,10 @@ int main() {
 
 
 	cubie a;
-	a.corn_perm = { UFL, DFR, ULB, DLF, DBL, UBR, DRB, URF };
+	a.corn_perm = { URF, ULB, DBL, UBR, DFR, UFL, DLF, DRB };
+	//rotate_left(a.corn_perm);
 
 	std::cout << a.get_corners() << std::endl;
-	std::cout << "okfihadfih\n";
 	std::cout << a.get_corners_with_rotation() << std::endl;
 
 

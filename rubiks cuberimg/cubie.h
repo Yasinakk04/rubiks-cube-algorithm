@@ -24,11 +24,11 @@ public:
 	std::array <short, No_edge> edge_ori;
 public:
 	cubie() {
-		//corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
-		//corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
+		corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-		//edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		//edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	}
 
 	
@@ -174,8 +174,6 @@ public:
 				}
 			}
 			corners_val = i * (count + corners_val);
-
-			std::cout << "Ok\n\n\n";
 		}
 
 		//Kociemba defines the natural corner order as
@@ -197,15 +195,21 @@ public:
 		short rotations;
 		std::vector <short> cp;
 
-		std::cout << "hello";
-
 		for (short i = 0; i != No_corner; i++) { cp.push_back(corn_perm[i]); }
 
-		for (short i = 7; i != 0; i--) {
+		rotate_left(cp, 0, 6);
+		
+		for (short i = 0; i != cp.size(); i++) {
+			std::cout << cp[i];
+			}
+
+
+		for (short i = DRB; i != URF; i--) {
 			rotations = 0;
 			while (cp[i] != i) {
 				rotate_left(cp, 0, i);
 				rotations++;
+			//	std::cout << i;
 			}
 
 			corners_val = i * (rotations + corners_val);
@@ -271,7 +275,7 @@ public:
 		for (short i = 0; i != 4; i++) {
 			rotations = 0;
 			while (ud_edge[i] != i + 8) {
-				rotate_left_4(ud_edge);
+//				rotate_left_4(ud_edge);
 				rotations++;
 			}
 			ud_slice_phase_2 = (i + 1) * ud_slice_phase_2 + rotations;

@@ -78,22 +78,22 @@ inline std::vector <short> rotate_left(std::vector <short> some_vector) {
 
 
 
-inline std::array <short, 4> rotate_left_4(std::array <short, 4> some_array) {
-	short temp = some_array[0];
-	for (short i = 0; i != 4; i++) {
-		some_array[i] = some_array[i + 1];
-	}
-	some_array[3] = temp;
-	
-	return some_array;
-}
-
-inline std::array <short, 4> rotate_right_4(std::array <short, 4> some_array) {
-	short temp = some_array[3];
-	for (short i = 4; i != 0; i--) {
-		some_array[i] = some_array[i - 1];
-	}
-	some_array[0] = temp;
-
-	return some_array;
-}
+//inline std::array <short, 4> rotate_left_4(std::array <short, 4> some_array) {
+//	short temp = some_array[0];
+//	for (short i = 0; i != 4; i++) {
+//		some_array[i] = some_array[i + 1];
+//	}
+//	some_array[3] = temp;
+//	
+//	return some_array;
+//}
+//
+//inline std::array <short, 4> rotate_right_4(std::array <short, 4> some_array) {
+//	short temp = some_array[3];
+//	for (short i = 4; i != 0; i--) {
+//		some_array[i] = some_array[i - 1];
+//	}
+//	some_array[0] = temp;
+//
+//	return some_array;
+//}
