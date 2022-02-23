@@ -22,22 +22,21 @@ int main() {
 
 
 	cubie a;
-	a.corn_perm = { UFL, DFR, ULB, DLF, DBL, UBR, DRB, URF };
+	a.corn_perm = { URF,DFR,UBR,ULB,UFL,DBL,DRB,DLF };
 
-	std::cout << a.get_corners() << std::endl;
-	std::cout << "okfihadfih\n";
-	std::cout << a.get_corners_with_rotation() << std::endl;
+	a.set_corners(35642);
+	//std::cout << a.get_corners_with_rotation() << std::endl;
 
-
-
+	a.output_cubie_corners();
 
 
-	//std::vector <short> something = { 1, 2, 3, 4, 5, 6, 7 };
 
-	//something = rotate_right(something);
+	//std::vector <short> something = { URF, ULB, DBL, UBR, DFR, UFL, DLF, DRB };
+
+	//something = rotate_left(something, 0, 6);
 
 	//for (short i = 0; i != something.size(); i++) {
-	//	std::cout << something[i];
+	//	std::cout << corn_pos[something[i]] << ", ";
 	//}
 
 

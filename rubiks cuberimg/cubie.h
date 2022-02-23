@@ -1,7 +1,5 @@
 #pragma once
 
-#ifndef CUBE_H
-#define CUBE_H
 #include <iostream>
 #include <array>
 #include <vector>
@@ -31,7 +29,7 @@ public:
 		//edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	}
 
-	
+
 	// ------------------------------------------------
 	//set cube attributes 
 	void set_corn_perm(std::array <short, No_corner> cp) {
@@ -160,10 +158,10 @@ public:
 
 
 	// ------------------------------------------------
-	short get_corners() {
-		int corners_val = 0;
+	unsigned int get_corners() {
+		unsigned int corners_val = 0;
 		short count;
-		for (short i = 7; i != 0; i--) {
+		for (short i = DRB; i != URF; i--) {
 			//You ignore the corner in position 0
 			//as there's nothing left of it
 
@@ -174,8 +172,6 @@ public:
 				}
 			}
 			corners_val = i * (count + corners_val);
-
-			std::cout << "Ok\n\n\n";
 		}
 
 		//Kociemba defines the natural corner order as
@@ -192,36 +188,67 @@ public:
 		return corners_val;
 	}
 
+	void set_corners(unsigned int corners_val){
+		std::array <short, 7> corn_coord_array;
+		corn_perm.fill(-1);
+		
+
+		for (short i = URF; i != DRB; i++) {
+			corn_coord_array[i] = corners_val % (i + 1);
+		}
+
+		short next_free = 0;
+		short last = 0;
+
+		short corn = 0;
+
+		while (next_free != 8) {
+			for (short i = 1; i != 8; i++) {
+				if (corn_coord_array[i - 1] == i) {
+					corn_perm[i] = corn;
+					last = i + 1;
+						while (last != 8) {
+							corn_coord_array[last]--;
+							last++;
+						}
+				}
+
+				else {
+
+					corn_perm[next_free] = corn;
+
+					while (corn_perm[next_free] != -1) {
+						next_free++;
+					}
+
+				}
+
+				corn++;
+			}
+		}
+	}
+
 	short get_corners_with_rotation() {
 		int corners_val = 0;
 		short rotations;
 		std::vector <short> cp;
 
-		std::cout << "hello";
-
 		for (short i = 0; i != No_corner; i++) { cp.push_back(corn_perm[i]); }
+
 
 		for (short i = 7; i != 0; i--) {
 			rotations = 0;
 			while (cp[i] != i) {
-				rotate_left(cp, 0, i);
+				cp = rotate_left(cp, 0, i);
 				rotations++;
 			}
 
 			corners_val = i * (rotations + corners_val);
 		}
-		std::cout << "Ok\n\n\n";
 		return corners_val;
-
-
 	}
 
-	void set_corners(short                                                                                                                                                                             corners_val) {
 
-		//for
-
-
-	}
 
 	// ------------------------------------------------
 
@@ -271,7 +298,7 @@ public:
 		for (short i = 0; i != 4; i++) {
 			rotations = 0;
 			while (ud_edge[i] != i + 8) {
-				rotate_left_4(ud_edge);
+				//rotate_left_4(ud_edge);
 				rotations++;
 			}
 			ud_slice_phase_2 = (i + 1) * ud_slice_phase_2 + rotations;
@@ -397,8 +424,3 @@ public:
 
 	}
 };
-
-
-
-
-#endif
