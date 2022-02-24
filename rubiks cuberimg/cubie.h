@@ -22,11 +22,11 @@ public:
 	std::array <short, No_edge> edge_ori;
 public:
 	cubie() {
-		//corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
-		//corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
+		corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-		//edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		//edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	}
 
 
@@ -241,6 +241,7 @@ public:
 			while (cp[i] != i) {
 				cp = rotate_left(cp, 0, i);
 				rotations++;
+			//	std::cout << i;
 			}
 
 			corners_val = i * (rotations + corners_val);
