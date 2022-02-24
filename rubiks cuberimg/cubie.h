@@ -22,11 +22,11 @@ public:
 	std::array <short, No_edge> edge_ori;
 public:
 	cubie() {
-		//corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
-		//corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
+		corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-		//edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		//edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	}
 
 
@@ -195,35 +195,35 @@ public:
 
 		for (short i = URF; i != DRB; i++) {
 			corn_coord_array[i] = corners_val % (i + 1);
+			std::cout << corn_coord_array[i] << "\n";
 		}
 
-		short next_free = 0;
-		short last = 0;
+		for (short i = 0; i != 7; i++) {
+		}
 
-		short corn = 0;
+		std::vector <short> values = { URF, UFL, ULB, UBR, DFR, DLF, DBL, DRB };
+		std::vector <short> values2 = { 7, 6, 5, 4, 3, 2, 1, 0 };
 
-		while (next_free != 8) {
-			for (short i = 1; i != 8; i++) {
-				if (corn_coord_array[i - 1] == i) {
-					corn_perm[i] = corn;
-					last = i + 1;
-						while (last != 8) {
-							corn_coord_array[last]--;
-							last++;
-						}
-				}
+		for (short i = DRB - 1; i != URF; i--) {
+			for (short j = 0; j != values.size(); j++) {
 
-				else {
+				if (corn_coord_array[i] = values2[j]) {
 
-					corn_perm[next_free] = corn;
+					corn_perm[i] = values[j];
+					values2[j] = -1;
 
-					while (corn_perm[next_free] != -1) {
-						next_free++;
+					for (short x = j - 1; x != -1; x--) {
+						values2[x]--;
 					}
-
+					break;
 				}
+			}
+		}
 
-				corn++;
+		for (short i = 0; i != 8; i++) {
+			if (values2[i] != -1) {
+				corn_perm[i] = values[i];
+				break;
 			}
 		}
 	}
@@ -241,6 +241,7 @@ public:
 			while (cp[i] != i) {
 				cp = rotate_left(cp, 0, i);
 				rotations++;
+			//	std::cout << i;
 			}
 
 			corners_val = i * (rotations + corners_val);

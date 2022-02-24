@@ -22,7 +22,7 @@ int main() {
 
 
 	cubie a;
-	a.corn_perm = { URF,DFR,UBR,ULB,UFL,DBL,DRB,DLF };
+	a.corn_perm = {URF,UFL,UBR,DRB,DLF,DFR,ULB,DBL};
 
 	a.set_corners(35642);
 	//std::cout << a.get_corners_with_rotation() << std::endl;
