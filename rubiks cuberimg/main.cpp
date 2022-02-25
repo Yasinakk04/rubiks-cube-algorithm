@@ -21,37 +21,18 @@ cubie cube = cubie();
 int main() {
 
 
-	cubie a;
-	a.corn_perm = {URF,UFL,UBR,DRB,DLF,DFR,ULB,DBL};
+	facelet a("UDDDUUUUUBBLLRRBLLRRRFFFRLLDUUUDDDDDFFFLLRBFFRRFBBBLBB");
+	cubie c = a.to_cubie();
+	std::cout << c.get_ud_edges();
 
-	a.set_corners(35642);
-	//std::cout << a.get_corners_with_rotation() << std::endl;
+	//cube1.edge_perm = { DR, BR, DL, UR, DB, BL, UF, FR, FL, UL, DF, UB };
+	//std::cout << cube1.get_ud_slice_phase_1() << "\n";
 
-	a.output_cubie_corners();
+	//cubie cube2;
+	//cube2.edge_perm = { BR, UF, DL, DR, UR, DF, FR, FL, UL, DB, UB, BL };
+	//std::cout << cube2.get_ud_slice_phase_1() << "\n";
+	//	
 
-
-
-	//std::vector <short> something = { URF, ULB, DBL, UBR, DFR, UFL, DLF, DRB };
-
-	//something = rotate_left(something, 0, 6);
-
-	//for (short i = 0; i != something.size(); i++) {
-	//	std::cout << corn_pos[something[i]] << ", ";
-	//}
-
-
-	//cube.set_corn_perm({});
-	//facelet a("X");
-
-	//facelet cube1("URBLUDRRURRLLRBUBFDBFUFFBBLLLFFDDRFLBDFDLLDUDBRDFDURUU");
-
-	//facelet cube2("LRDDURRFLUBFLRLBRRDUFBFUUDDBFLFDURFUBLFULDDRRBLFBBBUDL");
-	/*
-	cubie cube;
-	cube.edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-	std::cout << cube.get_ud_slice_phase_2();*/
-
-	//cube.edge_multiply(F_turn);
 
 	//cube.multiply(U_turn);
 	//cube.multiply(D_turn); cube.multiply(D_turn); cube.multiply(D_turn);
