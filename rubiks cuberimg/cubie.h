@@ -274,14 +274,14 @@ public:
 	//Phase one places all the ud edges in the ud slice
 	//Phase two places them into the correct place
 	short get_ud_slice_phase_2() {
-		std::array <short, 4> ud_edge;
+		std::vector <short> ud_edge = {0, 0, 0, 0};
 		short j = 0;
 		short ud_edge_pos = 0;
 
 		//This for loop is used to give a unique value for the
 		//ud edge cubies. In phase 2 it will always evaluate to
 		//0 as all the cubies are in the correct slice
-		for (short i = 0; i != 11; i++) {
+		for (short i = 0; i != No_edge; i++) {
 			if (edge_perm[i] >= FR) {
 				ud_edge[j] = edge_perm[i];
 				j++;
@@ -295,16 +295,17 @@ public:
 
 		short ud_slice_phase_2 = 0;
 		short rotations;
-		for (short i = 0; i != 4; i++) {
+		for (short i = 0; i != 3; i++) {
 			rotations = 0;
 			while (ud_edge[i] != i + 8) {
-				//rotate_left_4(ud_edge);
+				ud_edge = rotate_left(ud_edge, i, 3);
 				rotations++;
 			}
 			ud_slice_phase_2 = (i + 1) * ud_slice_phase_2 + rotations;
 		}
 
 		ud_slice_phase_2 = 24 * ud_edge_pos + ud_slice_phase_2;
+
 
 		return ud_slice_phase_2;
 	}

@@ -24,13 +24,13 @@ int main() {
 	//facelet a("UDDDUUUUUBBLLRRBLLRRRFFFRLLDUUUDDDDDFFFLLRBFFRRFBBBLBB");
 
 
-	cubie cube_4;
-	cube_4.set_ud_edges(19225);
-	cube_4.output_cubie_edges();
+	//cubie cube_4;
+	//cube_4.set_ud_edges(19225);
+	//cube_4.output_cubie_edges();
 
-	cubie cube_3;
-	cube_3.set_ud_edges(8270);
-	cube_3.output_cubie_edges();
+	//cubie cube_3;
+	//cube_3.set_ud_edges(8270);
+	//cube_3.output_cubie_edges();
 
 	//cube1.edge_perm = { DR, BR, DL, UR, DB, BL, UF, FR, FL, UL, DF, UB };
 	//std::cout << cube1.get_ud_slice_phase_1() << "\n";
@@ -39,6 +39,10 @@ int main() {
 	//cube2.edge_perm = { BR, UF, DL, DR, UR, DF, FR, FL, UL, DB, UB, BL };
 	//std::cout << cube2.get_ud_slice_phase_1() << "\n";
 	//	
+
+	cubie cube3;
+	cube3.edge_perm = { UF, DB, DF, UB, UR, DR, UL, DL, BL, FL, FR, BR };
+	std::cout << cube3.get_ud_slice_phase_2();
 
 
 	//cube.multiply(U_turn);
