@@ -318,14 +318,12 @@ public:
 		for (short i = DB; i != UR; i--) {
 			//You ignore UR as its  location
 			//is determined by the other 7 u and d edges
-
 			count = 0;
 			for (short j = 0; j != i; j++) {
 				if (edge_perm[j] > edge_perm[i]) {
 					count++;
 				}
 			}
-			std::cout << count;
 			ud_edge_value = i * (count + ud_edge_value);
 		}
 

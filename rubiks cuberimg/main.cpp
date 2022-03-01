@@ -21,9 +21,16 @@ cubie cube = cubie();
 int main() {
 
 
-	facelet a("UDDDUUUUUBBLLRRBLLRRRFFFRLLDUUUDDDDDFFFLLRBFFRRFBBBLBB");
-	cubie c = a.to_cubie();
-	std::cout << c.get_ud_edges();
+	//facelet a("UDDDUUUUUBBLLRRBLLRRRFFFRLLDUUUDDDDDFFFLLRBFFRRFBBBLBB");
+
+
+	cubie cube_4;
+	cube_4.set_ud_edges(19225);
+	cube_4.output_cubie_edges();
+
+	cubie cube_3;
+	cube_3.set_ud_edges(8270);
+	cube_3.output_cubie_edges();
 
 	//cube1.edge_perm = { DR, BR, DL, UR, DB, BL, UF, FR, FL, UL, DF, UB };
 	//std::cout << cube1.get_ud_slice_phase_1() << "\n";
