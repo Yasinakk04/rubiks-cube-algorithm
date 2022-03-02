@@ -36,13 +36,16 @@
     <ClInclude Include="coord.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="symmetries.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="moves.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

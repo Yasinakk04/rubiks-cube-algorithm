@@ -295,10 +295,10 @@ public:
 
 		short ud_slice_phase_2 = 0;
 		short rotations;
-		for (short i = 0; i != 3; i++) {
+		for (short i = 3; i != 0; i--) {
 			rotations = 0;
 			while (ud_edge[i] != i + 8) {
-				ud_edge = rotate_left(ud_edge, i, 3);
+				ud_edge = rotate_left(ud_edge, 0, i);
 				rotations++;
 			}
 			ud_slice_phase_2 = (i + 1) * ud_slice_phase_2 + rotations;
@@ -309,6 +309,48 @@ public:
 
 		return ud_slice_phase_2;
 	}
+
+
+	void set_ud_slice_phase_2(short ud_slice_phase_2_value) {
+
+		short pos = ud_slice_phase_2_value / 24;
+		short perm = ud_slice_phase_2_value % 24;
+
+		std::vector <short> ud_edges = { FR, FL, BL, BR };
+
+		short rotations;
+
+		for (short i = 0; i != 3; i++) {
+			rotations = perm % (i + 2);
+			while (rotations != 0) {
+				ud_edges = rotate_right(ud_edges, 0, i + 1);
+				rotations--;
+			}
+			perm = perm / (i + 2);
+		}
+
+
+
+
+		short n = 3;
+		short x;
+		edge_perm.fill(-1);
+
+		for (short i = BR; i != -1; i--) {
+			x = b_coefficient(i, n);
+			if (pos >= x) {
+				pos -= x;
+			}
+			else {
+				edge_perm[i] = ud_edges[n];
+				n--;
+			}
+
+			if (n == -1) { break; }
+		}
+	}
+
+
 
 	//This only works in phase 2,
 	//as it assumes that the u and d edges are 

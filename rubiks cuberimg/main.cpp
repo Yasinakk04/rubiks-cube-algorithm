@@ -40,10 +40,18 @@ int main() {
 	//std::cout << cube2.get_ud_slice_phase_1() << "\n";
 	//	
 
-	cubie cube3;
-	cube3.edge_perm = { UF, DB, DF, UB, UR, DR, UL, DL, BL, FL, FR, BR };
-	std::cout << cube3.get_ud_slice_phase_2();
 
+	test();
+
+
+	//cubie cube3;
+	//cube3.set_ud_slice_phase_2(3);
+	//cube3.output_cubie_edges();
+
+
+	//cubie cube4;
+	//cube4.set_ud_slice_phase_2(1);
+	//cube4.output_cubie_edges();
 
 	//cube.multiply(U_turn);
 	//cube.multiply(D_turn); cube.multiply(D_turn); cube.multiply(D_turn);

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <array>
+#include <iostream>
+#include <fstream>
 #include "enums.h"
 #include "cubie.h"
 
@@ -56,4 +58,12 @@ inline cubie make_B_turn() {
 	B_turn.set_edge_perm( { UR, UF, UL, BR, DR, DF, DL, BL, FR, FL, UB, DB });
 	B_turn.set_edge_ori( { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1 });
 	return B_turn;
+}
+
+
+inline void test() {
+	std::ofstream myfile;
+	myfile.open("something.bin", std::ios::binary | std::ios::out);
+	myfile.read()
+	myfile.close();
 }
