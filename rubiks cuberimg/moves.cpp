@@ -62,8 +62,36 @@ inline cubie make_B_turn() {
 
 
 inline void test() {
-	std::ofstream myfile;
-	myfile.open("something.bin", std::ios::binary | std::ios::out);
-	myfile.read()
-	myfile.close();
+//	std::ofstream myfile;
+//	myfile.open("something.bin", std::ios::binary | std::ios::out);
+//	myfile.read()
+//	myfile.close();
+}
+
+inline std::array <cubie, 18> make_moves() {
+	std::array <cubie, 18> moves;
+	moves[0] = make_U_turn();
+	moves[1] = make_R_turn();
+	moves[2] = make_F_turn();
+	moves[3] = make_D_turn();
+	moves[4] = make_L_turn();
+	moves[5] = make_B_turn();
+
+	for (short m = 6; m != 18; m++) {
+		
+		short times = m / 6;
+		//The integer result of m div 6 is the number of moves -1
+		//for instance 15 div 6 is 2, so it's applied 3 times
+
+		moves[m] = moves[m % 6];
+		//the move mod 6 is the actual move
+		//7 mod 6 is 1, so it's R
+
+		while (times != -1) {
+			moves[m].multiply(moves[m % 6]);
+			times--;
+		}
+	}
+
+	return moves;
 }

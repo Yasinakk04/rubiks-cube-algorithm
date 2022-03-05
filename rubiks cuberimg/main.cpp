@@ -20,7 +20,6 @@ cubie cube = cubie();
 
 int main() {
 
-
 	//facelet a("UDDDUUUUUBBLLRRBLLRRRFFFRLLDUUUDDDDDFFFLLRBFFRRFBBBLBB");
 
 
@@ -41,7 +40,7 @@ int main() {
 	//	
 
 
-	test();
+	//test();
 
 
 	//cubie cube3;

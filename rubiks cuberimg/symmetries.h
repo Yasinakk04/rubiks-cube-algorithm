@@ -1,6 +1,6 @@
 #pragma once
 #include <array>
-
+#include "moves.cpp"
 #include "cubie.h"
 
 //All the below definitions for each of the symmetries are taken directly 
@@ -60,6 +60,125 @@ void gen_symmetries() {
 			c.multiply(sym_F2);
 		}
 		c.corner_multiply(sym_URF3);
+	}
+
+	c.reset();
+
+	//Now the below is used to get the inverse
+	//symmetries. 
+	//Any symmetry times by a permutation, times by the inverse
+	//gives an equivalent cube
+
+	//multiplying a cube by its inverse gives the I
+	//cube
+	//c has been reset so it is the I cube
+
+	std::array <cubie, 48> inv_symmetries;
+	cubie x;
+	for (short i = 0; i != 48; i++) {
+		for (short j = 0; j != 48; j++) {
+			x = symmetries[i];
+			x.multiply(symmetries[j]);
+
+			if (x.corn_ori == c.corn_ori &&
+				x.corn_perm == c.corn_perm &&
+				x.edge_ori == c.edge_ori &&
+				x.edge_perm == c.edge_perm) {
+					inv_symmetries[j] = symmetries[i];
+					break;
+			}
+		}
+	}
+
+	//if you apply a cube to a symmetry cube, you need
+	//to be able to work out what that move would mean
+	//on a normal cube
+	//to do that this 2d array is used
+
+	//this again is also based off of Kociemba's algorithm
+
+	std::array <std::array <short, 48>, 18> symmetry_move_to_move;
+
+	std::array <cubie, 18> moves = make_moves();
+
+	for (short s = 0; s != 48; s++) {
+		for (short m = 0; m != 18; m++) {
+			c = symmetries[s];
+			c.multiply(moves[m]);
+			c.multiply(inv_symmetries[s]);
+			
+			for (short M = 0; m != 18; M++) {
+				if (moves[M].corn_ori == c.corn_ori &&
+					moves[M].corn_perm == c.corn_perm &&
+					moves[M].edge_ori == c.edge_ori &&
+					moves[M].edge_perm == c.edge_perm) {
+						symmetry_move_to_move[m][s] = M;
+				}
+			}
+		}
+	}
+
+	//Similar to how we need to convert the moves
+	//we also need to be able to convert the twist
+	//when using a symmetry cube
+
+	//2187 is the number of possible twists
+	//16 is the number of symmetries actually used, as
+	//the other 32 don't preserve the UD axis, explained
+	//by Kociemba on his website:
+	//http://www.kociemba.org/cube.htm
+
+	std::array <short, 16 * 2187> sym_twist_conversion;
+
+	x.reset();
+
+	for (short t = 0; t != 2187; t++) {
+		x.set_twist(t);
+		
+		for (short s = 0; s != 16; s++) {
+			c = symmetries[s];
+			c.multiply(x);
+			c.multiply(inv_symmetries[s]);
+
+			sym_twist_conversion[16 * t + s] = c.get_twist();
+		}
+	}
+
+	//Another table is necessary for the u and d edges
+
+	std::array <short, 16 * 40320> ud_edge_sym_conversion;
+
+	for (unsigned short ud = 0; ud != 40320; ud++) {
+		x.set_ud_edges(ud);
+
+		for (short s = 0; s != 16; s++) {
+			c = symmetries[s];
+			c.multiply(x);
+			c.multiply(inv_symmetries[s]);
+
+			sym_twist_conversion[16 * ud + s] = c.get_ud_edges();
+		}
+	}
+
+
+	//In order to use symmetries, you need to be
+	//able to figure out which symmetry corresponds to which permutation
+	//this is done using the values for the flip and permutation
+	//of the ud slice edges
+
+
+	std::array <short, 16 * 40320> ud_edge_sym_conversion;
+
+	for (unsigned short ud = 0; ud != 40320; ud++) {
+		x.set_ud_edges(ud);
+
+		for (short s = 0; s != 16; s++) {
+			c = symmetries[s];
+			c.multiply(x);
+			c.multiply(inv_symmetries[s]);
+
+			sym_twist_conversion[16 * ud + s] = c.get_ud_edges();
+		}
 	}
 }
 

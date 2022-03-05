@@ -521,4 +521,12 @@ public:
 	void do_move_string(std::string) {
 
 	}
+
+	void reset() {
+		corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
+		corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+		edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	}
 };
