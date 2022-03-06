@@ -156,7 +156,7 @@ void gen_symmetries() {
 			c.multiply(x);
 			c.multiply(inv_symmetries[s]);
 
-			sym_twist_conversion[16 * ud + s] = c.get_ud_edges();
+			ud_edge_sym_conversion[16 * ud + s] = c.get_ud_edges();
 		}
 	}
 
