@@ -2,6 +2,7 @@
 #include <string>
 #include <array>
 #include <vector>
+#include <fstream>
 
 #include "enums.h"
 #include "cubie.h"
@@ -19,6 +20,40 @@ const std::string edge_pos[12] = { "UR", "UF", "UL", "UB", "DR", "DF", "DL", "DB
 cubie cube = cubie();
 
 int main() {
+
+	std::ofstream something("a.dat", std::ios::out | std::ios::binary);
+
+	std::array<short, 6> x = {0, 1, 2, 3, 4, 5};
+
+	something << x[0];
+	something << x[1];
+
+	something.close();
+
+	std::ofstream myfile;
+	myfile.open("a.dat");
+
+	short r;
+	myfile >> r;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//facelet a("UDDDUUUUUBBLLRRBLLRRRFFFRLLDUUUDDDDDFFFLLRBFFRRFBBBLBB");
 

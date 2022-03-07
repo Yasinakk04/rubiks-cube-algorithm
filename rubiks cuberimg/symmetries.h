@@ -160,26 +160,125 @@ void gen_symmetries() {
 		}
 	}
 
-
 	//In order to use symmetries, you need to be
 	//able to figure out which symmetry corresponds to which permutation
 	//this is done using the values for the flip and permutation
 	//of the ud slice edges
 
+	c.reset();
+	x.reset();
 
-	std::array <short, 16 * 40320> ud_edge_sym_conversion;
+	std::array <short, 2048 * 495> ud_slice_sym_classes;	//This groups a number of ud slices that are 
+													//considered equivalent by symmetries
+													
 
-	for (unsigned short ud = 0; ud != 40320; ud++) {
-		x.set_ud_edges(ud);
 
-		for (short s = 0; s != 16; s++) {
-			c = symmetries[s];
-			c.multiply(x);
-			c.multiply(inv_symmetries[s]);
 
-			sym_twist_conversion[16 * ud + s] = c.get_ud_edges();
+
+	ud_slice_sym_classes.fill(-1);							//The algorithm fills in all the permutations for one class before moving to the next
+															//because it is going up from 0, the representent for a permutation 
+															//in a class is the one with the smallest value
+
+	std::array <short, 2048 * 495> ud_slice_symmetry;	//This tells you what symmetry is applied to 
+														//a specific ud slice permutation
+
+	std::array <short, 64430> ud_slice_sym_rep;		//This tells you the ud slice used to represent 
+													//a specific ud slice permutation and the flip of all edges
+													
+													//the number of classes being 64430 was calculated by Kociemba
+													//dividing 2048 * 495 by 16 gives 63360, which is close to the real value
+
+
+	int ud_flip_value; //This value is used to define the permutation by its flip
+				//and ud slice edge arrangement
+	int ud_class = 0;
+
+
+	for (short ud_slice = 0; ud_slice != 495; ud_slice++) {
+		x.set_ud_slice_phase_1(ud_slice);
+		for (short f = 0; f != 2048; f++) {
+			c.set_flip(f);
+			ud_flip_value = 2048 * ud_slice + f;
+
+			if (ud_slice_sym_classes[ud_flip_value] == -1) {
+				ud_slice_sym_classes[ud_flip_value] = ud_class;
+				ud_slice_symmetry[ud_flip_value] = 0; //Its set to 0 because it is the base represent of the class
+				ud_slice_sym_rep[ud_class] = ud_flip_value;
+			}
+			else{ continue; }
+
+			for (short s = 0; s != 16; s++) {
+				cubie sym = symmetries[s];
+
+				sym.edge_multiply(c);
+				sym.edge_multiply(inv_symmetries[s]);
+
+				ud_flip_value = 2048 * sym.get_ud_slice_phase_1() + sym.get_flip();
+
+				if (ud_slice_sym_classes[ud_flip_value] == -1) {
+					ud_slice_sym_classes[ud_flip_value] = ud_class;
+					ud_slice_symmetry[ud_flip_value] = s;
+				}
+			}
+			ud_class++;
 		}
 	}
+
+	//now we need to do something similar but with the coreners
+
+	c.reset();
+	x.reset();
+
+	std::array <short, 40320> corn_sym_classes;	
+
+												
+
+	corn_sym_classes.fill(-1);										
+
+	std::array <unsigned short, 40320> corn_symmetry;	
+
+	std::array <unsigned short, 2768> corn_sym_rep;		//This tells you the corner permutation used to represent 
+														//the permutations of a group or class of permutations
+														//that are equivalent by symmetry
+
+														//the number of classes being 2768 was also calculated by Kociemba
+														//dividing 8! by 16 gives 2520, which is close to the real value
+
+
+	short corn_value = 0;					//This value defines the permutation by the corner permutation
+	int corn_class = 0;
+
+
+	for (unsigned short corn = 0; corn != 40320; corn++) {
+		c.set_corners(corn);
+
+		if (corn_sym_classes[corn_value] == -1) {
+			corn_sym_classes[corn_value] = corn_class;
+			corn_symmetry[corn_value] = 0; //Its set to 0 because it is the base represent of the class
+			corn_sym_rep[ud_class] = corn_value;
+		}
+		else { continue; }
+
+		for (short s = 0; s != 16; s++) {
+			cubie sym = symmetries[s];
+
+			sym.corner_multiply(c);
+			sym.corner_multiply(inv_symmetries[s]);
+
+			corn_value = sym.get_corners();
+
+			if (corn_sym_classes[corn_value] == -1) {
+				corn_sym_classes[corn_value] = ud_class;
+				corn_symmetry[corn_value] = s;
+			}
+		}
+		corn_class++;
+		
+	}
+
+
+
+
 }
 
 
