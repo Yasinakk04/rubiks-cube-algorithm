@@ -95,3 +95,95 @@ inline std::array <cubie, 18> make_moves() {
 
 	return moves;
 }
+
+inline void make_twist_table() {
+	std::array <cubie, 18> moves = make_moves();
+
+	std::array <unsigned short, 2187 * 18> twist_table;
+
+	cubie c;
+
+	for (long t = 0; t != 2187; t++){				//This for loop enumerates through every corner permutation
+		for (long i = 0; i != 18; i++) {			//this one then enumerates through every move
+			c.set_twist(t);
+			c.corner_multiply(moves[i]);
+			twist_table[18 * t + i] = c.get_twist();		//With the table produced, you can work out the permutation
+		}													//of the new cube by inputting into this array the 
+															//last permutation value, t, and the move, i
+		if (t == 1000) {
+		std::cout << twist_table[0] << "\n\n";
+		}
+	}
+
+	std::ofstream something("twist move table.txt", std::ios::out | std::ios::binary);
+
+	for (int i = 0; i != 2187 * 18; i++) {
+		twist_table[i]++;
+		something << twist_table[i];
+	}
+
+	something.close();
+}
+
+
+//
+//void make_flip_table() {
+//	std::array <cubie, 18> moves = make_moves();
+//
+//	std::array <short, 2048 * 18> flip_table;
+//
+//	cubie c;
+//
+//	for (short f = 0; f != 2048; f++) {				//This works essentially the same as the twist table
+//		for (short i = 0; i != 18; i++) {			//the only difference is that the table has to be a different size
+//			c.set_flip(f);							//and edge multiplication happens rather than corner multiplication
+//			c.edge_multiply(moves[i]);			
+//			flip_table[18 * f + i] = c.get_flip();	
+//		}						
+//	}
+//}
+//
+//void make_ud_edges_table() {
+//	std::array <cubie, 18> moves = make_moves();
+//
+//	std::array <unsigned short, 40320 * 18> flip_table;
+//	cubie c;
+//
+//	for (unsigned short ud = 0; ud != 40320; ud++) {
+//		for (short i = 0; i != 18; i++) {			
+//			c.set_ud_edges(ud);						
+//			c.edge_multiply(moves[i]);
+//			flip_table[18 * ud+ i] = c.get_ud_edges();
+//		}
+//	}
+//}
+//
+//void make_corners_table() {
+//	std::array <cubie, 18> moves = make_moves();
+//
+//	std::array <unsigned short, 40320 * 18> corners_table;
+//	cubie c;
+//
+//	for (unsigned short corn = 0; corn != 40320; corn++) {
+//		for (short i = 0; i != 18; i++) {
+//			c.set_corners(corn);
+//			c.corner_multiply(moves[i]);
+//			corners_table[18 * corn + i] = c.get_corners();
+//		}
+//	}
+//}
+//
+//void make_ud_slice_phase_2_table() {
+//	std::array <cubie, 18> moves = make_moves();
+//
+//	std::array <short, 11880 * 18> ud_slice_phase_2_table;
+//	cubie c;
+//
+//	for (short ud = 0; ud != 11880; ud++) {
+//		for (short i = 0; i != 18; i++) {
+//			c.set_ud_slice_phase_2(ud);
+//			c.corner_multiply(moves[i]);
+//			ud_slice_phase_2_table[18 * ud + i] = c.get_ud_slice_phase_2();
+//		}
+//	}
+//}

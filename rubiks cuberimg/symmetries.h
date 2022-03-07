@@ -1,6 +1,6 @@
 #pragma once
 #include <array>
-#include "moves.cpp"
+#include "moves.h"
 #include "cubie.h"
 
 //All the below definitions for each of the symmetries are taken directly 

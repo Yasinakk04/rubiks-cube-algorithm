@@ -88,8 +88,8 @@ public:
 
 	// ------------------------------------------------
 
-	short get_twist() {
-		short twist = 0;
+	unsigned short get_twist() {
+		unsigned short twist = 0;
 		for (short i = 0; i != 7; i++) {
 			twist = 3 * twist + corn_ori[i];
 		}
@@ -101,7 +101,7 @@ public:
 		return twist;
 	}
 
-	void set_twist(short twist_val) {
+	void set_twist(unsigned short twist_val) {
 		short ori_sum = 0;
 		short ori;
 		for (short i = 6; i != -1; i--) {
@@ -145,21 +145,6 @@ public:
 
 		edge_ori[0] = flip_sum % 2;
 	}
-
-	// ------------------------------------------------
-
-
-
-	//The purpose of this function is only to determine 
-	//if edges for the middle slice (ud slice)
-	//are there or not
-	short get_ud_slice() {
-		short ud_slice = 0;
-		//for (short i = )
-
-
-	}
-
 
 	// ------------------------------------------------
 	unsigned short get_corners() {
@@ -414,21 +399,7 @@ public:
 		}
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-
-	
-
-
-
-	
-
-	void set_ud_slice_sorted() {
-
-	}
-
-	void set_ud_edges() {
-
-	}
+	// ------------------------------------------------
 
 	void corner_multiply(cubie B) {
 		std::array <short, 8> c_ori;

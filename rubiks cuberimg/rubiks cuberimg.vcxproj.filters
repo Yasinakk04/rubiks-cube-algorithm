@@ -44,7 +44,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="moves.cpp">
+    <ClCompile Include="moves.h">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>

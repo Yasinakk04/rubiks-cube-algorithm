@@ -11,7 +11,7 @@
 #include "miscellaneous functions.h"
 #include "coord.h"
 
-#include "moves.cpp"
+#include "moves.h"
 
 
 const std::string corn_pos[8] = { "URF", "UFL", "ULB", "UBR", "DFR", "DLF", "DBL", "DRB" };
@@ -21,29 +21,52 @@ cubie cube = cubie();
 
 int main() {
 
-	std::ofstream something("a.dat", std::ios::out | std::ios::binary);
+	//std::ofstream myfile;
+	//myfile.open("a.dat");
 
-	std::array<short, 6> x = {0, 1, 2, 3, 4, 5};
+	//std::array <short, 10> x = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-	something << x[0];
-	something << x[1];
+	//for (int i = 0; i != 10; i++) {
+	//	myfile << x[i];
+	//}
 
-	something.close();
+	//std::ifstream myfile;
+	//myfile.open("a.dat");
 
-	std::ofstream myfile;
-	myfile.open("a.dat");
+	//
+	//for (int i = 0; i != 10; i++) {
+	//	k = myfile.get();
+	//	std::cout << k << "\n";
+	//}
 
-	short r;
-	myfile >> r;
+	std::array <unsigned short, 2187 * 18> twist_table;
+
+	std::ifstream myfile;
+	myfile.open("twist move table.txt");
+
+	int index = 0;
+
+	while (index != 39366) {
+		unsigned short k;
+		myfile >> k;
+		k--;
+		twist_table[index] = k;
+		
+		index++;
+	}
 
 
+	//cubie c;
+	//std::cout << twist_table[0] << "\n";
+
+	//c.set_twist(twist_table[0]);
+	//c.output_cubie();
 
 
+	//c.set_twist(65534);
+	//c.output_cubie();
 
-
-
-
-
+	//std::cout << c.get_twist();
 
 
 
