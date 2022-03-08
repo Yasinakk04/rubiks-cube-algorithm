@@ -138,7 +138,7 @@ public:
 		short flip;
 		for (short i = 10; i != 0; i--) {
 			flip = flip_val % 2;
-			edge_ori[i] = flip;
+			edge_ori[10 - i] = flip;
 			flip_sum += flip;
 			flip_val /= 2;
 		}

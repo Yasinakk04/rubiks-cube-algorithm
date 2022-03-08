@@ -48,4 +48,12 @@
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="twist move table.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="flip move table.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

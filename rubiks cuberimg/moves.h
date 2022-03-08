@@ -115,34 +115,42 @@ inline void make_twist_table() {
 		}
 	}
 
-	std::ofstream something("twist move table.txt", std::ios::out | std::ios::binary);
+	std::ofstream something("twist move table.bin", std::ios::out | std::ios::binary);
 
 	for (int i = 0; i != 2187 * 18; i++) {
-		twist_table[i]++;
-		something << twist_table[i];
+		something.write((char*)&(twist_table[i]), 2);		
 	}
 
 	something.close();
 }
 
 
-//
-//void make_flip_table() {
-//	std::array <cubie, 18> moves = make_moves();
-//
-//	std::array <short, 2048 * 18> flip_table;
-//
-//	cubie c;
-//
-//	for (short f = 0; f != 2048; f++) {				//This works essentially the same as the twist table
-//		for (short i = 0; i != 18; i++) {			//the only difference is that the table has to be a different size
-//			c.set_flip(f);							//and edge multiplication happens rather than corner multiplication
-//			c.edge_multiply(moves[i]);			
-//			flip_table[18 * f + i] = c.get_flip();	
-//		}						
-//	}
-//}
-//
+
+inline void make_flip_table() {
+	std::array <cubie, 18> moves = make_moves();
+
+	std::array <short, 2048 * 18> flip_table;
+
+	cubie c;
+
+	for (short f = 0; f != 2048; f++) {				//This works essentially the same as the twist table
+		for (short i = 0; i != 18; i++) {			//the only difference is that the table has to be a different size
+			c.set_flip(f);							//and edge multiplication happens rather than corner multiplication
+			c.edge_multiply(moves[i]);			
+			flip_table[18 * f + i] = c.get_flip();	
+		}						
+	}
+
+	std::ofstream something("flip move table.bin", std::ios::out | std::ios::binary);
+
+	for (int i = 0; i != 2048 * 18; i++) {
+		something.write((char*)&(flip_table[i]), 2);
+	}
+
+	something.close();
+
+}
+
 //void make_ud_edges_table() {
 //	std::array <cubie, 18> moves = make_moves();
 //

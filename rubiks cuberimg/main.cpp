@@ -21,56 +21,70 @@ cubie cube = cubie();
 
 int main() {
 
-	//std::ofstream myfile;
-	//myfile.open("a.dat");
 
-	//std::array <short, 10> x = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-	//for (int i = 0; i != 10; i++) {
-	//	myfile << x[i];
-	//}
+	//facelet a("URBLUDRRURRLLRBUBFDBFUFFBBLLLFFDDRFLBDFDLLDUDBRDFDURUU");
+	//cubie c = a.to_cubie();
+	//c.output_cubie();
 
-	//std::ifstream myfile;
-	//myfile.open("a.dat");
 
-	//
-	//for (int i = 0; i != 10; i++) {
-	//	k = myfile.get();
-	//	std::cout << k << "\n";
-	//}
 
-	std::array <unsigned short, 2187 * 18> twist_table;
+
+
+	
+
+	////////std::ifstream something("a.bin", std::ios::binary);
+
+	////////short a;
+	////////something.read((char*)&a, 2);
+	////////something.close();
+	////////std::cout << a;
+
+
+	std::array <unsigned short, 2048 * 18> flip_table;
 
 	std::ifstream myfile;
-	myfile.open("twist move table.txt");
+	myfile.open("flip move table.bin");
 
-	int index = 0;
 
-	while (index != 39366) {
-		unsigned short k;
-		myfile >> k;
-		k--;
-		twist_table[index] = k;
-		
-		index++;
+	for (unsigned short i = 0; i != 2048 * 18; i++) {
+		myfile.read((char*)&(flip_table[i]), 2);
 	}
+	myfile.close();
 
+	short x;
 
-	//cubie c;
-	//std::cout << twist_table[0] << "\n";
+	x = flip_table[B];
+	x = flip_table[x * 18 + D3];
+	x = flip_table[x * 18 + L];
+	x = flip_table[x * 18 + B2];
+	x = flip_table[x * 18 + L];
+	x = flip_table[x * 18 + U3];
+	x = flip_table[x * 18 + L];
+	x = flip_table[x * 18 + F];
+	x = flip_table[x * 18 + D];
+	x = flip_table[x * 18 + B];
+	x = flip_table[x * 18 + R2];
+	x = flip_table[x * 18 + D2];
+	x = flip_table[x * 18 + F];
+	x = flip_table[x * 18 + D2];
+	x = flip_table[x * 18 + U2];
+	x = flip_table[x * 18 + F3];
+	x = flip_table[x * 18 + L];
+	x = flip_table[x * 18 + R3];
+	x = flip_table[x * 18 + F2];
+	x = flip_table[x * 18 + R2];
+	x = flip_table[x * 18 + U];
+	x = flip_table[x * 18 + D3];
+	x = flip_table[x * 18 + F2];
+	x = flip_table[x * 18 + L2];
+	x = flip_table[x * 18 + B3];
 
-	//c.set_twist(twist_table[0]);
-	//c.output_cubie();
+	cubie c;
 
-
-	//c.set_twist(65534);
-	//c.output_cubie();
-
-	//std::cout << c.get_twist();
-
-
-
-
+	c.set_flip(137);
+	c.output_cubie();
+	std::cout << x;
 
 
 
