@@ -84,6 +84,7 @@ public:
 	void output_cubie() {
 		output_cubie_corners();
 		output_cubie_edges();
+		std::cout << "\n\n";
 	}
 
 	// ------------------------------------------------
@@ -121,7 +122,7 @@ public:
 
 
 	// ------------------------------------------------
-	short get_flip() {
+	unsigned short get_flip() {
 		short flip = 0;
 		for (short i = 0; i != 11; i++) {
 			flip = 2 * flip + edge_ori[i];
@@ -133,17 +134,17 @@ public:
 		return flip;
 	}
 
-	void set_flip(short flip_val) {
-		short flip_sum = 0;
-		short flip;
-		for (short i = 10; i != 0; i--) {
+	void set_flip(unsigned short flip_val) {
+		unsigned short flip_sum = 0;
+		unsigned short flip;
+		for (short i = 10; i != -1; i--) {
 			flip = flip_val % 2;
-			edge_ori[10 - i] = flip;
+			edge_ori[i] = flip;
 			flip_sum += flip;
 			flip_val /= 2;
 		}
 
-		edge_ori[0] = flip_sum % 2;
+		edge_ori[11] = flip_sum % 2;
 	}
 
 	// ------------------------------------------------

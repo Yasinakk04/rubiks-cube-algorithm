@@ -71,27 +71,31 @@ inline void test() {
 inline std::array <cubie, 18> make_moves() {
 	std::array <cubie, 18> moves;
 	moves[0] = make_U_turn();
-	moves[1] = make_R_turn();
-	moves[2] = make_F_turn();
-	moves[3] = make_D_turn();
-	moves[4] = make_L_turn();
-	moves[5] = make_B_turn();
+	moves[3] = make_R_turn();
+	moves[6] = make_F_turn();
+	moves[9] = make_D_turn();
+	moves[12] = make_L_turn();
+	moves[15] = make_B_turn();
 
-	for (short m = 6; m != 18; m++) {
+	for (short m = 0; m != 18; m++) {
+
+		if (m % 3 == 0) {
+			continue;
+		}
+		//indexes that are multiples of 3 have already been filled in
 		
-		short times = m / 6;
-		//The integer result of m div 6 is the number of moves -1
-		//for instance 15 div 6 is 2, so it's applied 3 times
+		short times = m % 3;
+		//The integer result of m mod 3 is the number of moves - 1
+		//for instance 15 mod 3 is 0, so it's applied once
 
-		moves[m] = moves[m % 6];
-		//the move mod 6 is the actual move
-		//7 mod 6 is 1, so it's R
+		moves[m] = moves[m - (m % 3)];
 
-		while (times != -1) {
-			moves[m].multiply(moves[m % 6]);
+		while (times != 0) {
+			moves[m].multiply(moves[m - (m % 3)]);
 			times--;
 		}
 	}
+	
 
 	return moves;
 }
@@ -129,16 +133,25 @@ inline void make_twist_table() {
 inline void make_flip_table() {
 	std::array <cubie, 18> moves = make_moves();
 
-	std::array <short, 2048 * 18> flip_table;
+	std::array <unsigned short, 2048 * 18> flip_table;
 
 	cubie c;
 
+	
 	for (short f = 0; f != 2048; f++) {				//This works essentially the same as the twist table
 		for (short i = 0; i != 18; i++) {			//the only difference is that the table has to be a different size
 			c.set_flip(f);							//and edge multiplication happens rather than corner multiplication
 			c.edge_multiply(moves[i]);			
 			flip_table[18 * f + i] = c.get_flip();	
+
+			if (18 * f + i == 550 * 18 + 9) {
+				std::cout << flip_table[464] << "\n\n";
+				//c.output_cubie();
+				char* a = (char*)&(flip_table[i]);
+				std::cout << &a << "\n\n";
+			}
 		}						
+		
 	}
 
 	std::ofstream something("flip move table.bin", std::ios::out | std::ios::binary);
@@ -146,9 +159,7 @@ inline void make_flip_table() {
 	for (int i = 0; i != 2048 * 18; i++) {
 		something.write((char*)&(flip_table[i]), 2);
 	}
-
 	something.close();
-
 }
 
 //void make_ud_edges_table() {

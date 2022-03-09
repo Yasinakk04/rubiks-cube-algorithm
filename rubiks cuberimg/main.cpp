@@ -40,6 +40,7 @@ int main() {
 	////////something.close();
 	////////std::cout << a;
 
+	make_flip_table();
 
 	std::array <unsigned short, 2048 * 18> flip_table;
 
@@ -51,40 +52,46 @@ int main() {
 		myfile.read((char*)&(flip_table[i]), 2);
 	}
 	myfile.close();
+	std::cout << flip_table[464];
 
-	short x;
+	//unsigned short x;
 
-	x = flip_table[B];
-	x = flip_table[x * 18 + D3];
-	x = flip_table[x * 18 + L];
-	x = flip_table[x * 18 + B2];
-	x = flip_table[x * 18 + L];
-	x = flip_table[x * 18 + U3];
-	x = flip_table[x * 18 + L];
-	x = flip_table[x * 18 + F];
-	x = flip_table[x * 18 + D];
-	x = flip_table[x * 18 + B];
-	x = flip_table[x * 18 + R2];
-	x = flip_table[x * 18 + D2];
-	x = flip_table[x * 18 + F];
-	x = flip_table[x * 18 + D2];
-	x = flip_table[x * 18 + U2];
-	x = flip_table[x * 18 + F3];
-	x = flip_table[x * 18 + L];
-	x = flip_table[x * 18 + R3];
-	x = flip_table[x * 18 + F2];
-	x = flip_table[x * 18 + R2];
-	x = flip_table[x * 18 + U];
-	x = flip_table[x * 18 + D3];
-	x = flip_table[x * 18 + F2];
-	x = flip_table[x * 18 + L2];
-	x = flip_table[x * 18 + B3];
+	//x = flip_table[U * 3];
+	//x = flip_table[18 * x + D * 3 + 2];
+	//x = flip_table[18 * x + L * 3];
+	//x = flip_table[18 * x + B * 3 + 1];
+	//x = flip_table[18 * x + L * 3];
+	//x = flip_table[18 * x + U * 3 + 2];
+	//x = flip_table[18 * x + L * 3];
+	//x = flip_table[18 * x + F * 3];
+	//std::cout << x << " before\n\n";
+	//x = flip_table[18 * x + D * 3];
+	//std::cout << x << " after \n\n";
+	// 
+	// 
+	
+	//x = flip_table[18 * x + B * 3];
+	//x = flip_table[18 * x + R * 3 + 1];
+	//x = flip_table[18 * x + D * 3 + 1];
+	//x = flip_table[18 * x + F * 3];
+	//x = flip_table[18 * x + D * 3 + 1];
+	//x = flip_table[18 * x + U * 3 + 1];
+	//x = flip_table[18 * x + F * 3 + 2];
+	//x = flip_table[18 * x + L * 3];
+	//x = flip_table[18 * x + R * 3 + 2];
+	//x = flip_table[18 * x + F * 3 + 1];
+	//x = flip_table[18 * x + R * 3 + 1];
+	//x = flip_table[18 * x + U * 3];
+	//x = flip_table[18 * x + D * 3 + 2];
+	//x = flip_table[18 * x + F * 3 + 1];
+	//x = flip_table[18 * x + L * 3 + 1];
+	//x = flip_table[18 * x + B * 3 + 2];
+
 
 	cubie c;
 
-	c.set_flip(137);
-	c.output_cubie();
-	std::cout << x;
+	//c.set_flip(x);
+	//c.output_cubie();
 
 
 
@@ -122,32 +129,35 @@ int main() {
 
 	//cubie cube4;
 	//cube4.set_ud_slice_phase_2(1);
-	//cube4.output_cubie_edges();
+	////cube4.output_cubie_edges();
+	//cubie cube;
+	//cube.reset();
+	//std::array <cubie, 18> moves = make_moves();
 
-	//cube.multiply(U_turn);
-	//cube.multiply(D_turn); cube.multiply(D_turn); cube.multiply(D_turn);
-	//cube.multiply(L_turn);
-	//cube.multiply(B_turn); cube.multiply(B_turn);
-	//cube.multiply(L_turn);
-	//cube.multiply(U_turn); cube.multiply(U_turn); cube.multiply(U_turn);
-	//cube.multiply(L_turn);
-	//cube.multiply(F_turn);
-	//cube.multiply(D_turn);
-	//cube.multiply(B_turn);
-	//cube.multiply(R_turn); cube.multiply(R_turn);
-	//cube.multiply(D_turn); cube.multiply(D_turn);
-	//cube.multiply(F_turn);
-	//cube.multiply(D_turn); cube.multiply(D_turn);
-	//cube.multiply(U_turn); cube.multiply(U_turn);
-	//cube.multiply(F_turn); cube.multiply(F_turn); cube.multiply(F_turn);
-	//cube.multiply(L_turn);
-	//cube.multiply(R_turn); cube.multiply(R_turn); cube.multiply(R_turn);
-	//cube.multiply(F_turn); cube.multiply(F_turn);
-	//cube.multiply(R_turn); cube.multiply(R_turn);
-	//cube.multiply(U_turn);
-	//cube.multiply(D_turn); cube.multiply(D_turn); cube.multiply(D_turn);
-	//cube.multiply(F_turn); cube.multiply(F_turn);
-	//cube.multiply(L_turn); cube.multiply(L_turn);
-	//cube.multiply(B_turn); cube.multiply(B_turn); cube.multiply(B_turn);
+	//cube.multiply(moves[U * 3]);
+	//cube.multiply(moves[D * 3 + 2]);
+	//cube.multiply(moves[L * 3]);
+	//cube.multiply(moves[B * 3 + 1]);
+	//cube.multiply(moves[L * 3]);
+	//cube.multiply(moves[U * 3 + 2]);
+	//cube.multiply(moves[L * 3]);
+	//cube.multiply(moves[F * 3]);
+	//cube.multiply(moves[D * 3]);
+	//cube.multiply(moves[B * 3]);
+	//cube.multiply(moves[R * 3 + 1]);
+	//cube.multiply(moves[D * 3 + 1]);
+	//cube.multiply(moves[F * 3]);
+	//cube.multiply(moves[D * 3 + 1]);
+	//cube.multiply(moves[U * 3 + 1]);
+	//cube.multiply(moves[F * 3 + 2]);
+	//cube.multiply(moves[L * 3]);
+	//cube.multiply(moves[R * 3 + 2]);
+	//cube.multiply(moves[F * 3 + 1]);
+	//cube.multiply(moves[R * 3 + 1]);
+	//cube.multiply(moves[U * 3]);
+	//cube.multiply(moves[D * 3 + 2]);
+	//cube.multiply(moves[F * 3 + 1]);
+	//cube.multiply(moves[L * 3 + 1]);
+	//cube.multiply(moves[B * 3 + 2]);
 	//cube.output_cubie();
 }
