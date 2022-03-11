@@ -116,6 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/analyze:stacksize 32768000 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +145,8 @@
     <ClInclude Include="enums.h" />
     <ClInclude Include="facelets.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="pruning.h" />
+    <ClInclude Include="solver.h" />
     <ClInclude Include="symmetries.h" />
     <ClInclude Include="miscellaneous functions.h" />
     <ClInclude Include="turns.h" />
@@ -153,8 +156,19 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="corner sym class table.bin" />
+    <None Include="corner sym rep table.bin" />
+    <None Include="corner symmetry table.bin" />
+    <None Include="corners move table.bin" />
     <None Include="flip move table.bin" />
     <None Include="twist move table.bin" />
+    <None Include="twist sym table.bin" />
+    <None Include="ud edges move table.bin" />
+    <None Include="ud edges sym table.bin" />
+    <None Include="ud slice phase 2 move table.bin" />
+    <None Include="flipslice sym class table.bin" />
+    <None Include="flipslice sym rep table.bin" />
+    <None Include="flipslice symmetry table.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

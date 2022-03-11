@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\move tables">
+      <UniqueIdentifier>{b207906f-e05f-45d6-8edc-2a3c8a50669f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\symmetry stuffs">
+      <UniqueIdentifier>{b4b0d52c-7850-4517-a2b0-a71b1460bb39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\pruning tables">
+      <UniqueIdentifier>{c6dd7fac-43cf-4e12-8a98-45469559942a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="facelets.h">
@@ -39,6 +48,12 @@
     <ClInclude Include="symmetries.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pruning.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="solver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -49,11 +64,44 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="twist move table.bin">
-      <Filter>Resource Files</Filter>
+    <None Include="corners move table.bin">
+      <Filter>Resource Files\move tables</Filter>
     </None>
     <None Include="flip move table.bin">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\move tables</Filter>
+    </None>
+    <None Include="twist move table.bin">
+      <Filter>Resource Files\move tables</Filter>
+    </None>
+    <None Include="ud edges move table.bin">
+      <Filter>Resource Files\move tables</Filter>
+    </None>
+    <None Include="ud slice phase 2 move table.bin">
+      <Filter>Resource Files\move tables</Filter>
+    </None>
+    <None Include="corner sym class table.bin">
+      <Filter>Resource Files\symmetry stuffs</Filter>
+    </None>
+    <None Include="twist sym table.bin">
+      <Filter>Resource Files\symmetry stuffs</Filter>
+    </None>
+    <None Include="flipslice sym class table.bin">
+      <Filter>Resource Files\symmetry stuffs</Filter>
+    </None>
+    <None Include="corner symmetry table.bin">
+      <Filter>Resource Files\symmetry stuffs</Filter>
+    </None>
+    <None Include="corner sym rep table.bin">
+      <Filter>Resource Files\symmetry stuffs</Filter>
+    </None>
+    <None Include="ud edges sym table.bin">
+      <Filter>Resource Files\symmetry stuffs</Filter>
+    </None>
+    <None Include="flipslice symmetry table.bin">
+      <Filter>Resource Files\symmetry stuffs</Filter>
+    </None>
+    <None Include="flipslice sym rep table.bin">
+      <Filter>Resource Files\symmetry stuffs</Filter>
     </None>
   </ItemGroup>
 </Project>

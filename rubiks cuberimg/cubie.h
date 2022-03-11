@@ -31,7 +31,7 @@ public:
 
 
 	// ------------------------------------------------
-	//set cube attributes 
+	//set cube attributes
 	void set_corn_perm(std::array <short, No_corner> cp) {
 		corn_perm = cp;
 	}
@@ -94,7 +94,7 @@ public:
 		for (short i = 0; i != 7; i++) {
 			twist = 3 * twist + corn_ori[i];
 		}
-		//The for loop doesn't need to go from 7 to 0 as the 
+		//The for loop doesn't need to go from 7 to 0 as the
 		//orientation of the last corner can
 		//be determined by the sum of the other corners
 		//as the total must be a multiple of 3
@@ -166,20 +166,20 @@ public:
 
 		//Kociemba defines the natural corner order as
 		//URF<UFL<ULB<UBR<DFR<DLF<DBL<DRB
-		//The corners are from positions URF to DRB 
+		//The corners are from positions URF to DRB
 		//in the corn_perm array
-		//for each corner, if any corner left of it 
+		//for each corner, if any corner left of it
 		//follows this order a count is incremented
 		//ie if DRB is left or URF then it will
 		//be incremented
-		//the total count is then multiply by the 
+		//the total count is then multiply by the
 		//factorial for that corner
 
 		return corners_val;
 	}
 
-	void set_corners(unsigned short corners_val){
-		std::array <short, 7> corn_coord_array;
+	void set_corners(unsigned short corners_val) {
+		std::array <short, 7> corn_coord_array{};
 		corn_perm.fill(-1);
 
 		for (short i = 2; i != 9; i++) {
@@ -260,9 +260,9 @@ public:
 	//Phase one places all the ud edges in the ud slice
 	//Phase two places them into the correct place
 	short get_ud_slice_phase_2() {
-		std::vector <short> ud_edge = {0, 0, 0, 0};
+		std::vector <short> ud_edge = { 0, 0, 0, 0 };
 		short j = 0;
-		short ud_edge_pos = 0;
+		unsigned short ud_edge_pos = 0;
 
 		//This for loop is used to give a unique value for the
 		//ud edge cubies. In phase 2 it will always evaluate to
@@ -273,13 +273,13 @@ public:
 				j++;
 			}
 			else {
-				ud_edge_pos = ud_edge_pos + b_coefficient(i, j - 1); 
+				ud_edge_pos = ud_edge_pos + b_coefficient(i, j - 1);
 				//in the first function k starts as -1
 				//so subtracting 1 isn't necessary
 			}
 		}
 
-		short ud_slice_phase_2 = 0;
+		unsigned short ud_slice_phase_2 = 0;
 		short rotations;
 		for (short i = 3; i != 0; i--) {
 			rotations = 0;
@@ -297,10 +297,10 @@ public:
 	}
 
 
-	void set_ud_slice_phase_2(short ud_slice_phase_2_value) {
+	void set_ud_slice_phase_2(unsigned short ud_slice_phase_2_value) {
 
-		short pos = ud_slice_phase_2_value / 24;
-		short perm = ud_slice_phase_2_value % 24;
+		unsigned short pos = ud_slice_phase_2_value / 24;
+		unsigned short perm = ud_slice_phase_2_value % 24;
 
 		std::vector <short> ud_edges = { FR, FL, BL, BR };
 
@@ -339,7 +339,7 @@ public:
 
 
 	//This only works in phase 2,
-	//as it assumes that the u and d edges are 
+	//as it assumes that the u and d edges are
 	//in the u slice and d slice
 	unsigned short get_ud_edges() {
 		unsigned short ud_edge_value = 0;
@@ -365,7 +365,7 @@ public:
 	}
 
 	void set_ud_edges(unsigned short ud_edge_value) {
-		std::array <short, 7> ud_edge_coord_array;
+		std::array <short, 7> ud_edge_coord_array{};
 		corn_perm.fill(-1);
 
 		for (short i = 2; i != 9; i++) {
@@ -403,8 +403,8 @@ public:
 	// ------------------------------------------------
 
 	void corner_multiply(cubie B) {
-		std::array <short, 8> c_ori;
-		std::array <short, 8> c_perm;
+		std::array <short, 8> c_ori{};
+		std::array <short, 8> c_perm{};
 
 		for (short i = 0; i != No_corner; i++) {
 
@@ -419,7 +419,7 @@ public:
 				//cube is a symmetry cube
 				c_ori[i] = oriA + oriB;
 				if (c_ori[i] >= 3) {
-					//Non symmetry cubes can 
+					//Non symmetry cubes can
 					//only multiply to produce other
 					//non symmetry cubes
 					//so the final orientation should be
@@ -445,7 +445,7 @@ public:
 				c_ori[i] = oriA - oriB;
 				if (c_ori[i] < 3) {
 					c_ori[i] += 3;
-					//If the orientation were less than 3 
+					//If the orientation were less than 3
 					//It would stop being a symmetry cube
 					//which cannot be
 				}
@@ -455,22 +455,22 @@ public:
 				c_ori[i] = oriA - oriB;
 				if (c_ori[i] < 0) {
 					c_ori[i] += 3;
-					//The product of 2 symmetry cubes must be 1 
+					//The product of 2 symmetry cubes must be 1
 					//normal cube
 					//so its orientation will be between 0 and 2
 				}
-			}			
+			}
 		}
-		
-		for (short i = 0; i != 8; i++){
+
+		for (short i = 0; i != 8; i++) {
 			corn_ori[i] = c_ori[i];
 			corn_perm[i] = c_perm[i];
 		}
 	}
 
 	void edge_multiply(cubie B) {
-		std::array <short, 12> e_ori;
-		std::array <short, 12> e_perm;
+		std::array <short, 12> e_ori{};
+		std::array <short, 12> e_perm{};
 
 		for (short i = 0; i != No_edge; i++) {
 			e_perm[i] = edge_perm[B.edge_perm[i]];
