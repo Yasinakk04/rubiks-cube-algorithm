@@ -221,7 +221,7 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 	cubie c;
 	cubie x;
 
-	std::array <short, 2048 * 495> flipslice_sym_classes{}; //This groups a number of ud slices that are
+	std::array <unsigned int, 2048 * 495> flipslice_sym_classes{}; //This groups a number of ud slices that are
 															//considered equivalent by symmetries
 
 	flipslice_sym_classes.fill(-1);						//The algorithm fills in all the permutations for one class before moving to the next
@@ -231,8 +231,8 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 	std::array <unsigned int, 2048 * 495> flipslice_symmetry{}; //This tells you what symmetry is applied to
 														//a specific ud slice permutation
 
-	//std::array <unsigned short, 64430> flipslice_sym_rep{}; //This tells you the ud slice used to represent
-	//													//a specific ud slice permutation and the flip of all edges
+	std::array <unsigned short, 64430> flipslice_sym_rep{}; //This tells you the ud slice used to represent
+														//a specific ud slice permutation and the flip of all edges
 
 															//the number of classes being 64430 was calculated by Kociemba
 															//dividing 2048 * 495 by 16 gives 63360, which is close to the real value
@@ -250,49 +250,48 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 			flipslice_value = 2048 * ud_slice + f;
 
 			if (flipslice_sym_classes[flipslice_value] == -1) {
-				std::cout << "ok\n";
-				//flipslice_sym_classes[flipslice_value] = flipslice_class;
+				flipslice_sym_classes[flipslice_value] = flipslice_class;
 				flipslice_symmetry[flipslice_value] = 0; //Its set to 0 because it is the base represent of the class
-				//flipslice_sym_rep[flipslice_class] = flipslice_value;
+				flipslice_sym_rep[flipslice_class] = flipslice_value;
 			}
 			else { continue; }
 
 			for (short s = 0; s != 16; s++) {
-				//cubie sym = symmetries[s];
-			/*	sym.edge_multiply(c);
+				cubie sym = symmetries[s];
+				sym.edge_multiply(c);
 				sym.edge_multiply(inv_symmetries[s]);
 
-				flipslice_value = 2048 * sym.get_ud_slice_phase_1() + sym.get_flip();*/
+				flipslice_value = 2048 * sym.get_ud_slice_phase_1() + sym.get_flip();
 
-				//if (flipslice_sym_classes[flipslice_value] == -1) {
-				//	flipslice_sym_classes[flipslice_value] = flipslice_class;
-				//	flipslice_symmetry[flipslice_value] = s;
-				//}
+				if (flipslice_sym_classes[flipslice_value] == -1) {
+					flipslice_sym_classes[flipslice_value] = flipslice_class;
+					flipslice_symmetry[flipslice_value] = s;
+				}
 			}
 			flipslice_class++;
 		}
 	}
 
-	//std::ofstream flipslice_sym_class_table("flipslice sym class table.bin", std::ios::out | std::ios::binary);
+	std::ofstream flipslice_sym_class_table("flipslice sym class table.bin", std::ios::out | std::ios::binary);
 
-	//for (int i = 0; i != 2048 * 495; i++) {
-	//	flipslice_sym_class_table.write((char*)&(flipslice_sym_rep[i]), 2);
-	//}
-	//flipslice_sym_class_table.close();
+	for (int i = 0; i != 2048 * 495; i++) {
+		flipslice_sym_class_table.write((char*)&(flipslice_sym_rep[i]), 2);
+	}
+	flipslice_sym_class_table.close();
 
-	//std::ofstream flipslice_symmetry_table("flipslice symmetry table.bin", std::ios::out | std::ios::binary);
+	std::ofstream flipslice_symmetry_table("flipslice symmetry table.bin", std::ios::out | std::ios::binary);
 
-	//for (int i = 0; i != 2048 * 495; i++) {
-	//	flipslice_symmetry_table.write((char*)&(flipslice_sym_rep[i]), 2);
-	//}
-	//flipslice_symmetry_table.close();
+	for (int i = 0; i != 2048 * 495; i++) {
+		flipslice_symmetry_table.write((char*)&(flipslice_sym_rep[i]), 2);
+	}
+	flipslice_symmetry_table.close();
 
-	//std::ofstream flipslice_sym_rep_table("flipslice sym rep table.bin", std::ios::out | std::ios::binary);
+	std::ofstream flipslice_sym_rep_table("flipslice sym rep table.bin", std::ios::out | std::ios::binary);
 
-	//for (int i = 0; i != 64430; i++) {
-	//	flipslice_sym_rep_table.write((char*)&(flipslice_sym_rep[i]), 2);
-	//}
-	//flipslice_sym_rep_table.close();
+	for (int i = 0; i != 64430; i++) {
+		flipslice_sym_rep_table.write((char*)&(flipslice_sym_rep[i]), 2);
+	}
+	flipslice_sym_rep_table.close();
 }
 
 //
