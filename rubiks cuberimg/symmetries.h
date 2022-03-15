@@ -158,8 +158,8 @@ void generate_twist_symmetry(std::array <cubie, 48> symmetries,
 		
 		for (short s = 0; s != 16; s++) {
 			c = symmetries[s];
-			c.multiply(x);
-			c.multiply(inv_symmetries[s]);
+			c.corner_multiply(x);
+			c.corner_multiply(inv_symmetries[s]);
 			
 			sym_twist_conversion[16 * t + s] = c.get_twist();
 		}
@@ -168,7 +168,7 @@ void generate_twist_symmetry(std::array <cubie, 48> symmetries,
 	std::ofstream something("twist sym table.bin", std::ios::out | std::ios::binary);
 
 	for (int i = 0; i != 16 * 2187; i++) {
-		something.write((char*)&(sym_twist_conversion[i]), 2);
+		something.write((char*)&(sym_twist_conversion[i]), sizeof(unsigned short));
 	}
 	something.close();
 }
@@ -287,21 +287,21 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 	std::ofstream flipslice_sym_class_table("flipslice sym class table.bin", std::ios::out | std::ios::binary);
 
 	for (int i = 0; i != 101376; i++) {
-		flipslice_sym_class_table.write((char*)&(flipslice_sym_classes[i]), 2);
+		flipslice_sym_class_table.write((char*)&(flipslice_sym_classes[i]), sizeof(unsigned int));
 	}
 	flipslice_sym_class_table.close();
 
 	std::ofstream flipslice_symmetry_table("flipslice symmetry table.bin", std::ios::out | std::ios::binary);
 
 	for (int i = 0; i != 1013760; i++) {
-		flipslice_symmetry_table.write((char*)&(flipslice_symmetry[i]), 2);
+		flipslice_symmetry_table.write((char*)&(flipslice_symmetry[i]), sizeof(unsigned int));
 	}
 	flipslice_symmetry_table.close();
 
 	std::ofstream flipslice_sym_rep_table("flipslice sym rep table.bin", std::ios::out | std::ios::binary);
 
 	for (int i = 0; i != 64430; i++) {
-		flipslice_sym_rep_table.write((char*)&(flipslice_sym_rep[i]), 2);
+		flipslice_sym_rep_table.write((char*)&(flipslice_sym_rep[i]), sizeof(unsigned short));
 	}
 	flipslice_sym_rep_table.close();
 }
@@ -312,25 +312,24 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
  //now we need to do something similar but with the corners
 
 void generate_corner_symmetry_and_classes(std::array <cubie, 48> symmetries,
-											std::array <cubie, 48> inv_symmetries) {
+	std::array <cubie, 48> inv_symmetries) {
 	cubie c;
 	cubie x;
 	cubie sym;
 
-	std::vector <unsigned short> corner_sym_classes{}; 							
-						
-	std::vector <unsigned short> corner_symmetry{}; 													
+	std::vector <unsigned short> corner_sym_classes{};
+
+	std::vector <unsigned short> corner_symmetry{};
 
 	std::vector <unsigned short> corner_sym_rep{};
 
 	for (unsigned int i = 0; i != 40320; i++) {
-		corner_sym_classes.push_back(65500);
+		corner_sym_classes.push_back(60000);
 		corner_symmetry.push_back(0);
-		corner_sym_rep.push_back(0);
 	}
 
-	for (unsigned int i = 0; i != 2768; i++) {
-		
+	for (unsigned int i = 0; i != 2769; i++) {
+		corner_sym_rep.push_back(0);
 	}
 
 	//The algorithm fills in all the permutations for one class before moving to the next
@@ -345,144 +344,54 @@ void generate_corner_symmetry_and_classes(std::array <cubie, 48> symmetries,
 														//and ud slice edge arrangement
 	unsigned short corner_class = 0;
 
-	std::cout << corner_sym_classes[412];
+	bool increment = false;
 
-
-	for (unsigned short corner = 0; corner != 40320; corner++) {
+	for (int corner = 0; corner < 40320; corner++) {
 		x.set_corners(corner);
-
-
-        if (corner_sym_classes[corner] == 65500) {
+		if (corner_sym_classes[corner] == 60000) {
 			corner_sym_classes[corner] = corner_class;
 			corner_symmetry[corner] = 0; //Its set to 0 because it is the base representent of the class
 			corner_sym_rep[corner_class] = corner;
 
-			for (short s = 0; s != 16; s++) {
+			for (short s = 0; s < 16; s++) {
+				
 
 				sym = symmetries[s];
-				sym.corner_multiply(c);
+				sym.corner_multiply(x);
 				sym.corner_multiply(inv_symmetries[s]);
-
-				if (s == 5 && corner == 20) {
-					sym.output_cubie();
-				}
 
 				corner_value = sym.get_corners();
 
-				if (corner_sym_classes[corner_value] == 65500) {
+				if (corner_sym_classes[corner_value] == 60000) {
 					corner_sym_classes[corner_value] = corner_class;
 					corner_symmetry[corner_value] = s;
 				}
 			}
-			corner_class++;
-        }
+		}
 
 		else { continue; }
+
+		corner_class++;
 	}
-	
-	std::cout << corner_class;
 
 	std::ofstream corner_sym_class_table("corner sym class table.bin", std::ios::out | std::ios::binary);
 
 	for (int i = 0; i != 40320; i++) {
-		corner_sym_class_table.write((char*)&(corner_sym_classes[i]), 2);
+		corner_sym_class_table.write((char*)&(corner_sym_classes[i]), sizeof(unsigned short));
 	}
 	corner_sym_class_table.close();
 
 	std::ofstream corner_symmetry_table("corner symmetry table.bin", std::ios::out | std::ios::binary);
 
 	for (int i = 0; i != 40320; i++) {
-		corner_symmetry_table.write((char*)&(corner_symmetry[i]), 2);
+		corner_symmetry_table.write((char*)&(corner_symmetry[i]), sizeof(unsigned short));
 	}
 	corner_symmetry_table.close();
 
 	std::ofstream corner_sym_rep_table("corner sym rep table.bin", std::ios::out | std::ios::binary);
 
-	for (int i = 0; i != 2768; i++) {
-		corner_sym_rep_table.write((char*)&(corner_sym_rep[i]), 2);
+	for (int i = 0; i != 2769; i++) {
+		corner_sym_rep_table.write((char*)&(corner_sym_rep[i]), sizeof(unsigned short));
 	}
 	corner_sym_rep_table.close();
-
-
-
-
-
-
-
-	
-	//cubie c;
-	//cubie x;
-
-	//std::vector <unsigned short> corn_sym_classes{};
-
-	//std::vector <unsigned short> corn_symmetry{};
-
-	//std::vector <unsigned short> corn_sym_rep{}; //This tells you the corner permutation used to represent
-	//													//the permutations of a group or class of permutations
-	//													//that are equivalent by symmetry
-
-	//													//the number of classes being 2768 was also calculated by Kociemba
-	//													//dividing 8! by 16 gives 2520, which is close to the real value
-
-	//for (unsigned short i = 0; i != 40320; i++) {
-	//	corn_sym_classes.push_back(65500);
-	//	corn_symmetry.push_back(0);
-	//}
-
-	//for (unsigned short i = 0; i != 2768; i++) {
-	//	corn_sym_rep.push_back(0);
-	//}
-
-
-
-	//short corn_value = 0; //This value defines the permutation by the corner permutation
-	//int corn_class = 0;
-
-
-	//for (unsigned short corn = 0; corn != 40320; corn++) {
-	//	c.set_corners(corn);
-
-	//	if (corn_sym_classes[corn] == 65500) {
-	//		corn_sym_classes[corn] = corn_class;
-	//		corn_symmetry[corn] = 0; //Its set to 0 because it is the base represent of the class
-	//		corn_sym_rep[corn_class] = corn;
-	//	}
-	//	else { continue; }
-
-	//	for (short s = 0; s != 16; s++) {
-
-	//		cubie sym = symmetries[s];
-	//		sym.corner_multiply(c);
-	//		sym.corner_multiply(inv_symmetries[s]);
-
-	//		corn_value = sym.get_corners();
-
-	//		if (corn_sym_classes[corn_value] == 65500) {
-	//			corn_sym_classes[corn_value] = corn_class;
-	//			corn_symmetry[corn_value] = s;
-	//		}
-	//	}
-	//	corn_class++;
-	//}
-
-	//std::ofstream corner_sym_class_table("corner sym class table.bin", std::ios::out | std::ios::binary);
-
-	//for (int i = 0; i != 40320; i++) {
-	//	corner_sym_class_table.write((char*)&(corn_sym_classes[i]), 2);
-	//}
-	//corner_sym_class_table.close();
-
-	//std::ofstream corner_symmetry_table("corner symmetry table.bin", std::ios::out | std::ios::binary);
-
-	//for (int i = 0; i != 40320; i++) {
-	//	corner_symmetry_table.write((char*)&(corn_symmetry[i]), 2);
-	//}
-	//corner_symmetry_table.close();
-
-	//std::ofstream corner_sym_rep_table("corner sym rep table.bin", std::ios::out | std::ios::binary);
-
-	//for (int i = 0; i != 2768; i++) {
-	//	corner_sym_rep_table.write((char*)&(corn_sym_rep[i]), 2);
-	//}
-	//corner_sym_rep_table.close();
 }

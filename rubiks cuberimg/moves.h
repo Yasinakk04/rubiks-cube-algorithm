@@ -115,7 +115,7 @@ inline void make_twist_table() {
 	 std::ofstream something("twist move table.bin", std::ios::out | std::ios::binary);
 	
 	 for (int i = 0; i != 2187 * 18; i++) {
-		 something.write((char*)&(twist_table[i]), 2);
+		 something.write((char*)&(twist_table[i]), sizeof(unsigned short));
 	 }
 	
 	 something.close();
@@ -139,7 +139,7 @@ inline void make_flip_table() {
 	 std::ofstream something("flip move table.bin", std::ios::out | std::ios::binary);
 	
 	 for (int i = 0; i != 2048 * 18; i++) {
-		something.write((char*)&(flip_table[i]), 2);
+		something.write((char*)&(flip_table[i]), sizeof(unsigned short));
 	 }
 
 	 something.close();
@@ -162,7 +162,7 @@ inline void make_ud_edges_table() {
 	 std::ofstream something("ud edges move table.bin", std::ios::out | std::ios::binary);
 	
 	 for (int i = 0; i != 40320 * 18; i++) {
-		something.write((char*)&(ud_edges_table[i]), 2);
+		something.write((char*)&(ud_edges_table[i]), sizeof(unsigned short));
 	 }
 	 something.close();
 	 
