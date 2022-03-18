@@ -103,5 +103,8 @@
     <None Include="flipslice sym rep table.bin">
       <Filter>Resource Files\symmetry stuffs</Filter>
     </None>
+    <None Include="freeglut.dll">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
