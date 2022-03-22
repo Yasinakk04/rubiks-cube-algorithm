@@ -106,5 +106,8 @@
     <None Include="freeglut.dll">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="flipslice_twist_depth3.bin">
+      <Filter>Resource Files\pruning tables</Filter>
+    </None>
   </ItemGroup>
 </Project>

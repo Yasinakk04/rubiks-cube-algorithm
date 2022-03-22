@@ -149,7 +149,12 @@ std::array <std::array <short, 48>, 18> generate_symmetry_move(std::array <cubie
 
 void generate_twist_symmetry(std::array <cubie, 48> symmetries,
 	std::array <cubie, 48> inv_symmetries) {
-	std::array <unsigned short, 16 * 2187> sym_twist_conversion{};
+	std::vector <unsigned short> sym_twist_conversion{};
+
+	for (unsigned short i = 0; i != 16 * 2187; i++) {
+		sym_twist_conversion.push_back(0);
+	}
+
 	cubie x;
 	cubie c;
 
@@ -178,7 +183,11 @@ void generate_ud_edges_symmetry(std::array <cubie, 48> symmetries,
 
 	//Another table is necessary for the u and d edges
 
-	std::array <unsigned short, 40320 * 16> ud_edge_sym_conversion{};
+	std::vector <unsigned short> ud_edge_sym_conversion{};
+	for (unsigned int i = 0; i != 40320 * 16; i++) {
+		ud_edge_sym_conversion.push_back(0);
+	}
+
 
 	cubie x;
 	cubie c;
@@ -199,7 +208,7 @@ void generate_ud_edges_symmetry(std::array <cubie, 48> symmetries,
 	std::ofstream something("ud edges sym table.bin", std::ios::out | std::ios::binary);
 
 	for (int i = 0; i != 16 * 40320; i++) {
-		something.write((char*)&(ud_edge_sym_conversion[i]), 2);
+		something.write((char*)&(ud_edge_sym_conversion[i]), sizeof(unsigned short));
 	}
 	something.close();
 
@@ -225,7 +234,7 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 															//considered equivalent by symmetries
 																//2048 * 495
 
-	std::vector <unsigned int> flipslice_symmetry{}; //This tells you what symmetry is applied to
+	std::vector <unsigned short> flipslice_symmetry{}; //This tells you what symmetry is applied to
 													//a specific ud slice permutation
 
 	std::vector <unsigned short> flipslice_sym_rep{}; //This tells you the ud slice used to represent
@@ -233,7 +242,7 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 
 
 
-	for (unsigned int i = 0; i != 1013760; i++) {
+	for (unsigned int i = 0; i != 2048 * 495; i++) {
 		flipslice_sym_classes.push_back(2000000);
 		flipslice_symmetry.push_back(0);
 	}
@@ -294,7 +303,7 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 	std::ofstream flipslice_symmetry_table("flipslice symmetry table.bin", std::ios::out | std::ios::binary);
 
 	for (int i = 0; i != 1013760; i++) {
-		flipslice_symmetry_table.write((char*)&(flipslice_symmetry[i]), sizeof(unsigned int));
+		flipslice_symmetry_table.write((char*)&(flipslice_symmetry[i]), sizeof(unsigned short));
 	}
 	flipslice_symmetry_table.close();
 

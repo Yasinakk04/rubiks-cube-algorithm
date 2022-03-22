@@ -3,6 +3,8 @@
 #include <array>
 #include <iostream>
 #include <fstream>
+#include <vector>
+
 #include "enums.h"
 #include "cubie.h"
 
@@ -98,9 +100,12 @@ inline std::array <cubie, 18> make_moves() {
 
 inline void make_twist_table() {
 	 std::array <cubie, 18> moves = make_moves();
-	
-	 std::array <unsigned short, 2187 * 18> twist_table{};
-	
+	 std::vector <unsigned short> twist_table;
+
+	 for (int i = 0; i != 2187 * 18; i++) {
+		 twist_table.push_back(0);
+	 }
+
 	 cubie c;
 	
 	 for (unsigned short t = 0; t != 2187; t++){ //This for loop enumerates through every corner permutation
@@ -123,9 +128,12 @@ inline void make_twist_table() {
 	
 inline void make_flip_table() {
 	 std::array <cubie, 18> moves = make_moves();
-	
-	 std::array <unsigned short, 2048 * 18> flip_table{};
-	
+	 std::vector <unsigned short> flip_table;
+
+	 for (int i = 0; i != 2048 * 18; i++) {
+		 flip_table.push_back(0);
+	 }
+
 	 cubie c;
 	
 	 for (short f = 0; f != 2048; f++) { //This works essentially the same as the twist table
@@ -147,8 +155,13 @@ inline void make_flip_table() {
 	
 inline void make_ud_edges_table() {
 	 std::array <cubie, 18> moves = make_moves();
-	
-	 std::array <unsigned short, 40320 * 18> ud_edges_table{};
+
+	 std::vector <unsigned short> ud_edges_table;
+
+	 for (int i = 0; i != 40320 * 18; i++) {
+		 ud_edges_table.push_back(0);
+	 }
+
 	 cubie c;
 	
 	 for (unsigned short ud = 0; ud != 40320; ud++) {
@@ -165,42 +178,19 @@ inline void make_ud_edges_table() {
 		something.write((char*)&(ud_edges_table[i]), sizeof(unsigned short));
 	 }
 	 something.close();
-	 
-	
-	 std::cout << ud_edges_table[124];
-	
-	 unsigned short x;
-	
-	 x = ud_edges_table[U * 3];
-	 x = ud_edges_table[18 * x + D * 3];
-	 x = ud_edges_table[18 * x + R * 3 + 1];
-	 x = ud_edges_table[18 * x + L * 3 + 1];
-	 x = ud_edges_table[18 * x + F * 3 + 1];
-	 x = ud_edges_table[18 * x + U * 3 + 2];
-	 x = ud_edges_table[18 * x + D * 3];
-	 x = ud_edges_table[18 * x + F * 3 + 1];
-	 x = ud_edges_table[18 * x + U * 3];
-	 x = ud_edges_table[18 * x + D * 3 + 1];
-	 x = ud_edges_table[18 * x + B * 3 + 1];
-	 x = ud_edges_table[18 * x + L * 3 + 1];
-	 x = ud_edges_table[18 * x + R * 3 + 1];
-	 x = ud_edges_table[18 * x + U * 3 + 2];
-	 x = ud_edges_table[18 * x + L * 3 + 1];
-	 x = ud_edges_table[18 * x + F * 3 + 1];
-	 x = ud_edges_table[18 * x + U * 3];
-	 x = ud_edges_table[18 * x + D * 3 + 2];
-	 x = ud_edges_table[18 * x + F * 3 + 1];
-	 x = ud_edges_table[18 * x + U * 3];
-	 x = ud_edges_table[18 * x + D * 3 + 1];
-	 x = ud_edges_table[18 * x + F * 3 + 1];
 }
 
 
 
 inline void make_corners_table() {
+
 	 std::array <cubie, 18> moves = make_moves();
-	
-	 std::array <unsigned short, 40320 * 18> corners_table{};
+	 std::vector <unsigned short> corners_table;
+
+	 for (unsigned int i = 0; i != 40320 * 18; i++) {
+		 corners_table.push_back(0);
+	 }
+
 	 cubie c;
 	
 	 for (unsigned short corn = 0; corn != 40320; corn++) {
@@ -221,8 +211,14 @@ inline void make_corners_table() {
 }
 
 inline void make_ud_slice_phase_2_table() {
+
 	std::array <cubie, 18> moves = make_moves();
-	std::array <unsigned short, 11880 * 18> ud_slice_phase_2_table{};
+	std::vector <unsigned short> ud_slice_phase_2_table;
+
+	for (unsigned int i = 0; i != 11880 * 18; i++) {
+		ud_slice_phase_2_table.push_back(0);
+	}
+
 	cubie c;
 
 	for (short ud = 0; ud != 11880; ud++) {

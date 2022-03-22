@@ -169,6 +169,7 @@
     <None Include="corner symmetry table.bin" />
     <None Include="corners move table.bin" />
     <None Include="flip move table.bin" />
+    <None Include="flipslice_twist_depth3.bin" />
     <None Include="freeglut.dll" />
     <None Include="twist move table.bin" />
     <None Include="twist sym table.bin" />
