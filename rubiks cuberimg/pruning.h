@@ -41,8 +41,52 @@ void set_corners_ud_edges_depth3(unsigned int index, unsigned int value) {
 	corners_ud_edges_depth3[base] |= value << shift;
 }
 
+unsigned short do_phase_2_move(unsigned long long moveses,
+	std::vector <unsigned short> twist_table,
+	std::vector <unsigned short> flip_table,
+	std::vector <unsigned short> ud_slice_phase_2_table,
+	std::vector <unsigned int> flipslice_sym_classes,
+	std::vector <unsigned short> flipslice_sym,
+	std::vector <unsigned short> sym_twist_conversion,
+	unsigned short i) {
 
-unsigned short do_move(unsigned long long moveses,
+	unsigned int twist = 0, flip = 0, ud_slice = 0;
+	unsigned short m;
+	unsigned int index = 0;
+	unsigned int flipslice;
+
+	unsigned short flipslice_class = 0;
+	unsigned short flipslice_symmetry;
+
+
+	while (moveses != 0) {
+		unsigned short m = moveses % 18;
+		moveses = moveses / 18;
+
+		twist = twist_table[18 * twist + m];
+		flip = flip_table[18 * flip + m];
+		ud_slice = ud_slice_phase_2_table[432 * ud_slice + m] / 24;
+
+		flipslice = (ud_slice << 11) + flip;
+
+		flipslice_class = flipslice_sym_classes[flipslice];
+		flipslice_symmetry = flipslice_sym[flipslice];
+
+		twist = sym_twist_conversion[(twist << 4) + flipslice_symmetry];
+		////<<4 does times 2^4 or times 16
+
+		index = 2187 * flipslice_class + twist;
+
+		if (flipslice_twist_depth3[index] < i) { //if it's less than it's already filled
+			return 4000000000;
+		}
+	}
+
+	return index;
+}
+
+
+unsigned short do_phase_1_move(unsigned long long moveses,
 						std::vector <unsigned short> twist_table,
 						std::vector <unsigned short> flip_table,
 						std::vector <unsigned short> ud_slice_phase_2_table,
@@ -84,8 +128,6 @@ unsigned short do_move(unsigned long long moveses,
 	}
 
 	return index;
-
-	// -----------------------------------------------------
 }
 
 void make_phase_1_pruning_table() {
@@ -97,40 +139,7 @@ void make_phase_1_pruning_table() {
 		flipslice_sym.push_back(0);
 	}
 
-
-	unsigned int sym;
-
-	unsigned short rep = 0;
-	unsigned short flip;
-	unsigned short twist;
-	//unsigned int done;
-	////bool backsearch;
-	//unsigned short depth = 0;
-	unsigned short ud_slice;
-	unsigned int flipslice_class;
-	unsigned int flipslice_classes;
-
 	unsigned int index;
-	/*unsigned int index_new = 0;
-	unsigned int index_newer;
-
-	unsigned short mult;
-	bool match;*/
-
-	unsigned short flipslice;
-
-	//unsigned short flipslice_new;
-	//unsigned short twist_new;
-	//unsigned short flip_new;
-	//unsigned short ud_slice_new;
-
-	//unsigned short flipslice_class_new;
-	//unsigned short flipslice_symmetry_new;
-
-	//unsigned int twist_newer;
-
-
-
 
 	std::array <cubie, 48> symmetries = gen_symmetries();
 	std::array <cubie, 48> inv_symmetries = gen_inv_symmetries(symmetries);
@@ -277,7 +286,7 @@ void make_phase_1_pruning_table() {
 			total_moves = i * total_moves + 18;
 
 			for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
-				index = do_move(moveses, twist_table, flip_table, ud_slice_phase_2_table, 
+				index = do_phase_1_move(moveses, twist_table, flip_table, ud_slice_phase_2_table, 
 					flipslice_sym_classes, flipslice_sym, sym_twist_conversion, i);
 
 				index = 0;
