@@ -505,9 +505,8 @@ void make_phase_1_pruning_table() {
 					std::cout << getTime();
 				}
 
-				else if (i > 6 && moveses == total_moves / 4){
-					std::cout << "half way for " << i << " pass \n\n";
-					std::cout << getTime();
+				else if (i == 6){
+					std::cout << "moveses is " << moveses << "\n\n";
 				}
 
 			}
