@@ -294,16 +294,18 @@ unsigned short do_phase_1_move(unsigned long long moveses,
 
 	unsigned int twist = 0, flip = 0, ud_slice = 0;
 	unsigned short m;
+	unsigned short last = 25;
 	unsigned int index = 0;
 	unsigned int flipslice;
 
 	unsigned short flipslice_class = 0;
 	unsigned short flipslice_symmetry;
+	unsigned short modding = 17 + i;
 
 
-	while (moveses != 0) {
-		unsigned short m = moveses % 18;
-		moveses = moveses / 18;
+	for (unsigned short x = 0; x != i; x++) {
+		unsigned short m = moveses % modding;
+		moveses = moveses / modding;
 
 		twist = twist_table[18 * twist + m];
 		flip = flip_table[18 * flip + m];
@@ -322,6 +324,14 @@ unsigned short do_phase_1_move(unsigned long long moveses,
 		if (flipslice_twist_depth3[index] < i) { //if it's less than it's already filled
 			return 4000000000;
 		}
+
+		else if (last == m / 3) {
+			return 4000000000;
+		}
+
+		last = m / 3;
+
+		modding--;
 	}
 
 	return index;
@@ -481,12 +491,12 @@ void make_phase_1_pruning_table() {
 
 		flipslice_twist_depth3[0] = 0;
 
-		for (unsigned short i = 1; i != 13; i++) {
-			total_moves = i * total_moves + 18;
+		for (unsigned short i = 17; i != 29; i++) {
+			total_moves = i * total_moves + 17;
 
 			for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
 				index = do_phase_1_move(moveses, twist_table, flip_table, ud_slice_phase_2_table, 
-					flipslice_sym_classes, flipslice_sym, sym_twist_conversion, i);
+					flipslice_sym_classes, flipslice_sym, sym_twist_conversion, i - 16);
 				
 				if (index == 4000000000) {
 					continue;
@@ -498,17 +508,18 @@ void make_phase_1_pruning_table() {
 
 
 				if (moveses == total_moves / 2) {
-					std::cout << "half way for " << i << " pass \n\n";
-					std::cout << getTime();
+					std::cout << "half way for " << i - 16 << " pass \n";
+					std::cout << getTime() << "\n\n";
 				}
 
-				else if (i == 6){
-					std::cout << "moveses is " << moveses << "\n\n";
+				else if (i > 22 && moveses % 2048 == 0){
+					std::cout << "moveses is " << moveses << " and pass " << i - 16 << "\n";
+					std::cout << getTime() << "\n\n";
 				}
 
 			}
-			std::cout << i << " pass has finished \n\n";
-			std::cout << getTime();
+			std::cout << i - 16 << " pass has finished \n";
+			std::cout << getTime() << "\n\n";
 		}
 
 		for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
