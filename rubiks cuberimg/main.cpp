@@ -26,6 +26,24 @@ cubie cube = cubie();
 
 int main() {
 	
+	make_twist_table(); make_flip_table(); make_ud_edges_table(); make_corners_table(); make_ud_slice_phase_2_table();
+
+
+	std::array <cubie, 48> symmetries = gen_symmetries();
+	std::array <cubie, 48> inv_symmetries = gen_inv_symmetries(symmetries);
+
+	generate_twist_symmetry(symmetries, inv_symmetries);
+
+	generate_ud_edges_symmetry(symmetries, inv_symmetries);
+
+	generate_flipslices_symmetry_and_classes(symmetries, inv_symmetries);
+
+	generate_corner_symmetry_and_classes(symmetries, inv_symmetries);
+
+
+	std::cout << "move table and symmetry tables done \n\n";
+
+
 	make_phase_1_pruning_table();
 }
 

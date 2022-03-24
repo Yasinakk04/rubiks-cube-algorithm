@@ -176,8 +176,6 @@ inline void make_ud_edges_table() {
 	 something.close();
 }
 
-
-
 inline void make_corners_table() {
 
 	 std::array <cubie, 18> moves = make_moves();
