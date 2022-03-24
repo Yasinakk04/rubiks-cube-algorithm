@@ -3,6 +3,9 @@
 #include <array>
 #include <vector>
 #include <fstream>
+#include <ctime>
+
+#include <chrono>
 
 #include "symmetries.h"
 #include "cubie.h"
@@ -17,6 +20,16 @@ unsigned int get_flipslice_twist_depth_3(unsigned int index) {
 	unsigned int y = flipslice_twist_depth3[index / 16];
 	y >>= (index % 16) * 2;
 	return y & 3;
+}
+
+
+std::string getTime() {
+	time_t result = time(0);
+
+	char str[26];
+	ctime_s(str, sizeof str, &result);
+
+	return str;
 }
 
 
@@ -67,15 +80,14 @@ unsigned short do_phase_2_move(unsigned long long moveses,
 		corner = corners_table[18 * corner + m];
 		ud_slice = ud_slice_phase_2_table[432 * ud_slice + m] / 24;
 
-		flipslice = (ud_slice << 11) + flip;
 
 		corner_sym_class = corner_sym_classes[corner];
-		corner_symmetry = corner_sym[flipslice];
+		corner_symmetry = corner_sym[corner];
 
-		twist = sym_twist_conversion[(twist << 4) + flipslice_symmetry];
+		ud_edges = sym_twist_conversion[(ud_edges << 4) + corner_symmetry];
 		////<<4 does times 2^4 or times 16
 
-		index = 2187 * flipslice_class + twist;
+		index = 40320 * corner_sym_class + ud_edges;
 
 		if (flipslice_twist_depth3[index] < i) { //if it's less than it's already filled
 			return 4000000000;
@@ -219,7 +231,7 @@ void make_phase_2_pruning_table() {
 
 	flipslice_twist_depth3[0] = 0;
 
-	for (unsigned short i = 1; i != 13; i++) {
+	/*for (unsigned short i = 1; i != 13; i++) {
 		total_moves = i * total_moves + 18;
 
 		for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
@@ -239,7 +251,7 @@ void make_phase_2_pruning_table() {
 
 		}
 		std::cout << i << " pass has finished \n\n";
-	}
+	}*/
 
 	for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
 		flipslice_twist_depth3[i] = flipslice_twist_depth3[i] % 3;
@@ -478,20 +490,29 @@ void make_phase_1_pruning_table() {
 			for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
 				index = do_phase_1_move(moveses, twist_table, flip_table, ud_slice_phase_2_table, 
 					flipslice_sym_classes, flipslice_sym, sym_twist_conversion, i);
+				
 				if (index == 4000000000) {
 					continue;
 				}
+				
 				else if (flipslice_twist_depth3[index] = 30) {
 					flipslice_twist_depth3[index] = i;
 				}
 
 
 				if (moveses == total_moves / 2) {
-					std::cout << "half way for " << i << "pass \n\n";
+					std::cout << "half way for " << i << " pass \n\n";
+					std::cout << getTime();
+				}
+
+				else if (i > 6 && moveses == total_moves / 4){
+					std::cout << "half way for " << i << " pass \n\n";
+					std::cout << getTime();
 				}
 
 			}
 			std::cout << i << " pass has finished \n\n";
+			std::cout << getTime();
 		}
 
 		for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
