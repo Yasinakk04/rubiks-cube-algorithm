@@ -288,8 +288,6 @@ void make_phase_1_pruning_table() {
 			for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
 				index = do_phase_1_move(moveses, twist_table, flip_table, ud_slice_phase_2_table, 
 					flipslice_sym_classes, flipslice_sym, sym_twist_conversion, i);
-
-				index = 0;
 				if (index == 4000000000) {
 					continue;
 				}
