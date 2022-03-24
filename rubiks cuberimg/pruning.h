@@ -14,15 +14,6 @@ std::vector <unsigned char> flipslice_twist_depth3{};
 std::vector <unsigned short> corners_ud_edges_depth3{};
 
 
-//This is meant to give exactly the number of moves mod 3 to solve this cube in phase 1
-//Im not sure how though but this is what Kociemba states on his site
-unsigned int get_flipslice_twist_depth_3(unsigned int index) {
-	unsigned int y = flipslice_twist_depth3[index / 16];
-	y >>= (index % 16) * 2;
-	return y & 3;
-}
-
-
 std::string getTime() {
 	time_t result = time(0);
 
@@ -32,6 +23,13 @@ std::string getTime() {
 	return str;
 }
 
+//This is meant to give exactly the number of moves mod 3 to solve this cube in phase 1
+//Im not sure how though but this is what Kociemba states on his site
+unsigned int get_flipslice_twist_depth_3(unsigned int index) {
+	unsigned int y = flipslice_twist_depth3[index / 16];
+	y >>= (index % 16) * 2;
+	return y & 3;
+}
 
 //This is meant to give at the least the number of moves to solve phase 2
 unsigned int get_corners_ud_edges_depth_3(unsigned int index) {
@@ -57,39 +55,37 @@ void set_corners_ud_edges_depth3(unsigned int index, unsigned int value) {
 unsigned short do_phase_2_move(unsigned long long moveses,
 	std::vector <unsigned short> ud_edges_table,
 	std::vector <unsigned short> corners_table,
-	std::vector <unsigned short> ud_slice_phase_2_table,
-	std::vector <unsigned int> corner_sym_classes,
-	std::vector <unsigned short> corner_sym,
-	std::vector <unsigned short> sym_twist_conversion,
+	std::vector <unsigned short> corner_sym_classes,
+	std::vector <unsigned short> corner_symmetry,
+	std::vector <unsigned short> ud_edge_sym_conversion,
 	unsigned short i) {
 
-	unsigned short ud_edges = 0, corner = 0, ud_slice = 0;
+	unsigned int ud_edges = 0, corner = 0, ud_slice = 0;
 	unsigned short m;
 	unsigned int index = 0;
 	unsigned int flipslice;
 
 	unsigned short corner_sym_class = 0;
-	unsigned short corner_symmetry;
+	unsigned short corner_sym;
 
 
 	while (moveses != 0) {
-		unsigned short m = moveses % 18;
-		moveses = moveses / 18;
+		unsigned short m = moveses % 10;
+		moveses = moveses / 10;
 
 		ud_edges = ud_edges_table[18 * ud_edges + m];
 		corner = corners_table[18 * corner + m];
-		ud_slice = ud_slice_phase_2_table[432 * ud_slice + m] / 24;
-
-
 		corner_sym_class = corner_sym_classes[corner];
-		corner_symmetry = corner_sym[corner];
+		corner_sym = corner_symmetry[corner];
 
-		ud_edges = sym_twist_conversion[(ud_edges << 4) + corner_symmetry];
-		////<<4 does times 2^4 or times 16
+		ud_edges = ud_edge_sym_conversion[(ud_edges << 4) + corner_sym];
+		////<< 4 does times 2^4 or times 16
 
 		index = 40320 * corner_sym_class + ud_edges;
 
-		if (flipslice_twist_depth3[index] < i) { //if it's less than it's already filled
+
+
+		if (corners_ud_edges_depth3[index] < i) { //if it's less than it's already filled
 			return 4000000000;
 		}
 	}
@@ -100,10 +96,10 @@ unsigned short do_phase_2_move(unsigned long long moveses,
 void make_phase_2_pruning_table() {
 
 	cubie c;
-	std::vector <unsigned short> flipslice_sym{};
+	std::vector <unsigned short> corners_ud_edges_depth3{};
 
 	for (unsigned int i = 0; i != 64430; i++) {
-		flipslice_sym.push_back(0);
+		corners_ud_edges_depth3.push_back(0);
 	}
 
 	unsigned int index;
@@ -136,90 +132,91 @@ void make_phase_2_pruning_table() {
 
 	ud_edge_sym_conversion_f.close();
 
-	// -------------------------------------------------------------------------------------
-
-	std::ifstream flip_table_f;
-	flip_table_f.open("flip move table.bin");
-
-	std::vector <unsigned short> flip_table;
-
-	for (unsigned int i = 0; i != 2048 * 495; i++) {
-		flip_table.push_back(0);
-	}
-
-	for (unsigned int i = 0; i != 2048 * 495; i++) {
-		flip_table_f.read((char*)&flip_table[i], sizeof(unsigned short));
-	}
-
-	flip_table_f.close();
 
 	// -------------------------------------------------------------------------------------
 
-	std::ifstream ud_slice_table_f;
-	ud_slice_table_f.open("ud slice phase 2 move table.bin");
+	std::ifstream corners_table_f;
+	corners_table_f.open("corners move table.bin");
 
-	std::vector <unsigned short> ud_slice_phase_2_table;
+	std::vector <unsigned short> corners_table;
 
-	for (unsigned int i = 0; i != 2048 * 495; i++) {
-		ud_slice_phase_2_table.push_back(0);
+	for (unsigned int i = 0; i != 40320 * 18; i++) {
+		corners_table.push_back(0);
 	}
 
-	for (unsigned int i = 0; i != 2048 * 495; i++) {
-		ud_slice_table_f.read((char*)&ud_slice_phase_2_table[i], sizeof(unsigned int));
+	for (unsigned int i = 0; i != 40320 * 18; i++) {
+		corners_table_f.read((char*)&corners_table[i], sizeof(unsigned short));
 	}
 
-	ud_slice_table_f.close();
+	corners_table_f.close();
 
 	// -------------------------------------------------------------------------------------
 
-	std::ifstream flipslice_sym_class_f;
-	flipslice_sym_class_f.open("flipslice sym class table.bin");
+	std::ifstream ud_edges_table_f;
+	ud_edges_table_f.open("ud edges move table.bin");
 
-	std::vector <unsigned int> flipslice_sym_classes;
+	std::vector <unsigned short> ud_edges_table;
 
-	for (unsigned int i = 0; i != 2048 * 495; i++) {
-		flipslice_sym_classes.push_back(0);
+	for (unsigned int i = 0; i != 40320 * 18; i++) {
+		ud_edges_table.push_back(0);
 	}
 
-	for (unsigned int i = 0; i != 2048 * 495; i++) {
-		flipslice_sym_class_f.read((char*)&flipslice_sym_classes[i], sizeof(unsigned int));
+	for (unsigned int i = 0; i != 40320 * 18; i++) {
+		ud_edges_table_f.read((char*)&ud_edges_table[i], sizeof(unsigned short));
 	}
 
-	flipslice_sym_class_f.close();
+	ud_edges_table_f.close();
 
 	// -------------------------------------------------------------------------------------
 
-	std::ifstream flipslice_sym_rep_f;
-	flipslice_sym_rep_f.open("flipslice sym rep table.bin");
+	std::ifstream corner_sym_class_f;
+	corner_sym_class_f.open("corner sym class table.bin");
 
-	std::vector <unsigned short> flipslice_sym_rep;
+	std::vector <unsigned short> corner_sym_classes;
+
+	for (unsigned int i = 0; i != 40320; i++) {
+		corner_sym_classes.push_back(0);
+	}
+
+	for (unsigned int i = 0; i != 40320; i++) {
+		corner_sym_class_f.read((char*)&corner_sym_classes[i], sizeof(unsigned short));
+	}
+
+	corner_sym_class_f.close();
+
+	// -------------------------------------------------------------------------------------
+
+	std::ifstream corner_sym_rep_table_f;
+	corner_sym_rep_table_f.open("corner sym rep table.bin");
+
+	std::vector <unsigned short> corner_sym_rep;
 
 	for (unsigned int i = 0; i != 64430; i++) {
-		flipslice_sym_rep.push_back(0);
+		corner_sym_rep.push_back(0);
 	}
 
 	for (unsigned int i = 0; i != 64430; i++) {
-		flipslice_sym_rep_f.read((char*)&flipslice_sym_rep[i], sizeof(unsigned short));
+		corner_sym_rep_table_f.read((char*)&corner_sym_rep[i], sizeof(unsigned short));
 	}
 
-	flipslice_sym_rep_f.close();
+	corner_sym_rep_table_f.close();
 
 	// -------------------------------------------------------------------------------------
 
-	std::ifstream flipslice_symmetry_f;
-	flipslice_symmetry_f.open("flipslice symmetry table.bin");
+	std::ifstream corner_symmetry_f;
+	corner_symmetry_f.open("corner symmetry table.bin");
 
-	std::vector <unsigned short> flipslice_symmetry;
+	std::vector <unsigned short> corner_symmetry;
 
 	for (unsigned int i = 0; i != 2048 * 495; i++) {
-		flipslice_symmetry.push_back(0);
+		corner_symmetry.push_back(0);
 	}
 
 	for (unsigned int i = 0; i != 2048 * 495; i++) {
-		flipslice_sym_rep_f.read((char*)&flipslice_symmetry[i], sizeof(unsigned short));
+		corner_symmetry_f.read((char*)&corner_symmetry[i], sizeof(unsigned short));
 	}
 
-	flipslice_symmetry_f.close();
+	corner_symmetry_f.close();
 
 
 	// -------------------------------------------------------------------------------------
@@ -229,19 +226,19 @@ void make_phase_2_pruning_table() {
 	total_moves = 0;
 
 
-	flipslice_twist_depth3[0] = 0;
+	corners_ud_edges_depth3[0] = 0;
 
-	/*for (unsigned short i = 1; i != 13; i++) {
-		total_moves = i * total_moves + 18;
+	for (unsigned short i = 1; i != 18; i++) {
+		total_moves = i * total_moves + 10;
 
 		for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
-			index = do_phase_1_move(moveses, twist_table, flip_table, ud_slice_phase_2_table,
-				flipslice_sym_classes, flipslice_sym, sym_twist_conversion, i);
+			index = do_phase_2_move(moveses, ud_edges_table, corners_table,
+				corner_sym_classes, corner_symmetry, ud_edge_sym_conversion, i);
 			if (index == 4000000000) {
 				continue;
 			}
-			else if (flipslice_twist_depth3[index] = 30) {
-				flipslice_twist_depth3[index] = i;
+			else if (corners_ud_edges_depth3[index] = 30) {
+				corners_ud_edges_depth3[index] = i;
 			}
 
 
@@ -251,33 +248,33 @@ void make_phase_2_pruning_table() {
 
 		}
 		std::cout << i << " pass has finished \n\n";
-	}*/
-
-	for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
-		flipslice_twist_depth3[i] = flipslice_twist_depth3[i] % 3;
 	}
 
-	std::ofstream flipslice_twist_depth3_f("flipslice_twist_depth3.bin", std::ios::out | std::ios::binary);
-	unsigned char flipslice_twist_depth3_compressed = 0;
+	for (unsigned int i = 0; i != corners_ud_edges_depth3.size(); i++) {
+		corners_ud_edges_depth3[i] = corners_ud_edges_depth3[i] % 3;
+	}
+
+	std::ofstream corners_ud_edges_depth3_f("corners_ud_edges_depth3.bin", std::ios::out | std::ios::binary);
+	unsigned char corners_ud_edges_depth3_compressed = 0;
 
 	for (unsigned int i = 0; i != flipslice_twist_depth3.size() / 4; i++) { //divide by 4 because 4 values per byte
 
 		if (i < 8806772) {
-			flipslice_twist_depth3_compressed = ((flipslice_twist_depth3[4 * i] << 6) |
-				(flipslice_twist_depth3[4 * i + 1] << 4) |
-				(flipslice_twist_depth3[4 * i + 2] << 2) |
-				(flipslice_twist_depth3[4 * i + 3]));
+			corners_ud_edges_depth3_compressed = ((corners_ud_edges_depth3[4 * i] << 6) |
+				(corners_ud_edges_depth3[4 * i + 1] << 4) |
+				(corners_ud_edges_depth3[4 * i + 2] << 2) |
+				(corners_ud_edges_depth3[4 * i + 3]));
 		}
 
 		else {
-			flipslice_twist_depth3_compressed = ((flipslice_twist_depth3[4 * i] << 6) |
-				(flipslice_twist_depth3[4 * i + 1] << 4) |
-				(flipslice_twist_depth3[4 * i + 2] << 2));
+			corners_ud_edges_depth3_compressed = ((corners_ud_edges_depth3[4 * i] << 6) |
+				(corners_ud_edges_depth3[4 * i + 1] << 4) |
+				(corners_ud_edges_depth3[4 * i + 2] << 2));
 		}
 
-		flipslice_twist_depth3_f.write((char*)&(flipslice_twist_depth3[i]), sizeof(unsigned char));
+		corners_ud_edges_depth3_f.write((char*)&(corners_ud_edges_depth3[i]), sizeof(unsigned char));
 	}
-	flipslice_twist_depth3_f.close();
+	corners_ud_edges_depth3_f.close();
 	std::cout << "done";
 }
 

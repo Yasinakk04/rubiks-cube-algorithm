@@ -62,7 +62,6 @@ inline cubie make_B_turn() {
 	return B_turn;
 }
 
-
 inline std::array <cubie, 18> make_moves() {
 	std::array <cubie, 18> moves;
 	moves[0] = make_U_turn();
@@ -94,9 +93,6 @@ inline std::array <cubie, 18> make_moves() {
 
 	return moves;
 }
-
-
-
 
 inline void make_twist_table() {
 	 std::array <cubie, 18> moves = make_moves();
