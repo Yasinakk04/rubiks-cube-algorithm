@@ -78,7 +78,7 @@ unsigned short do_move(unsigned long long moveses,
 
 		index = 2187 * flipslice_class + twist;
 
-		if (flipslice_twist_depth3[index] <= i) { //if it's less than it's already filled
+		if (flipslice_twist_depth3[index] < i) { //if it's less than it's already filled
 			return 4000000000;
 		}
 	}
@@ -136,11 +136,9 @@ void make_phase_1_pruning_table() {
 	std::array <cubie, 48> inv_symmetries = gen_inv_symmetries(symmetries);
 	cubie sy;
 
-	std::cout << sizeof(flipslice_twist_depth3) << "hfjkdsah\n\n";
 
-
-	for (unsigned long i = 0; i != (64430 * 2187)/ 16 ; i++) {
-		flipslice_twist_depth3.push_back(4);
+	for (unsigned long i = 0; i != (64430 * 2187)/ 16 + 1; i++) {
+		flipslice_twist_depth3.push_back(30);
 	}
 
         //All the files needed for this function
@@ -278,9 +276,6 @@ void make_phase_1_pruning_table() {
 		for (unsigned short i = 1; i != 13; i++) {
 			total_moves = i * total_moves + 18;
 
-			unsigned short imod3 = i % 3;
-
-
 			for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
 				index = do_move(moveses, twist_table, flip_table, ud_slice_phase_2_table, 
 					flipslice_sym_classes, flipslice_sym, sym_twist_conversion, i);
@@ -289,37 +284,45 @@ void make_phase_1_pruning_table() {
 				if (index == 4000000000) {
 					continue;
 				}
-				else if (flipslice_twist_depth3[index] = 4) {
+				else if (flipslice_twist_depth3[index] = 30) {
 					flipslice_twist_depth3[index] = i;
 				}
+
+
+				if (moveses == total_moves / 2) {
+					std::cout << "half way for " << i << "pass \n\n";
+				}
+
 			}
 			std::cout << i << " pass has finished \n\n";
 		}
 
-		for (unsigned int i = 0; i != sizeof(flipslice_twist_depth3); i++) {
-
+		for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
 			flipslice_twist_depth3[i] = flipslice_twist_depth3[i] % 3;
-
 		}
 
 		std::ofstream flipslice_twist_depth3_f("flipslice_twist_depth3.bin", std::ios::out | std::ios::binary);
-
 		unsigned char flipslice_twist_depth3_compressed = 0;
 
+		for (unsigned int i = 0; i != flipslice_twist_depth3.size() / 4; i++) { //divide by 4 because 4 values per byte
+			
+			if (i < 8806772) {
+				flipslice_twist_depth3_compressed = ((flipslice_twist_depth3[4 * i] << 6) |
+													(flipslice_twist_depth3[4 * i + 1] << 4) |
+													(flipslice_twist_depth3[4 * i + 2] << 2) |
+													(flipslice_twist_depth3[4 * i + 3]));
+			}
 
-		for (unsigned int i = 0; i != sizeof(flipslice_twist_depth3) / sizeof(unsigned char); i++) {
-
-			flipslice_twist_depth3_compressed = ((flipslice_twist_depth3[i] << 6) |
-												(flipslice_twist_depth3[i + 1] << 4) |
-												(flipslice_twist_depth3[i + 2] << 2) |
-												(flipslice_twist_depth3[i + 3]));
-
+			else {
+				flipslice_twist_depth3_compressed = ((flipslice_twist_depth3[4 * i] << 6) |
+													(flipslice_twist_depth3[4 * i + 1] << 4) |
+													(flipslice_twist_depth3[4 * i + 2] << 2));
+			}
 
 			flipslice_twist_depth3_f.write((char*)&(flipslice_twist_depth3[i]), sizeof(unsigned char));
 		}
 		flipslice_twist_depth3_f.close();
 		std::cout << "done";
-
 }
 		// -------------------------------------------------------------------------------------
 
