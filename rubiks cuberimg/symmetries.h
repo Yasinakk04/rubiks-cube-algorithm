@@ -207,7 +207,7 @@ void generate_ud_edges_symmetry(std::array <cubie, 48> symmetries,
 
 	std::ofstream something("ud edges sym table.bin", std::ios::out | std::ios::binary);
 
-	for (int i = 0; i != 16 * 40320; i++) {
+	for (unsigned int i = 0; i != 16 * 40320; i++) {
 		something.write((char*)&(ud_edge_sym_conversion[i]), sizeof(unsigned short));
 	}
 	something.close();
