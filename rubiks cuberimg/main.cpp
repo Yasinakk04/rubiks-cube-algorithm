@@ -1,4 +1,12 @@
-//#include <GL/glut.h>
+
+/*
+ * GL03Viewport.cpp: Clipping-area and Viewport
+ * Implementing reshape to ensure same aspect ratio between the
+ * clipping-area and the viewport.
+ */
+#include <windows.h>  // for MS Windows
+#include <GL/glut.h>  // GLUT, include glu.h and gl.h
+
 
 #include <iostream>
 #include <string>
@@ -24,223 +32,123 @@ const std::string edge_pos[12] = { "UR", "UF", "UL", "UB", "DR", "DF", "DL", "DB
 cubie cube = cubie();
 
 
-int main() {
-	
-	make_twist_table(); make_flip_table(); make_ud_edges_table(); make_corners_table(); make_ud_slice_phase_2_table();
+//int main() {
+//	
+//	make_twist_table(); make_flip_table(); make_ud_edges_table(); make_corners_table(); make_ud_slice_phase_2_table();
+//
+//
+//	std::array <cubie, 48> symmetries = gen_symmetries();
+//	std::array <cubie, 48> inv_symmetries = gen_inv_symmetries(symmetries);
+//
+//	generate_twist_symmetry(symmetries, inv_symmetries);
+//
+//	generate_ud_edges_symmetry(symmetries, inv_symmetries);
+//
+//	generate_flipslices_symmetry_and_classes(symmetries, inv_symmetries);
+//
+//	generate_corner_symmetry_and_classes(symmetries, inv_symmetries);
+//
+//
+//	std::cout << "\n\nmove table and symmetry tables done \n\n";
+//
+//
+//	std::cout << "this is for the second pruning table:\n\n";
+//
+//	make_phase_2_pruning_table();
+//}
 
-
-	std::array <cubie, 48> symmetries = gen_symmetries();
-	std::array <cubie, 48> inv_symmetries = gen_inv_symmetries(symmetries);
-
-	generate_twist_symmetry(symmetries, inv_symmetries);
-
-	generate_ud_edges_symmetry(symmetries, inv_symmetries);
-
-	generate_flipslices_symmetry_and_classes(symmetries, inv_symmetries);
-
-	generate_corner_symmetry_and_classes(symmetries, inv_symmetries);
-
-
-	std::cout << "\n\nmove table and symmetry tables done \n\n";
-
-
-	std::cout << "this is for the second pruning table:\n\n";
-
-	make_phase_2_pruning_table();
+ /* Initialize OpenGL Graphics */
+void initGL() {
+    // Set "clearing" or background color
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black and opaque
 }
 
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);   // Clear the color buffer with current clearing color
 
+    // Define shapes enclosed within a pair of glBegin and glEnd
+    glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    glVertex2f(-0.8f, 0.1f);     // Define vertices in counter-clockwise (CCW) order
+    glVertex2f(-0.2f, 0.1f);     //  so that the normal (front-face) is facing you
+    glVertex2f(-0.2f, 0.7f);
+    glVertex2f(-0.8f, 0.7f);
 
-//// angle of rotation for the camera direction
-//float angle = 0.0f;
-//
-//// actual vector representing the camera's direction
-//float lx = 0.0f, lz = -1.0f;
-//
-//// XZ position of the camera
-//float x = 0.0f, z = 5.0f;
-//
-//// the key states. These variables will be zero
-////when no key is being presses
-//float deltaAngle = 0.0f;
-//float deltaMove = 0;
-//int xOrigin = -1;
-//
-//void changeSize(int w, int h) {
-//
-//	// Prevent a divide by zero, when window is too short
-//	// (you cant make a window of zero width).
-//	if (h == 0)
-//		h = 1;
-//
-//	float ratio = w * 1.0 / h;
-//
-//	// Use the Projection Matrix
-//	glMatrixMode(GL_PROJECTION);
-//
-//	// Reset Matrix
-//	glLoadIdentity();
-//
-//	// Set the viewport to be the entire window
-//	glViewport(0, 0, w, h);
-//
-//	// Set the correct perspective.
-//	gluPerspective(45.0f, ratio, 0.1f, 100.0f);
-//
-//	// Get Back to the Modelview
-//	glMatrixMode(GL_MODELVIEW);
-//}
-//
-//void drawSnowMan() {
-//
-//	glColor3f(1.0f, 1.0f, 1.0f);
-//
-//	// Draw Body
-//	glTranslatef(0.0f, 0.75f, 0.0f);
-//	glutSolidSphere(0.75f, 20, 20);
-//
-//	// Draw Head
-//	glTranslatef(0.0f, 1.0f, 0.0f);
-//	glutSolidSphere(0.25f, 20, 20);
-//
-//	// Draw Eyes
-//	glPushMatrix();
-//	glColor3f(0.0f, 0.0f, 0.0f);
-//	glTranslatef(0.05f, 0.10f, 0.18f);
-//	glutSolidSphere(0.05f, 10, 10);
-//	glTranslatef(-0.1f, 0.0f, 0.0f);
-//	glutSolidSphere(0.05f, 10, 10);
-//	glPopMatrix();
-//
-//	// Draw Nose
-//	glColor3f(1.0f, 0.5f, 0.5f);
-//	glRotatef(0.0f, 1.0f, 0.0f, 0.0f);
-//	glutSolidCone(0.08f, 0.5f, 10, 2);
-//}
-//
-//void computePos(float deltaMove) {
-//
-//	x += deltaMove * lx * 0.1f;
-//	z += deltaMove * lz * 0.1f;
-//}
-//
-//void renderScene(void) {
-//
-//	if (deltaMove)
-//		computePos(deltaMove);
-//
-//	// Clear Color and Depth Buffers
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//	// Reset transformations
-//	glLoadIdentity();
-//	// Set the camera
-//	gluLookAt(x + lx, 1.0f, z,
-//		x, 1.0f, z + lz,
-//		0.0f, 1.0f, 0.0f);
-//
-//	// Draw ground
-//
-//	glColor3f(0.9f, 0.9f, 0.9f);
-//	glBegin(GL_QUADS);
-//	glVertex3f(-100.0f, 0.0f, -100.0f);
-//	glVertex3f(-100.0f, 0.0f, 100.0f);
-//	glVertex3f(100.0f, 0.0f, 100.0f);
-//	glVertex3f(100.0f, 0.0f, -100.0f);
-//	glEnd();
-//
-//	// Draw 36 SnowMen
-//
-//	for (int i = -3; i < 3; i++)
-//		for (int j = -3; j < 3; j++) {
-//			glPushMatrix();
-//			glTranslatef(i * 10.0, 0, j * 10.0);
-//			drawSnowMan();
-//			glPopMatrix();
-//		}
-//	glutSwapBuffers();
-//}
-//
-//void processNormalKeys(unsigned char key, int xx, int yy) {
-//
-//	if (key == 27)
-//		exit(0);
-//}
-//
-//void pressKey(int key, int xx, int yy) {
-//
-//	switch (key) {
-//	case GLUT_KEY_UP: deltaMove = 0.5f; break;
-//	case GLUT_KEY_DOWN: deltaMove = -0.5f; break;
-//	}
-//}
-//
-//void releaseKey(int key, int x, int y) {
-//
-//	switch (key) {
-//	case GLUT_KEY_UP:
-//	case GLUT_KEY_DOWN: deltaMove = 0; break;
-//	}
-//}
-//
-//void mouseMove(int x, int y) {
-//
-//	// this will only be true when the left button is down
-//	if (xOrigin >= 0) {
-//
-//		// update deltaAngle
-//		deltaAngle = (x - xOrigin) * 0.005f;
-//
-//		// update camera's direction
-//		lx = sin(angle + deltaAngle);
-//		lz = -cos(angle + deltaAngle);
-//	}
-//}
-//
-//void mouseButton(int button, int state, int x, int y) {
-//
-//	// only start motion if the left button is pressed
-//	if (button == GLUT_LEFT_BUTTON) {
-//
-//		// when the button is released
-//		if (state == GLUT_UP) {
-//			angle += deltaAngle;
-//			xOrigin = -1;
-//		}
-//		else {// state = GLUT_DOWN
-//			xOrigin = x;
-//		}
-//	}
-//}
-//
-//int main(int argc, char** argv) {
-//
-//	// init GLUT and create window
-//	glutInit(&argc, argv);
-//	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-//	glutInitWindowPosition(100, 100);
-//	glutInitWindowSize(320, 320);
-//	glutCreateWindow("Lighthouse3D - GLUT Tutorial");
-//
-//	// register callbacks
-//	glutDisplayFunc(renderScene);
-//	glutReshapeFunc(changeSize);
-//	glutIdleFunc(renderScene);
-//
-//	glutIgnoreKeyRepeat(1);
-//	glutKeyboardFunc(processNormalKeys);
-//	glutSpecialFunc(pressKey);
-//	glutSpecialUpFunc(releaseKey);
-//
-//	// here are the two new functions
-//	glutMouseFunc(mouseButton);
-//	glutMotionFunc(mouseMove);
-//
-//	// OpenGL init
-//	glEnable(GL_DEPTH_TEST);
-//
-//	// enter GLUT event processing cycle
-//	glutMainLoop();
-//
-//	return 1;
-//}
+    glColor3f(0.0f, 1.0f, 0.0f); // Green
+    glVertex2f(-0.7f, -0.6f);
+    glVertex2f(-0.1f, -0.6f);
+    glVertex2f(-0.1f, 0.0f);
+    glVertex2f(-0.7f, 0.0f);
+
+    glColor3f(0.2f, 0.2f, 0.2f); // Dark Gray
+    glVertex2f(-0.9f, -0.7f);
+    glColor3f(1.0f, 1.0f, 1.0f); // White
+    glVertex2f(-0.5f, -0.7f);
+    glColor3f(0.2f, 0.2f, 0.2f); // Dark Gray
+    glVertex2f(-0.5f, -0.3f);
+    glColor3f(1.0f, 1.0f, 1.0f); // White
+    glVertex2f(-0.9f, -0.3f);
+    glEnd();
+
+    glBegin(GL_TRIANGLES);          // Each set of 3 vertices form a triangle
+    glColor3f(0.0f, 0.0f, 1.0f); // Blue
+    glVertex2f(0.1f, -0.6f);
+    glVertex2f(0.7f, -0.6f);
+    glVertex2f(0.4f, -0.1f);
+
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    glVertex2f(0.3f, -0.4f);
+    glColor3f(0.0f, 1.0f, 0.0f); // Green
+    glVertex2f(0.9f, -0.4f);
+    glColor3f(0.0f, 0.0f, 1.0f); // Blue
+    glVertex2f(0.6f, -0.9f);
+    glEnd();
+
+    glBegin(GL_POLYGON);            // These vertices form a closed polygon
+    glColor3f(1.0f, 1.0f, 0.0f); // Yellow
+    glVertex2f(0.4f, 0.2f);
+    glVertex2f(0.6f, 0.2f);
+    glVertex2f(0.7f, 0.4f);
+    glVertex2f(0.6f, 0.6f);
+    glVertex2f(0.4f, 0.6f);
+    glVertex2f(0.3f, 0.4f);
+    glEnd();
+
+    glFlush();  // Render now
+}
+
+/* Handler for window re-size event. Called back when the window first appears and
+   whenever the window is re-sized with its new width and height */
+void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integer
+   // Compute aspect ratio of the new window
+    if (height == 0) height = 1;                // To prevent divide by 0
+    GLfloat aspect = (GLfloat)width / (GLfloat)height;
+
+    // Set the viewport to cover the new window
+    glViewport(0, 0, width, height);
+
+    // Set the aspect ratio of the clipping area to match the viewport
+    glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
+    glLoadIdentity();             // Reset the projection matrix
+    if (width >= height) {
+        // aspect >= 1, set the height from -1 to 1, with larger width
+        gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+    }
+    else {
+        // aspect < 1, set the width to -1 to 1, with larger height
+        gluOrtho2D(-1.0, 1.0, -1.0 / aspect, 1.0 / aspect);
+    }
+}
+
+/* Main function: GLUT runs as a console application starting at main() */
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);          // Initialize GLUT
+    glutInitWindowSize(640, 480);   // Set the window's initial width & height - non-square
+    glutInitWindowPosition(50, 50); // Position the window's initial top-left corner
+    glutCreateWindow("Viewport Transform");  // Create window with the given title
+    glutDisplayFunc(display);       // Register callback handler for window re-paint event
+    glutReshapeFunc(reshape);       // Register callback handler for window re-size event
+    initGL();                       // Our own OpenGL initialization
+    glutMainLoop();                 // Enter the infinite event-processing loop
+    return 0;
+}

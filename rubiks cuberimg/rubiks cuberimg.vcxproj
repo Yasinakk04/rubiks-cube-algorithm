@@ -117,7 +117,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/analyze:stacksize 32768000 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>\\datasrv1\15YKhan%24\year 12\NEA stuff\freeglut\include;C:\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>\\datasrv1\15YKhan$\year 12\NEA stuff\freeglut\include;C:\freeglut\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
