@@ -44,7 +44,9 @@ int main() {
 	std::cout << "\n\nmove table and symmetry tables done \n\n";
 
 
-	make_phase_1_pruning_table();
+	std::cout << "this is for the second pruning table:\n\n";
+
+	make_phase_2_pruning_table();
 }
 
 
