@@ -148,11 +148,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="camera and movement.h" />
     <ClInclude Include="coord.h" />
     <ClInclude Include="cubie.h" />
     <ClInclude Include="enums.h" />
     <ClInclude Include="facelets.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="make facelets.h" />
     <ClInclude Include="pruning.h" />
     <ClInclude Include="solver.h" />
     <ClInclude Include="symmetries.h" />

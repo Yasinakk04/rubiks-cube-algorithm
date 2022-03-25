@@ -23,35 +23,6 @@ std::string getTime() {
 	return str;
 }
 
-//This is meant to give exactly the number of moves mod 3 to solve this cube in phase 1
-//Im not sure how though but this is what Kociemba states on his site
-unsigned int get_flipslice_twist_depth_3(unsigned int index) {
-	unsigned int y = flipslice_twist_depth3[index / 16];
-	y >>= (index % 16) * 2;
-	return y & 3;
-}
-
-//This is meant to give at the least the number of moves to solve phase 2
-unsigned int get_corners_ud_edges_depth_3(unsigned int index) {
-	unsigned int y = corners_ud_edges_depth3[index / 16];
-	y >>= (index % 16) * 2;
-	return y & 3;
-}
-
-void set_flipslice_twist_depth3(unsigned int index, unsigned int value) {
-	unsigned int shift = (index % 16) * 2;
-	unsigned int base = index >> 4;
-	flipslice_twist_depth3[base] &= ~(3 << shift) & 0xffffffff;
-	flipslice_twist_depth3[base] |= value << shift;
-}
-
-void set_corners_ud_edges_depth3(unsigned int index, unsigned int value) {
-	unsigned int shift = (index % 16) * 2;
-	unsigned int base = index >> 4;
-	corners_ud_edges_depth3[base] &= ~(3 << shift) & 0xffffffff;
-	corners_ud_edges_depth3[base] |= value << shift;
-}
-
 inline unsigned short do_phase_2_move(unsigned long long moveses,
 	std::vector <unsigned short> ud_edges_table,
 	std::vector <unsigned short> corners_table,
@@ -68,7 +39,7 @@ inline unsigned short do_phase_2_move(unsigned long long moveses,
 	unsigned short corner_sym_class = 0;
 	unsigned short corner_sym;
 
-	unsigned short modding = 10 + i;
+	unsigned short modding = 9 + i;
 
 	unsigned short last = 25;
 
@@ -235,7 +206,7 @@ void make_phase_2_pruning_table() {
 
 	corners_ud_edges_depth3[0] = 0;
 
-	for (unsigned short i = 10; i != 28; i++) {
+	for (unsigned short i = 10; i != 27; i++) {
 		total_moves = i * total_moves + 10;
 
 		for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
@@ -254,8 +225,8 @@ void make_phase_2_pruning_table() {
 				std::cout << getTime() << "\n\n";
 			}
 
-			else if (i > 14 && moveses % 1024 == 1) {
-				std::cout << "moveses is " << moveses << "\n";
+			else if (i > 14 && moveses % 262144 == 1) {
+				std::cout << "moveses is " << moveses << " out of " << total_moves << " and on pass " << i - 9 << "\n";
 				std::cout << getTime() << "\n\n";
 			}
 
@@ -265,6 +236,9 @@ void make_phase_2_pruning_table() {
 	}
 
 	for (unsigned int i = 0; i != corners_ud_edges_depth3.size(); i++) {
+		if (corners_ud_edges_depth3[i] == 30) {
+			corners_ud_edges_depth3[i] = 18;
+		}
 		corners_ud_edges_depth3[i] = corners_ud_edges_depth3[i] % 3;
 	}
 
@@ -348,8 +322,6 @@ inline unsigned short do_phase_1_move(unsigned long long moveses,
 
 
 void make_phase_1_pruning_table(){
-
-	cubie c;
 	std::vector <unsigned short> flipslice_sym{};
 	
 	for (unsigned int i = 0; i != 64430; i++) {
@@ -499,7 +471,7 @@ void make_phase_1_pruning_table(){
 
 		flipslice_twist_depth3[0] = 0;
 
-		for (unsigned short i = 17; i != 29; i++) {
+		for (unsigned short i = 17; i != 28; i++) {
 			total_moves = i * total_moves + 17;
 
 			for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
@@ -520,8 +492,8 @@ void make_phase_1_pruning_table(){
 					std::cout << getTime() << "\n\n";
 				}
 
-				else if (i > 21 && moveses % 1024 == 1){
-					std::cout << "moveses is " << moveses << " and pass is " << i - 16 << "\n";
+				else if (i > 21 && moveses % 262144 == 1){
+					std::cout << "moveses is " << moveses << " out of " << total_moves << " and pass is " << i - 16 << "\n";
 					std::cout << getTime() << "\n\n";
 				}
 
@@ -530,7 +502,11 @@ void make_phase_1_pruning_table(){
 			std::cout << getTime() << "\n\n";
 		}
 
+
 		for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
+			if (flipslice_twist_depth3[i] == 30) {
+				flipslice_twist_depth3[i] = 12;
+			}
 			flipslice_twist_depth3[i] = flipslice_twist_depth3[i] % 3;
 		}
 
