@@ -363,7 +363,7 @@ void make_phase_1_pruning_table(){
             twist_table.push_back(0);
         }
 
-		for (unsigned int i = 0; i != 1 * 495; i++) {
+		for (unsigned int i = 0; i != 2048 * 495; i++) {
             twist_table_f.read((char*)&twist_table[i], sizeof(unsigned short));
 		}
 
