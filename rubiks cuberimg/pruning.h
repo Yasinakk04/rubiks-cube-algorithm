@@ -498,17 +498,18 @@ void make_phase_1_pruning_table(){
 
 
 				if (moveses == total_moves / 2) {
-					std::cout << "half way for " << i - 16 << " pass \n\n";
-					std::cout << getTime();
+					std::cout << "half way for " << i - 16 << " pass \n";
+					std::cout << getTime() << "\n\n";
 				}
 
-				else if (i == 6){
-					std::cout << "moveses is " << moveses << "\n\n";
+				else if (i > 21 && moveses % 1024 == 1){
+					std::cout << "moveses is " << moveses << "\n";
+					std::cout << getTime() << "\n\n";
 				}
 
 			}
-			std::cout << i - 16 << " pass has finished \n\n";
-			std::cout << getTime();
+			std::cout << i - 16 << " pass has finished \n";
+			std::cout << getTime() << "\n\n";
 		}
 
 		for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
