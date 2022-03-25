@@ -359,11 +359,11 @@ void make_phase_1_pruning_table(){
 
         std::vector <unsigned short> twist_table;
 
-        for (unsigned int i = 0; i != 2048 * 495; i++) {
+        for (unsigned int i = 0; i != 2187 * 18; i++) {
             twist_table.push_back(0);
         }
 
-		for (unsigned int i = 0; i != 1 * 495; i++) {
+		for (unsigned int i = 0; i != 2187 * 18; i++) {
             twist_table_f.read((char*)&twist_table[i], sizeof(unsigned short));
 		}
 
@@ -376,11 +376,11 @@ void make_phase_1_pruning_table(){
 
 		std::vector <unsigned short> sym_twist_conversion;
 
-		for (unsigned int i = 0; i != 2048 * 495; i++) {
+		for (unsigned int i = 0; i != 2187 * 16; i++) {
 			sym_twist_conversion.push_back(0);
 		}
 
-		for (unsigned int i = 0; i != 2048 * 495; i++) {
+		for (unsigned int i = 0; i != 2187 * 16; i++) {
 			sym_twist_conversion_f.read((char*)&sym_twist_conversion[i], sizeof(unsigned short));
 		}
 
@@ -393,11 +393,11 @@ void make_phase_1_pruning_table(){
 
         std::vector <unsigned short> flip_table;
 
-        for (unsigned int i = 0; i != 2048 * 495; i++) {
+        for (unsigned int i = 0; i != 2048 * 18; i++) {
             flip_table.push_back(0);
         }
 
-		for (unsigned int i = 0; i != 2048 * 495; i++) {
+		for (unsigned int i = 0; i != 2048 * 18; i++) {
 			flip_table_f.read((char*)&flip_table[i], sizeof(unsigned short));
 		}
 
@@ -410,11 +410,11 @@ void make_phase_1_pruning_table(){
 
 		std::vector <unsigned short> ud_slice_phase_2_table;
 
-		for (unsigned int i = 0; i != 2048 * 495; i++) {
+		for (unsigned int i = 0; i != 11880 * 18; i++) {
 			ud_slice_phase_2_table.push_back(0);
 		}
 
-		for (unsigned int i = 0; i != 2048 * 495; i++) {
+		for (unsigned int i = 0; i != 11880 * 18; i++) {
 			ud_slice_table_f.read((char*)&ud_slice_phase_2_table[i], sizeof(unsigned int));
 		}
 
