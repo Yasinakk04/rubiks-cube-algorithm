@@ -18,7 +18,7 @@ std::string getTime() {
 	time_t result = time(0);
 
 	char str[26];
-	ctime_s(str, sizeof str, &result);
+	ctime_s(str, sizeof str, &result);  
 
 	return str;
 }
@@ -283,7 +283,7 @@ void make_phase_2_pruning_table() {
 
 
 
-unsigned short do_phase_1_move(unsigned long long moveses,
+inline unsigned short do_phase_1_move(unsigned long long moveses,
 						std::vector <unsigned short> twist_table,
 						std::vector <unsigned short> flip_table,
 						std::vector <unsigned short> ud_slice_phase_2_table,
@@ -294,18 +294,16 @@ unsigned short do_phase_1_move(unsigned long long moveses,
 
 	unsigned int twist = 0, flip = 0, ud_slice = 0;
 	unsigned short m;
-	unsigned short last = 25;
 	unsigned int index = 0;
 	unsigned int flipslice;
 
 	unsigned short flipslice_class = 0;
 	unsigned short flipslice_symmetry;
-	unsigned short modding = 17 + i;
 
 
-	for (unsigned short x = 0; x != i; x++) {
-		unsigned short m = moveses % modding;
-		moveses = moveses / modding;
+	while (moveses != 0) {
+		unsigned short m = moveses % 18;
+		moveses = moveses / 18;
 
 		twist = twist_table[18 * twist + m];
 		flip = flip_table[18 * flip + m];
@@ -324,14 +322,6 @@ unsigned short do_phase_1_move(unsigned long long moveses,
 		if (flipslice_twist_depth3[index] < i) { //if it's less than it's already filled
 			return 4000000000;
 		}
-
-		else if (last == m / 3) {
-			return 4000000000;
-		}
-
-		last = m / 3;
-
-		modding--;
 	}
 
 	return index;
@@ -339,7 +329,7 @@ unsigned short do_phase_1_move(unsigned long long moveses,
 
 
 
-void make_phase_1_pruning_table() {
+void make_phase_1_pruning_table(){
 
 	cubie c;
 	std::vector <unsigned short> flipslice_sym{};
@@ -355,7 +345,7 @@ void make_phase_1_pruning_table() {
 	cubie sy;
 
 
-	for (unsigned long i = 0; i != (64430 * 2187)/ 16 + 1; i++) {
+	for (unsigned long i = 0; i != (64430 * 2187); i++) {
 		flipslice_twist_depth3.push_back(30);
 	}
 
@@ -503,23 +493,22 @@ void make_phase_1_pruning_table() {
 				}
 				
 				else if (flipslice_twist_depth3[index] = 30) {
-					flipslice_twist_depth3[index] = i;
+					flipslice_twist_depth3[index] = i - 16;
 				}
 
 
 				if (moveses == total_moves / 2) {
-					std::cout << "half way for " << i - 16 << " pass \n";
-					std::cout << getTime() << "\n\n";
+					std::cout << "half way for " << i - 16 << " pass \n\n";
+					std::cout << getTime();
 				}
 
-				else if (i > 22 && moveses % 2048 == 0){
-					std::cout << "moveses is " << moveses << " and pass " << i - 16 << "\n";
-					std::cout << getTime() << "\n\n";
+				else if (i == 6){
+					std::cout << "moveses is " << moveses << "\n\n";
 				}
 
 			}
-			std::cout << i - 16 << " pass has finished \n";
-			std::cout << getTime() << "\n\n";
+			std::cout << i - 16 << " pass has finished \n\n";
+			std::cout << getTime();
 		}
 
 		for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
@@ -531,7 +520,7 @@ void make_phase_1_pruning_table() {
 
 		for (unsigned int i = 0; i != flipslice_twist_depth3.size() / 4; i++) { //divide by 4 because 4 values per byte
 			
-			if (i < 8806772) {
+			if (i < 140908408) { //last integer multiple of 4 before 2187 * 64430
 				flipslice_twist_depth3_compressed = ((flipslice_twist_depth3[4 * i] << 6) |
 													(flipslice_twist_depth3[4 * i + 1] << 4) |
 													(flipslice_twist_depth3[4 * i + 2] << 2) |
@@ -540,8 +529,7 @@ void make_phase_1_pruning_table() {
 
 			else {
 				flipslice_twist_depth3_compressed = ((flipslice_twist_depth3[4 * i] << 6) |
-													(flipslice_twist_depth3[4 * i + 1] << 4) |
-													(flipslice_twist_depth3[4 * i + 2] << 2));
+													(flipslice_twist_depth3[4 * i + 1] << 4));
 			}
 
 			flipslice_twist_depth3_f.write((char*)&(flipslice_twist_depth3[i]), sizeof(unsigned char));
