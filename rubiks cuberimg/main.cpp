@@ -41,7 +41,7 @@ int main() {
 	generate_corner_symmetry_and_classes(symmetries, inv_symmetries);
 
 
-	std::cout << "move table and symmetry tables done \n\n";
+	std::cout << "\n\nmove table and symmetry tables done \n\n";
 
 
 	make_phase_1_pruning_table();
