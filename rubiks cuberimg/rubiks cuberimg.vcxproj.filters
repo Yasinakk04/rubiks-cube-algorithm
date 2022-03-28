@@ -22,6 +22,9 @@
     <Filter Include="Resource Files\pruning tables">
       <UniqueIdentifier>{c6dd7fac-43cf-4e12-8a98-45469559942a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\3D RENDERING">
+      <UniqueIdentifier>{46df0cd6-9bbc-470c-92f4-c92ff3bc0799}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="facelets.h">
@@ -53,6 +56,12 @@
     </ClInclude>
     <ClInclude Include="solver.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="make facelets.h">
+      <Filter>Resource Files\3D RENDERING</Filter>
+    </ClInclude>
+    <ClInclude Include="camera and movement.h">
+      <Filter>Resource Files\3D RENDERING</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
