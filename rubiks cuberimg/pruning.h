@@ -13,6 +13,7 @@
 std::vector <unsigned char> flipslice_twist_depth3{};
 std::vector <unsigned char> corners_ud_edges_depth3{};
 
+std::vector <unsigned short> fs_sym{};
 
 std::string getTime() {
 	time_t result = time(0);
@@ -306,8 +307,10 @@ inline unsigned short do_phase_1_move(unsigned long long moveses,
 						std::vector <unsigned short> ud_slice_phase_2_table,
 						std::vector <unsigned int> flipslice_sym_classes,
 						std::vector <unsigned short> flipslice_sym,
+						std::vector <unsigned short> flipslice_rep,
 						std::vector <unsigned short> sym_twist_conversion,
-						unsigned short i									) {
+						unsigned short i,
+						unsigned short flipslice_class_index) {
 
 	unsigned int twist = 0, flip = 0, ud_slice = 0;
 	unsigned int index = 0;
@@ -316,15 +319,29 @@ inline unsigned short do_phase_1_move(unsigned long long moveses,
 	unsigned short flipslice_class = 0;
 	unsigned short flipslice_symmetry;
 
-	unsigned short modding = 17 + i;
+	unsigned short modding = 18;
 	unsigned short last = 25;
 
-	unsigned char dist_old = 1;
+	unsigned short sym;
 
+	unsigned int twist_new;
+	unsigned int index_new;
+
+	if (i > 8) {
+		twist = flipslice_class_index % 2187;
+		flipslice = flipslice_rep[flipslice_class_index / 2187];
+
+		ud_slice = flipslice >> 11;
+		flip = flipslice & 0b0000011111111111;
+		i = 1;
+	}
 
 	for (short x = 0; x != i; x++) {
 		unsigned short m = moveses % modding;
 		moveses = moveses / modding;
+
+		if (last = m / 3) { return 4000000000; }
+
 
 		twist = twist_table[18 * twist + m];
 		flip = flip_table[18 * flip + m];
@@ -340,37 +357,80 @@ inline unsigned short do_phase_1_move(unsigned long long moveses,
 
 		index = 2187 * flipslice_class + twist;
 		
-		if (last = m / 3  || (flipslice_twist_depth3[index] != x) && x < i - 1) {
+		if ((flipslice_twist_depth3[index] != x) && x < i - 1) {
 			return 4000000000;										//This checks that the new mapping is one more than the last
 		}																//otherwise itll mean that it's already filled in
 						
-		else if (flipslice_twist_depth3[index] == 30) { //if it's not 3 then it's already filled									
-			return index;											//this check should only happen on the last move
-		}
-		
-		dist_old = flipslice_twist_depth3[index];
-		
+				
 		last = m / 3;
 		modding++;
 	}
+	
+	sym = fs_sym[flipslice_class];
 
+
+	if (flipslice_twist_depth3[index] == 30 && i < 8) { //if it's 30 then it's not already filled									
+												//this check should only happen on the last move
+		flipslice_twist_depth3[index] = i;
+
+		if (sym != 1) {
+			for (unsigned short j = 0; j != 16; j++) {
+				sym >>= 1;
+
+				if (sym % 2 == 1) {
+					twist_new = sym_twist_conversion[(twist << 4) + j];
+					index_new = 2187 * flipslice_class + twist_new;
+
+					if (flipslice_twist_depth3[index_new] == 30) {
+						flipslice_twist_depth3[index] = i;
+					}
+				}
+			}
+		}
+	}
+
+	else if (flipslice_twist_depth3[index] != 30) {
+		flipslice_twist_depth3[flipslice_class_index] = flipslice_twist_depth3[index] + modding - 18;
+	}
+
+	return 0;
 }
 
 
 
 void make_phase_1_pruning_table(){
 	std::vector <unsigned short> flipslice_sym{};
-	
-	for (unsigned int i = 0; i != 64430; i++) {
-		flipslice_sym.push_back(0);
-	}
 
 	unsigned int index;
 
 	std::array <cubie, 48> symmetries = gen_symmetries();
 	std::array <cubie, 48> inv_symmetries = gen_inv_symmetries(symmetries);
+	cubie cc;
 	cubie sy;
+	
+	std::cout << "okokofk";
 
+	for (unsigned int i = 0; i != 64430; i++) {
+		flipslice_sym.push_back(0);
+
+		cc.set_ud_slice_phase_2(i / 2048);
+		cc.set_flip(i % 2048);
+
+		fs_sym.push_back(0);
+
+		for (unsigned char x = 0; x != 16; x++) {
+			sy = symmetries[x];
+			unsigned short y = 0x0000000000000000;
+
+			sy.edge_multiply(cc);
+			sy.edge_multiply(inv_symmetries[x]);
+
+			if (sy.get_ud_slice_phase_2() == i / 2048 && sy.get_flip() == i % 2048) {
+				y |= 1 << x;
+			}
+			fs_sym.push_back(y);
+		}
+	}
 
 	for (unsigned long i = 0; i != (64430 * 2187); i++) {
 		flipslice_twist_depth3.push_back(30);
@@ -524,7 +584,7 @@ void make_phase_1_pruning_table(){
 	}
 
 	while (pass != 13) {
-		if (pass != 12) {
+		if (pass < 8) {
 
 			for (unsigned short i = 17; i != pass + 17; i++) {
 				total_moves = i * total_moves + 17;
@@ -532,7 +592,7 @@ void make_phase_1_pruning_table(){
 
 			for (unsigned long long moveses = 0; moveses != total_moves; moveses++) {
 				index = do_phase_1_move(moveses, twist_table, flip_table, ud_slice_phase_2_table,
-					flipslice_sym_classes, flipslice_sym, sym_twist_conversion, pass);
+					flipslice_sym_classes, flipslice_sym, sym_twist_conversion, flipslice_sym_rep, pass, 0);
 
 				if (moveses == total_moves / 2) {
 					std::cout << "half way for " << pass << " pass \n";
@@ -543,32 +603,32 @@ void make_phase_1_pruning_table(){
 					std::cout << "moveses is " << moveses << " out of " << total_moves << " and pass is " << pass << "\n";
 					std::cout << getTime() << "\n\n";
 				}
-
-				if (index == 4000000000) {
-					continue;
-				}
-
-				else if (flipslice_twist_depth3[index] == 30) {
-					flipslice_twist_depth3[index] = pass; 
-				}
-
-
 			}
 			std::cout << pass << " pass has finished \n";
 			std::cout << getTime() << "\n\n";
 		}
 
-		else {
-			for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
+		else if (pass < 12) {
+			for (unsigned int i = 0; i != sizeof(flipslice_twist_depth3); i++) {
 				if (flipslice_twist_depth3[i] == 30) {
-					flipslice_twist_depth3[i] = pass;  
+					for (unsigned long long moveses = 0; moveses != 18; moveses++) {
+						do_phase_1_move(moveses, twist_table, flip_table, ud_slice_phase_2_table,
+							flipslice_sym_classes, flipslice_sym, sym_twist_conversion, flipslice_sym_rep, pass, i);
+					}
 				}
 			}
 		}
 
-		std::ofstream flipslice_twist_depth3_f("flipslice_twist_depth3.bin", std::ios::out | std::ios::binary);
+
 
 		if (pass == 12) {
+			for (unsigned int i = 0; i != flipslice_twist_depth3.size(); i++) {
+				if (flipslice_twist_depth3[i] == 30) {
+					flipslice_twist_depth3[i] = pass;
+				}
+			}
+
+			std::ofstream flipslice_twist_depth3_f("flipslice_twist_depth3.bin", std::ios::out | std::ios::binary);
 			for (unsigned int i = 0; i != flipslice_twist_depth3.size() / 4; i++) { //divide by 4 because 4 values per byte
 
 				unsigned char flipslice_twist_depth3_compressed = 0;
