@@ -101,16 +101,11 @@ inline void cubie::put_U_edge_in_U_face(unsigned short edge){
 				std::cout << edge << ": hello\n\n";
 			}
 
-			else if (edge_in_L_face(edge) == true) {
-				multiply(moves[3 * D]);
 				multiply(moves[3 * F]);
 				multiply(moves[3 * L]);
 			}
 
 			else if (edge_in_B_face(edge) == true) {
-				multiply(moves[3 * D + 1]);
-				multiply(moves[3 * F]);
-				multiply(moves[3 * L]);
 			}
 		}
 	}
