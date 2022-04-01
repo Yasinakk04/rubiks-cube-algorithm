@@ -1,6 +1,10 @@
 #pragma once
 
 
+#include <string>
+
+#include "solver.h"
+
 //Some of the code used here was sourced from 
 //http://www.lighthouse3d.com/tutorials/glut-tutorial/the-code-so-far-ii/
 
@@ -102,14 +106,14 @@ void pressKey(int key, int xx, int yy) {
 
 	switch (key) {
 	case GLUT_KEY_UP: deltaMove = 0.5f; break;
-	case GLUT_KEY_DOWN: deltaMove = -0.5f; break;
+	case GLUT_KEY_DOWN: deltaMove = -0.5f; break;		
 	}
 }
 
 void releaseKey(int key, int x, int y) {
 
 	switch (key) {
-	case GLUT_KEY_UP:
+	case GLUT_KEY_UP: deltaMove = 0; break;
 	case GLUT_KEY_DOWN: deltaMove = 0; break;
 	}
 }
@@ -148,4 +152,34 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 
 	if (key == 27)
 		exit(0);
+
+	else if (key == 13) {
+		std::string facelet_rep;
+		for (unsigned short i = 0; i != 54; i++) {
+			switch (facelet_numbers[i]) {
+			case U:
+				facelet_rep.push_back('U');
+				break;				  
+			case R:					  
+				facelet_rep.push_back('R');
+				break;				 
+			case F:					 
+				facelet_rep.push_back('F');
+				break;				
+			case D:					
+				facelet_rep.push_back('D');
+				break;				 
+			case L:					 
+				facelet_rep.push_back('L');
+				break;				 
+			case B:					 
+				facelet_rep.push_back('B');
+				break;
+			default:
+				break;
+			}
+		}
+
+		solve(facelet_rep);
+	}
 }

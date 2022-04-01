@@ -29,6 +29,17 @@ public:
 		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	}
 
+	cubie(std::array <short, 8> c_perm,
+		std::array <short, 8> c_ori,
+		std::array <short, 12> e_perm,
+		std::array <short, 12> e_ori) {
+			corn_perm = c_perm;
+			corn_ori = c_ori;
+
+			edge_perm = e_perm;
+			edge_ori = e_ori;
+	}
+
 
 	// ------------------------------------------------
 	//set cube attributes
@@ -504,9 +515,6 @@ public:
 		edge_multiply(B);
 	}
 
-	void do_move_string(std::string) {
-
-	}
 
 	void reset() {
 		corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
@@ -516,34 +524,44 @@ public:
 		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	}
 
+	bool compare(cubie b) {
+		if ((edge_perm == b.edge_perm) &&
+			(edge_ori == b.edge_ori) &&
+			(corn_perm == b.corn_perm) &&
+			(corn_ori == b.corn_ori)){
+			return true;
+			}
+			return false;
+	}
+
 	// ------------------------------------------------
 	
-	unsigned short find_edge_pos(unsigned short edge) {
-		for (unsigned char i = 0; i != 12; i++) {
+	short find_edge_pos(short edge) {
+		for (char i = 0; i != 12; i++) {
 			if (edge_perm[i] == edge) {
 				return i;
 			}
 		}
 	}
 
-	unsigned short find_edge_ori(unsigned short edge) {
-		for (unsigned char i = 0; i != 12; i++) {
+	short find_edge_ori(short edge) {
+		for (char i = 0; i != 12; i++) {
 			if (edge_perm[i] == edge) {
 				return edge_ori[i];
 			}
 		}
 	}
 
-	unsigned short find_corner_pos(unsigned short corner) {
-		for (unsigned char i = 0; i != 8; i++) {
+	short find_corner_pos(short corner) {
+		for (char i = 0; i != 8; i++) {
 			if (corn_perm[i] == corner) {
 				return i;
 			}
 		}
 	}
 
-	unsigned short find_corner_ori(unsigned short corner) {
-		for (unsigned char i = 0; i != 8; i++) {
+	short find_corner_ori(short corner) {
+		for (char i = 0; i != 8; i++) {
 			if (corn_perm[i] == corner) {
 				return corn_ori[i];
 			}
@@ -552,7 +570,7 @@ public:
 
 	// ------------------------------------------------
 
-	bool corner_in_U_face(unsigned short corner) {
+	bool corner_in_U_face(short corner) {
 		if (find_corner_pos(corner) <= UBR) {
 			return true;
 		}
@@ -561,12 +579,40 @@ public:
 		}
 	}
 
+	bool corner_in_F_face(short corner) {
+		if (find_corner_pos(corner) <= UFL || 
+			find_corner_pos(corner) == DFR ||
+			find_corner_pos(corner) == DLF) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
+	bool corner_in_D_face(short corner) {
+		if (corner_in_U_face(corner) == false) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	
+	bool corner_in_B_face(short corner) {
+		if (corner_in_F_face(corner) == false) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 
 	// ------------------------------------------------
 
-	bool edge_in_U_face(unsigned short edge) {
+	bool edge_in_U_face(short edge) {
 		if (find_edge_pos(edge) <= UB) {
 			return true;
 		}
@@ -575,8 +621,8 @@ public:
 		}
 	}
 
-	bool edge_in_R_face(unsigned short edge) {
-		unsigned short edge_pos = find_edge_pos(edge);
+	bool edge_in_R_face(short edge) {
+		short edge_pos = find_edge_pos(edge);
 		if (edge_pos == UR ||
 			edge_pos == FR ||
 			edge_pos == BR ||
@@ -588,7 +634,7 @@ public:
 		}
 	}
 
-	bool edge_in_F_face(unsigned short edge) {
+	bool edge_in_F_face(short edge) {
 		unsigned short edge_pos = find_edge_pos(edge);
 		if (edge_pos == UF ||
 			edge_pos == FR ||
@@ -601,8 +647,8 @@ public:
 		}
 	}
 
-	bool edge_in_D_face(unsigned short edge) {
-		if (DR <= find_edge_pos(edge) <= DB ) {
+	bool edge_in_D_face(short edge) {
+		if (DR <= find_edge_pos(edge) && find_edge_pos(edge) <= DB ) {
 			return true;
 		}
 		else {
@@ -610,7 +656,7 @@ public:
 		}
 	}
 
-	bool edge_in_L_face(unsigned short edge) {
+	bool edge_in_L_face(short edge) {
 		unsigned short edge_pos = find_edge_pos(edge);
 		if (edge_pos == UL ||
 			edge_pos == FL ||
@@ -623,7 +669,7 @@ public:
 		}
 	}
 
-	bool edge_in_B_face(unsigned short edge) {
+	bool edge_in_B_face(short edge) {
 		unsigned short edge_pos = find_edge_pos(edge);
 		if (edge_pos == UB ||
 			edge_pos == BR ||
@@ -638,13 +684,52 @@ public:
 
 	// ------------------------------------------------
 
-	void put_edge_in_D_face(unsigned short edge);
+	void put_edge_in_D_face(short edge);
+
+	void put_U_corner_in_DBR(short corner);
 
 	// ------------------------------------------------
 
-	void check_U_edge_in_pos(unsigned short e_pos);
+	void check_U_edge_in_pos(short e_pos);
 
 	// ------------------------------------------------
 
-	void put_U_edge_in_U_face(unsigned short edge);
+	void put_U_edge_in_U_face(short edge);
+
+	void put_U_corner_in_U_face(short corner);
+
+	// ------------------------------------------------
+
+	void doU(int times);
+	void doR(int times);
+	void doF(int times);
+	void doD(int times);
+	void doL(int times);
+	void doB(int times);
+
+	void do_move_vector(std::vector <short> a_moves) {
+		for (short i = 0; i != a_moves.size(); i++) {
+			switch (a_moves[i]) {
+			case U:
+				doU(1);
+				break;
+			case R:
+				doR(1);
+				break;
+			case F:
+				doF(1);
+				break;
+			case D:
+				doD(1);
+				break;
+			case L:
+				doL(1);
+				break;
+			case B:
+				doB(1);
+				break;
+			}
+		}
+	}
 };
+

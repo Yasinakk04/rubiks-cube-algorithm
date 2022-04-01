@@ -197,7 +197,7 @@ public:
 
 
 			for (short j = 0; j != 3; j++) {
-				if (facelet_rep[face[j]] == U or facelet_rep[face[j]] == D) { ori = j; break; }
+				if (facelet_rep[face[j]] == U || facelet_rep[face[j]] == D) { ori = j; break; }
 				//The above is to figure out which facelet of a corner is a U or D facelet
 				//At least one of them are
 
@@ -211,6 +211,9 @@ public:
 			short colour1 = facelet_rep[face[(ori + 1) % 3]];
 			short colour2 = facelet_rep[face[(ori + 2) % 3]];
 			//The 2 adjacent facelets to the U or D face are defined above
+
+			std::cout << colour1 << "\n" << colour2 << "\n";
+
 
 			for (short j = 0; j != No_corner; j++) {
 				if (colour1 == cornerColour[j][1] && colour2 == cornerColour[j][2]) {

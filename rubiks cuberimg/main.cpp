@@ -23,6 +23,7 @@
 #include "coord.h"
 #include "symmetries.h"
 #include "moves.h"
+#include "turns.h"
 #include "pruning.h"
 
 #include "solver.h"
@@ -35,47 +36,38 @@ const std::string edge_pos[12] = { "UR", "UF", "UL", "UB", "DR", "DF", "DL", "DB
 
 cubie cube = cubie();
 
+int main(int argc, char** argv) {
 
-int main() {
-	facelet a("LRDDURRFLUBFLRLBRRDUFBFUUDDBFLFDURFUBLFULDDRRBLFBBBUDL");
+	solve("LRDDURRFLUBFLRLBRRDUFBFUUDDBFLFDURFUBLFULDDRRBLFBBBUDL");
 
-	cubie c;
-	c = a.to_cubie();
+	// init GLUT and create window
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitWindowPosition(100, 100);
+	glutInitWindowSize(320, 320);
+	glutCreateWindow("Lighthouse3D - GLUT Tutorial");
 
-	white_cross(c);
+	// register callbacks
+	glutDisplayFunc(renderScene);
+	glutReshapeFunc(changeSize);
+	glutIdleFunc(renderScene);
 
+	glutIgnoreKeyRepeat(1);
+	glutKeyboardFunc(processNormalKeys);
+	glutSpecialFunc(pressKey);
+	glutSpecialUpFunc(releaseKey);
+
+	// here are the two new functions
+	glutMouseFunc(mouseButton);
+	glutMouseFunc(checkColour);
+	glutMotionFunc(mouseMove);
+
+	// OpenGL init
+	glEnable(GL_DEPTH_TEST);
+
+	// enter GLUT event processing cycle
+	glutMainLoop();
+
+
+	return 1;
 }
-
-//
-//
-//int main(int argc, char** argv) {
-//	// init GLUT and create window
-//	glutInit(&argc, argv);
-//	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-//	glutInitWindowPosition(100, 100);
-//	glutInitWindowSize(320, 320);
-//	glutCreateWindow("Lighthouse3D - GLUT Tutorial");
-//
-//	// register callbacks
-//	glutDisplayFunc(renderScene);
-//	glutReshapeFunc(changeSize);
-//	glutIdleFunc(renderScene);
-//
-//	glutIgnoreKeyRepeat(1);
-//	glutKeyboardFunc(processNormalKeys);
-//	glutSpecialFunc(pressKey);
-//	glutSpecialUpFunc(releaseKey);
-//
-//	// here are the two new functions
-//	glutMouseFunc(mouseButton);
-//	glutMouseFunc(checkColour);
-//	glutMotionFunc(mouseMove);
-//
-//	// OpenGL init
-//	glEnable(GL_DEPTH_TEST);
-//
-//	// enter GLUT event processing cycle
-//	glutMainLoop();
-//
-//	return 1;
-//}
