@@ -25,6 +25,9 @@
     <Filter Include="Resource Files\3D RENDERING">
       <UniqueIdentifier>{46df0cd6-9bbc-470c-92f4-c92ff3bc0799}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\place edge in right place">
+      <UniqueIdentifier>{9d939758-75c8-4254-a615-0856ec35e0e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="facelets.h">
@@ -63,6 +66,9 @@
     <ClInclude Include="camera and movement.h">
       <Filter>Resource Files\3D RENDERING</Filter>
     </ClInclude>
+    <ClInclude Include="place edge in right place.h">
+      <Filter>Header Files\place edge in right place</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -70,9 +76,6 @@
     </ClCompile>
     <ClCompile Include="moves.h">
       <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="corners_ud_edges_depth18.bin">
-      <Filter>Resource Files\pruning tables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,41 +94,8 @@
     <None Include="ud slice phase 2 move table.bin">
       <Filter>Resource Files\move tables</Filter>
     </None>
-    <None Include="corner sym class table.bin">
-      <Filter>Resource Files\symmetry stuffs</Filter>
-    </None>
-    <None Include="twist sym table.bin">
-      <Filter>Resource Files\symmetry stuffs</Filter>
-    </None>
-    <None Include="flipslice sym class table.bin">
-      <Filter>Resource Files\symmetry stuffs</Filter>
-    </None>
-    <None Include="corner symmetry table.bin">
-      <Filter>Resource Files\symmetry stuffs</Filter>
-    </None>
-    <None Include="corner sym rep table.bin">
-      <Filter>Resource Files\symmetry stuffs</Filter>
-    </None>
-    <None Include="ud edges sym table.bin">
-      <Filter>Resource Files\symmetry stuffs</Filter>
-    </None>
-    <None Include="flipslice symmetry table.bin">
-      <Filter>Resource Files\symmetry stuffs</Filter>
-    </None>
-    <None Include="flipslice sym rep table.bin">
-      <Filter>Resource Files\symmetry stuffs</Filter>
-    </None>
     <None Include="freeglut.dll">
       <Filter>Resource Files</Filter>
-    </None>
-    <None Include="flipslice_twist_depth3.bin">
-      <Filter>Resource Files\pruning tables</Filter>
-    </None>
-    <None Include="corners_ud_edges_depth3.bin">
-      <Filter>Resource Files\pruning tables</Filter>
-    </None>
-    <None Include="flipslice_twist_depth18.bin">
-      <Filter>Resource Files\pruning tables</Filter>
     </None>
   </ItemGroup>
 </Project>

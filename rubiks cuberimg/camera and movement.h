@@ -88,10 +88,10 @@ void checkColour(int button, int state, int x, int y) {
 
 		if (!(pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0)) {
 			unsigned char face = pixel[0] % 247;
-			unsigned short facelet = pixel[2] % 247;
+			unsigned short facelet_number = pixel[2] % 247;
 
-			facelets[9 * face + facelet]++;
-			facelets[9 * face + facelet] = facelets[9 * face + facelet] % 6;
+			facelet_numbers[9 * face + facelet_number]++;
+			facelet_numbers[9 * face + facelet_number] = facelet_numbers[9 * face + facelet_number] % 6;
 		}
 	}
 
