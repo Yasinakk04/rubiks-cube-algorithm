@@ -227,8 +227,9 @@ void generate_ud_edges_symmetry(std::array <cubie, 48> symmetries,
 void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 	std::array <cubie, 48> inv_symmetries) {
 
-	cubie c;
 	cubie x;
+	cubie c;
+	cubie sym;
 
 	std::vector <unsigned int> flipslice_sym_classes{}; //This groups a number of ud slices that are
 															//considered equivalent by symmetries
@@ -265,7 +266,7 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 
 
 	for (short ud_slice = 0; ud_slice != 495; ud_slice++) {
-		x.set_ud_slice_phase_1(ud_slice);
+		c.set_ud_slice_phase_1(ud_slice);
 		for (short f = 0; f != 2048; f++) {
 			c.set_flip(f);
 			flipslice_value = 2048 * ud_slice + f;
@@ -278,12 +279,13 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 			else { continue; }
 
 			for (short s = 0; s != 16; s++) {
-				cubie sym = symmetries[s];
+				sym.edge_perm = symmetries[s].edge_perm;
+				sym.edge_ori = symmetries[s].edge_ori;
+				
 				sym.edge_multiply(c);
 				sym.edge_multiply(inv_symmetries[s]);
-
 				flipslice_value = 2048 * sym.get_ud_slice_phase_1() + sym.get_flip();
-
+				
 				if (flipslice_sym_classes[flipslice_value] == 2000000) {
 					flipslice_sym_classes[flipslice_value] = flipslice_class;
 					flipslice_symmetry[flipslice_value] = s;
@@ -295,14 +297,14 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 
 	std::ofstream flipslice_sym_class_table("flipslice sym class table.bin", std::ios::out | std::ios::binary);
 
-	for (int i = 0; i != 101376; i++) {
+	for (int i = 0; i != 2048 * 495; i++) {
 		flipslice_sym_class_table.write((char*)&(flipslice_sym_classes[i]), sizeof(unsigned int));
 	}
 	flipslice_sym_class_table.close();
 
 	std::ofstream flipslice_symmetry_table("flipslice symmetry table.bin", std::ios::out | std::ios::binary);
 
-	for (int i = 0; i != 1013760; i++) {
+	for (int i = 0; i != 2048 * 495; i++) {
 		flipslice_symmetry_table.write((char*)&(flipslice_symmetry[i]), sizeof(unsigned short));
 	}
 	flipslice_symmetry_table.close();
@@ -314,9 +316,6 @@ void generate_flipslices_symmetry_and_classes(std::array <cubie, 48> symmetries,
 	}
 	flipslice_sym_rep_table.close();
 }
-
-
-
 
  //now we need to do something similar but with the corners
 

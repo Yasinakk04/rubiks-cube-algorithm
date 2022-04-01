@@ -5,7 +5,7 @@
  * clipping-area and the viewport.
  */
 #include <windows.h>  // for MS Windows
-//#include <GL/glut.h>  // GLUT, include glu.h and gl.h
+#include <GL/glut.h>  // GLUT, include glu.h and gl.h
 
 
 #include <iostream>
@@ -25,6 +25,8 @@
 #include "moves.h"
 #include "pruning.h"
 
+#include "solver.h"
+
 #include "make facelets.h"
 #include "camera and movement.h"
 
@@ -35,28 +37,13 @@ cubie cube = cubie();
 
 
 int main() {
-	
-	make_twist_table(); make_flip_table(); make_ud_edges_table(); make_corners_table(); make_ud_slice_phase_2_table();
+	facelet a("LRDDURRFLUBFLRLBRRDUFBFUUDDBFLFDURFUBLFULDDRRBLFBBBUDL");
 
+	cubie c;
+	c = a.to_cubie();
 
-	std::array <cubie, 48> symmetries = gen_symmetries();
-	std::array <cubie, 48> inv_symmetries = gen_inv_symmetries(symmetries);
+	white_cross(c);
 
-	generate_twist_symmetry(symmetries, inv_symmetries);
-
-	generate_ud_edges_symmetry(symmetries, inv_symmetries);
-
-	generate_flipslices_symmetry_and_classes(symmetries, inv_symmetries);
-
-	generate_corner_symmetry_and_classes(symmetries, inv_symmetries);
-
-
-	std::cout << "\n\nmove table and symmetry tables done \n\n";
-
-
-	std::cout << "this is for the first pruning table:\n\n";
-
-	make_phase_1_pruning_table();
 }
 
 //

@@ -241,6 +241,7 @@ public:
 	void set_ud_slice_phase_1(short ud_slice_value) {
 		short n = 3;
 		short x;
+		unsigned short y = 8;
 		edge_perm.fill(-1);
 
 		for (short i = BR; i != -1; i--) {
@@ -249,11 +250,21 @@ public:
 				ud_slice_value -= x;
 			}
 			else {
-				edge_perm[i] = 12;
+				edge_perm[i] = y;
 				n--;
+				y++;
 			}
 
 			if (n == -1) { break; }
+		}
+
+		x = 0;
+
+		for (short i = BR; i != -1; i--) {
+			if (edge_perm[i] < 0) {
+				edge_perm[i] = x;
+				x++;
+			}
 		}
 	}
 
@@ -315,9 +326,6 @@ public:
 			perm = perm / (i + 2);
 		}
 
-
-
-
 		short n = 3;
 		short x;
 		edge_perm.fill(-1);
@@ -334,8 +342,13 @@ public:
 
 			if (n == -1) { break; }
 		}
-	}
 
+		for (short i = BR; i != -1; i--) {
+			if (edge_perm[i] == -1) {
+				edge_perm[i] = 0;
+			}
+		}
+	}
 
 
 	//This only works in phase 2,
@@ -472,11 +485,12 @@ public:
 		std::array <short, 12> e_ori{};
 		std::array <short, 12> e_perm{};
 
+		e_ori.fill(0);
+		e_perm.fill(0);
+
 		for (short i = 0; i != No_edge; i++) {
 			e_perm[i] = edge_perm[B.edge_perm[i]];
-			e_ori[i] = B.edge_ori[i] + edge_ori[B.edge_perm[i]];
-
-			if (e_ori[i] == 2) { e_ori[i] = 0; }
+			e_ori[i] = (B.edge_ori[i] + edge_ori[B.edge_perm[i]]) % 2;
 		}
 
 		for (short i = 0; i != No_edge; i++) {
@@ -501,4 +515,136 @@ public:
 		edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	}
+
+	// ------------------------------------------------
+	
+	unsigned short find_edge_pos(unsigned short edge) {
+		for (unsigned char i = 0; i != 12; i++) {
+			if (edge_perm[i] == edge) {
+				return i;
+			}
+		}
+	}
+
+	unsigned short find_edge_ori(unsigned short edge) {
+		for (unsigned char i = 0; i != 12; i++) {
+			if (edge_perm[i] == edge) {
+				return edge_ori[i];
+			}
+		}
+	}
+
+	unsigned short find_corner_pos(unsigned short corner) {
+		for (unsigned char i = 0; i != 8; i++) {
+			if (corn_perm[i] == corner) {
+				return i;
+			}
+		}
+	}
+
+	unsigned short find_corner_ori(unsigned short corner) {
+		for (unsigned char i = 0; i != 8; i++) {
+			if (corn_perm[i] == corner) {
+				return corn_ori[i];
+			}
+		}
+	}
+
+	// ------------------------------------------------
+
+	bool corner_in_U_face(unsigned short corner) {
+		if (find_corner_pos(corner) <= UBR) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+
+
+
+	// ------------------------------------------------
+
+	bool edge_in_U_face(unsigned short edge) {
+		if (find_edge_pos(edge) <= UB) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_R_face(unsigned short edge) {
+		unsigned short edge_pos = find_edge_pos(edge);
+		if (edge_pos == UR ||
+			edge_pos == FR ||
+			edge_pos == BR ||
+			edge_pos == DR  ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_F_face(unsigned short edge) {
+		unsigned short edge_pos = find_edge_pos(edge);
+		if (edge_pos == UF ||
+			edge_pos == FR ||
+			edge_pos == FL ||
+			edge_pos == DF) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_D_face(unsigned short edge) {
+		if (DR <= find_edge_pos(edge) <= DB ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_L_face(unsigned short edge) {
+		unsigned short edge_pos = find_edge_pos(edge);
+		if (edge_pos == UL ||
+			edge_pos == FL ||
+			edge_pos == BL ||
+			edge_pos == DL) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_B_face(unsigned short edge) {
+		unsigned short edge_pos = find_edge_pos(edge);
+		if (edge_pos == UB ||
+			edge_pos == BR ||
+			edge_pos == BL ||
+			edge_pos == DB) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	// ------------------------------------------------
+
+	void put_edge_in_D_face(unsigned short edge);
+
+	// ------------------------------------------------
+
+	void check_U_edge_in_pos(unsigned short e_pos);
+
+	// ------------------------------------------------
+
+	void put_U_edge_in_U_face(unsigned short edge);
 };

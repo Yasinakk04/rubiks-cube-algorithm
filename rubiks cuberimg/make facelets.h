@@ -4,8 +4,8 @@
 #include "enums.h"
 #include "GL\glut.h"
 
-int facelet = 0;
-unsigned short facelets[54] = { 
+int facelet_number = 0;
+unsigned short facelet_numbers[54] = { 
 	U, U, U, U, U, U, U, U, U,
 	R, R, R, R, R, R, R, R, R,
 	F, F, F, F, F, F, F, F, F,
@@ -18,31 +18,31 @@ void drawSquare(float x, float y, float side_length) {
 
 	glBegin(GL_TRIANGLES);
 
-	unsigned short colour = facelets[facelet];
+	unsigned short colour = facelet_numbers[facelet_number];
 	
 	switch (colour) {
 	case U:
-		glColor3ub(247 + (facelet / 9), 255, 247 + (facelet % 9));
+		glColor3ub(247 + (facelet_number / 9), 255, 247 + (facelet_number % 9));
 		break;
 	case R:
-		glColor3ub(247 + (facelet / 9), 0, 0 + (facelet % 9));
+		glColor3ub(247 + (facelet_number / 9), 0, 0 + (facelet_number % 9));
 		break;
 	case F:
-		glColor3ub(0 + (facelet / 9), 255, 0 + (facelet % 9));
+		glColor3ub(0 + (facelet_number / 9), 255, 0 + (facelet_number % 9));
 		break;
 	case D:
-		glColor3ub(247 + (facelet / 9), 255, 0 + (facelet % 9));
+		glColor3ub(247 + (facelet_number / 9), 255, 0 + (facelet_number % 9));
 		break;
 	case L:
-		glColor3ub(247 + (facelet / 9), 128, 0 + (facelet % 9));
+		glColor3ub(247 + (facelet_number / 9), 128, 0 + (facelet_number % 9));
 		break;
 	case B:
-		glColor3ub(0 + (facelet / 9), 0, 247 + (facelet % 9));
+		glColor3ub(0 + (facelet_number / 9), 0, 247 + (facelet_number % 9));
 		break;
 	}
 
-	facelet++;
-	facelet = facelet % 54;
+	facelet_number++;
+	facelet_number = facelet_number % 54;
 
 	glVertex3f(x, y, -5.0);
 	glVertex3f(x + side_length, y, -5.0);
@@ -114,31 +114,31 @@ void drawSquare3D(float xTL, float yTL, float zTL,		//TL is top left
 					float xBL, float yBL, float zBL) {
 	glBegin(GL_TRIANGLES);
 
-	unsigned short colour = facelets[facelet];
+	unsigned short colour = facelet_numbers[facelet_number];
 
 	switch (colour) {
 	case U:
-		glColor3ub(247 + (facelet / 9), 255, 247 + (facelet % 9));
+		glColor3ub(247 + (facelet_number / 9), 255, 247 + (facelet_number % 9));
 		break;
 	case R:
-		glColor3ub(247 + (facelet / 9), 0, 0 + (facelet % 9));
+		glColor3ub(247 + (facelet_number / 9), 0, 0 + (facelet_number % 9));
 		break;
 	case F:
-		glColor3ub(0 + (facelet / 9), 255, 0 + (facelet % 9));
+		glColor3ub(0 + (facelet_number / 9), 255, 0 + (facelet_number % 9));
 		break;
 	case D:
-		glColor3ub(247 + (facelet / 9), 255, 0 + (facelet % 9));
+		glColor3ub(247 + (facelet_number / 9), 255, 0 + (facelet_number % 9));
 		break;
 	case L:
-		glColor3ub(247 + (facelet / 9), 128, 0 + (facelet % 9));
+		glColor3ub(247 + (facelet_number / 9), 128, 0 + (facelet_number % 9));
 		break;
 	case B:
-		glColor3ub(0 + (facelet / 9), 0, 247 + (facelet % 9));
+		glColor3ub(0 + (facelet_number / 9), 0, 247 + (facelet_number % 9));
 		break;
 	}
 
-	facelet++;
-	facelet = facelet % 54;
+	facelet_number++;
+	facelet_number = facelet_number % 54;
 
 	glVertex3f(xTL, yTL, zTL);
 	glVertex3f(xBR, yBR, zBR);

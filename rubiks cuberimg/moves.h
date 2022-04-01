@@ -215,10 +215,10 @@ inline void make_ud_slice_phase_2_table() {
 
 	cubie c;
 
-	for (short ud = 0; ud != 11880; ud++) {
+	for (unsigned short ud = 0; ud != 11880; ud++) {
 		for (short i = 0; i != 18; i++) {
 			c.set_ud_slice_phase_2(ud);
-			c.corner_multiply(moves[i]);
+			c.edge_multiply(moves[i]);
 			ud_slice_phase_2_table[18 * ud + i] = c.get_ud_slice_phase_2();
 		}
 	}

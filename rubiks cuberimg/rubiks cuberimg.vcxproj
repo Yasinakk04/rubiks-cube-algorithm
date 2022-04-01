@@ -155,6 +155,7 @@
     <ClInclude Include="facelets.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="make facelets.h" />
+    <ClInclude Include="place edge in right place.h" />
     <ClInclude Include="pruning.h" />
     <ClInclude Include="solver.h" />
     <ClInclude Include="symmetries.h" />
@@ -162,28 +163,16 @@
     <ClInclude Include="turns.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="corners_ud_edges_depth18.bin" />
     <ClCompile Include="moves.h" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="corner sym class table.bin" />
-    <None Include="corner sym rep table.bin" />
-    <None Include="corner symmetry table.bin" />
     <None Include="corners move table.bin" />
-    <None Include="corners_ud_edges_depth3.bin" />
     <None Include="flip move table.bin" />
-    <None Include="flipslice_twist_depth18.bin" />
-    <None Include="flipslice_twist_depth3.bin" />
     <None Include="freeglut.dll" />
     <None Include="twist move table.bin" />
-    <None Include="twist sym table.bin" />
     <None Include="ud edges move table.bin" />
-    <None Include="ud edges sym table.bin" />
     <None Include="ud slice phase 2 move table.bin" />
-    <None Include="flipslice sym class table.bin" />
-    <None Include="flipslice sym rep table.bin" />
-    <None Include="flipslice symmetry table.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
