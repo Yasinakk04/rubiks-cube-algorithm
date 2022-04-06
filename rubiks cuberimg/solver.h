@@ -5,6 +5,8 @@
 
 #include "enums.h"
 
+#include "facelets.h"
+#include "to facelet.h"
 #include "cubie.h"
 #include "moves.h"
 #include "place edge in right place.h"
@@ -232,9 +234,9 @@ cubie white_cross(cubie cube) {
 		cube.edge_perm[2] != 2 ||
 		cube.edge_perm[3] != 3) {
 
-		do {
+		while (cube.edge_perm[0] != 0) {
 			cube.doU(1);
-		} while (cube.edge_perm[0] != 0);
+		}
 
 		if (cube.edge_perm[1] != 1) {
 			if (cube.edge_perm[3] == 1) {  //if it's opposite
@@ -255,6 +257,8 @@ cubie white_cross(cubie cube) {
 			}
 		}
 
+		cube.output_cubie();
+
 		//At this point UF and UR are in the correct places
 		//Now it need to swap UB and UL or 
 		//they already are in the corrct places
@@ -267,6 +271,7 @@ cubie white_cross(cubie cube) {
 			cube.doD(2);
 			cube.doB(2);
 		}
+
 	}
 
 	//white cross extended
@@ -424,7 +429,7 @@ cubie middle_layer(cubie cube) {
 
 cubie yellow_cross(cubie cube) {
 	if (cube.edge_ori[4] != 0 ||	//this checks if there already 
-		cube.edge_ori[5] != 0 ||	//a yellow cross
+		cube.edge_ori[B] != 0 ||	//a yellow cross
 		cube.edge_ori[6] != 0 ||	
 		cube.edge_ori[7] != 0) {
 
@@ -448,9 +453,9 @@ cubie yellow_cross(cubie cube) {
 		//at this point all 4 edges are yellow so we only check that 
 		//they're orientated
 		if ((cube.edge_ori[4] == 0 && cube.edge_ori[6] == 0) || //this checks if the 
-			(cube.edge_ori[5] == 0 && cube.edge_ori[7] == 0)) { //orientated faces are opposite 
+			(cube.edge_ori[B] == 0 && cube.edge_ori[7] == 0)) { //orientated faces are opposite 
 																//eachother
-			if (cube.edge_ori[5] == 0 && cube.edge_ori[7] == 0) {
+			if (cube.edge_ori[B] == 0 && cube.edge_ori[7] == 0) {
 				cube.doD(1);		//this guarantees they're placed in DR and DL
 			}
 			
@@ -543,7 +548,10 @@ cubie second_to_last_step(cubie cube) {
 	cubie R_move;
 	cubie L_move;
 
+	std::cout << next_edge << "\n";
+
 	std::array <cubie, 18> moves = make_moves();
+	cube.output_cubie();
 	
 	if (cube.edge_perm[next_edge] == other_edge) {
 		switch (next_edge) {
@@ -633,9 +641,6 @@ cubie final(cubie cube) {
 		}
 	} while (match == false);
 
-	
-	cube.output_cubie();
-	
 	cubie F_move;
 	cubie L_move; 
 	cubie B_move;
@@ -644,6 +649,9 @@ cubie final(cubie cube) {
 	I.reset();
 
 	std::array <cubie, 18> moves = make_moves();
+
+	facelet a(cube.to_facelet_rep());
+	a.to_2D_string();
 
 	while (cube.compare(I) == false) {
 
@@ -657,7 +665,6 @@ cubie final(cubie cube) {
 
 
 		short corn = cube.corn_perm[corner];
-		std::cout << corn << "\n";
 
 		switch (corn) {
 		case DFR:
@@ -683,20 +690,18 @@ cubie final(cubie cube) {
 		}
 
 		cube = final_algorithm(cube, F_move, L_move, B_move);
-			cube = final_algorithm(cube, F_move, L_move, B_move);
-			cube.output_cubie();
 	}
 	
 	return cube;
 
 }
 
-
-
 int solve(std::string facelet_rep) {
-	facelet a(facelet_rep);
+	facelet a("DDFRURLLBLFUDRLFLRBBDFFRUBRBUUUDFFBDFUURLDLFRDDBBBURLL");
 
 	a.to_2D_string();
+
+	//a.print_string();
 
 	cubie c;
 	c = a.to_cubie();
@@ -711,11 +716,17 @@ int solve(std::string facelet_rep) {
 
 	c = second_to_last_step(c);
 
-	c.output_cubie();
+	//facelet b(c.to_facelet_rep());
+
+	//b.to_2D_string();
+
+	//c.output_cubie();
+
+	//read_solution();
 
 	c = final(c);
 
-	c.output_cubie();
+	//c.output_cubie();
 
 	return 0;
 }

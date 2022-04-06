@@ -8,41 +8,47 @@
 
 void cubie::put_edge_in_D_face(short edge) {
 	std::array <cubie, 18> moves = make_moves();
+	short count = 0;
+
 
 	if (edge_in_R_face(edge) == true) {
 		do {
 			doR(1);
+			count++;
 		} while (edge_in_D_face(edge) == false);	//for do while loop
 													//https://www.w3schools.com/cpp/cpp_do_while_loop.asp					
 		doD(1);
-		doR(3);						
+		doR(4 - count);						
 	}												
 
 	else if (edge_in_F_face(edge) == true) {
 		do {
 			doF(1);
+			count++;
 		} while (edge_in_D_face(edge) == false);
 
 		doD(1);
-		doF(3);
+		doF(4 - count);
 	}
 
 	else if (edge_in_L_face(edge) == true) {
 		do {
 			doL(1);
+			count++;
 		} while (edge_in_D_face(edge) == false);
 
 		doD(1);
-		doL(3);
+		doL(4 - count);
 	}
 
 	else if (edge_in_B_face(edge) == true) {
 		do {
 			doB(1);
+			count++;
 		} while (edge_in_D_face(edge) == false);
 
 		doD(1);
-		doB(3); //This places what was in the UB space back in 
+		doB(4 - count); //This places what was in the UB space back in 
 									//case it was a U edge
 	}
 }

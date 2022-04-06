@@ -161,6 +161,7 @@
     <ClInclude Include="solver.h" />
     <ClInclude Include="symmetries.h" />
     <ClInclude Include="miscellaneous functions.h" />
+    <ClInclude Include="to facelet.h" />
     <ClInclude Include="turns.h" />
   </ItemGroup>
   <ItemGroup>

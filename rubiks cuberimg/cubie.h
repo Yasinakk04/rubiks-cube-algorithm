@@ -131,7 +131,6 @@ public:
 		else { corn_ori[7] = 3 - (ori_sum % 3); }
 	}
 
-
 	// ------------------------------------------------
 	unsigned short get_flip() {
 		short flip = 0;
@@ -318,7 +317,6 @@ public:
 		return ud_slice_phase_2;
 	}
 
-
 	void set_ud_slice_phase_2(unsigned short ud_slice_phase_2_value) {
 
 		unsigned short pos = ud_slice_phase_2_value / 24;
@@ -360,7 +358,6 @@ public:
 			}
 		}
 	}
-
 
 	//This only works in phase 2,
 	//as it assumes that the u and d edges are
@@ -515,7 +512,6 @@ public:
 		edge_multiply(B);
 	}
 
-
 	void reset() {
 		corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
 		corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -598,7 +594,6 @@ public:
 			return false;
 		}
 	}
-
 	
 	bool corner_in_B_face(short corner) {
 		if (corner_in_F_face(corner) == false) {
@@ -608,7 +603,6 @@ public:
 			return false;
 		}
 	}
-
 
 	// ------------------------------------------------
 
@@ -731,5 +725,9 @@ public:
 			}
 		}
 	}
+
+	// ------------------------------------------------
+
+	std::array <short, 54> to_facelet_rep();
 };
 

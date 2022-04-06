@@ -54,8 +54,11 @@ public:
 		facelet_rep = from_string(face_string);
 	}
 
+	facelet(std::array <short, 54> string) {
+		facelet_rep = string;
+	}
 
-	std::array<short, 54> from_string(std::string face_string) {	//facelets are defined in the odrer shown
+	std::array <short, 54> from_string(std::string face_string) {	//facelets are defined in the odrer shown
 																	//at the top
 		std::array<short, 54> error{};
 		std::array<short, 54> solved{};
@@ -133,8 +136,8 @@ public:
 			if (colour == U) { colours_2D[i] = 'U'; }		//This means by calculator how many times
 			else if (colour == R) { colours_2D[i] = 'R'; }  //9 goes into the value you can find the 
 			else if (colour == F) { colours_2D[i] = 'F'; }  //colour
-			else if (colour == L) { colours_2D[i] = 'L'; }
 			else if (colour == D) { colours_2D[i] = 'D'; }
+			else if (colour == L) { colours_2D[i] = 'L'; }
 			else if (colour == B) { colours_2D[i] = 'B'; }
 
 		}
@@ -145,8 +148,8 @@ public:
 			"         " << string_2D[6] << " " << string_2D[7] << " " << string_2D[8] << "\n" << \
 			\
 			string_2D[36] << " " << string_2D[37] << " " << string_2D[38] << " " << string_2D[18] << " " << string_2D[19] << " " << string_2D[20] << " " << string_2D[9] << " " << string_2D[10] << " " << string_2D[11] << "\n" << \
-			string_2D[39] << " " << string_2D[40] << " " << string_2D[41] << " " << string_2D[18] << " " << string_2D[22] << " " << string_2D[23] << " " << string_2D[12] << " " << string_2D[13] << " " << string_2D[14] << "\n" << \
-			string_2D[42] << " " << string_2D[43] << " " << string_2D[41] << " " << string_2D[24] << " " << string_2D[25] << " " << string_2D[26] << " " << string_2D[15] << " " << string_2D[16] << " " << string_2D[17] << "\n" << \
+			string_2D[39] << " " << string_2D[40] << " " << string_2D[41] << " " << string_2D[21] << " " << string_2D[22] << " " << string_2D[23] << " " << string_2D[12] << " " << string_2D[13] << " " << string_2D[14] << "\n" << \
+			string_2D[42] << " " << string_2D[43] << " " << string_2D[44] << " " << string_2D[24] << " " << string_2D[25] << " " << string_2D[26] << " " << string_2D[15] << " " << string_2D[16] << " " << string_2D[17] << "\n" << \
 			\
 			"         " << string_2D[27] << " " << string_2D[28] << " " << string_2D[29] << "\n" << \
 			"         " << string_2D[30] << " " << string_2D[31] << " " << string_2D[32] << "\n" << \
@@ -163,8 +166,8 @@ public:
 			"      " << colours_2D[6] << " " << colours_2D[7] << " " << colours_2D[8] << "\n" << \
 			\
 			colours_2D[36] << " " << colours_2D[37] << " " << colours_2D[38] << " " << colours_2D[18] << " " << colours_2D[19] << " " << colours_2D[20] << " " << colours_2D[9] << " " << colours_2D[10] << " " << colours_2D[11] << "\n" << \
-			colours_2D[39] << " " << colours_2D[40] << " " << colours_2D[41] << " " << colours_2D[18] << " " << colours_2D[22] << " " << colours_2D[23] << " " << colours_2D[12] << " " << colours_2D[13] << " " << colours_2D[14] << "\n" << \
-			colours_2D[42] << " " << colours_2D[43] << " " << colours_2D[41] << " " << colours_2D[24] << " " << colours_2D[25] << " " << colours_2D[26] << " " << colours_2D[15] << " " << colours_2D[16] << " " << colours_2D[17] << "\n" << \
+			colours_2D[39] << " " << colours_2D[40] << " " << colours_2D[41] << " " << colours_2D[21] << " " << colours_2D[22] << " " << colours_2D[23] << " " << colours_2D[12] << " " << colours_2D[13] << " " << colours_2D[14] << "\n" << \
+			colours_2D[42] << " " << colours_2D[43] << " " << colours_2D[44] << " " << colours_2D[24] << " " << colours_2D[25] << " " << colours_2D[26] << " " << colours_2D[15] << " " << colours_2D[16] << " " << colours_2D[17] << "\n" << \
 			\
 			"      " << colours_2D[27] << " " << colours_2D[28] << " " << colours_2D[29] << "\n" << \
 			"      " << colours_2D[30] << " " << colours_2D[31] << " " << colours_2D[32] << "\n" << \
@@ -194,8 +197,6 @@ public:
 			std::array <short, 3> face = cornerFacelet[i];
 			corner_check = false;
 
-
-
 			for (short j = 0; j != 3; j++) {
 				if (facelet_rep[face[j]] == U || facelet_rep[face[j]] == D) { ori = j; break; }
 				//The above is to figure out which facelet of a corner is a U or D facelet
@@ -211,9 +212,6 @@ public:
 			short colour1 = facelet_rep[face[(ori + 1) % 3]];
 			short colour2 = facelet_rep[face[(ori + 2) % 3]];
 			//The 2 adjacent facelets to the U or D face are defined above
-
-			std::cout << colour1 << "\n" << colour2 << "\n";
-
 
 			for (short j = 0; j != No_corner; j++) {
 				if (colour1 == cornerColour[j][1] && colour2 == cornerColour[j][2]) {
@@ -283,5 +281,11 @@ public:
 			}
 		}
 		return cc;
+	}
+
+	void print_string() {
+		for (short i = 0; i != 54; i++) {
+			std::cout << facelet_rep[i];
+		}
 	}
 };
