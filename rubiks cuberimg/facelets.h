@@ -61,6 +61,8 @@ public:
 	std::array <short, 54> from_string(std::string face_string) {	//facelets are defined in the odrer shown
 																	//at the top
 		std::array<short, 54> error{};
+		error.fill(-1);
+
 		std::array<short, 54> solved{};
 		std::array<short, 54> facelet_rep{};
 
@@ -185,6 +187,14 @@ public:
 		cc.edge_perm.fill(-1);
 
 
+		cubie error;
+		error.corn_perm.fill(-1);
+		error.edge_perm.fill(-1);
+		error.corn_ori.fill(-1);
+		error.edge_ori.fill(-1);
+
+
+
 		//The above invalidates the permutation after it is initialised
 
 
@@ -205,7 +215,7 @@ public:
 
 				//The below should only occur after each of the corner facelets has been checked 
 				//to see if it is U or D
-				else if (j == 2) { std::cout << "The entered corners are invalid\n i is " << i << "\nj is " << j; return cc; }
+				else if (j == 2) { std::cout << "The entered corners are invalid\n i is " << i << "\nj is " << j; return error; }
 				//If none of the faces are a U or a D then there must have been an error
 			}
 
@@ -224,7 +234,7 @@ public:
 
 			if (corner_check == false) {
 				std::cout << "corner at position " << i << " is invalid\n";
-				return cc;
+				return error;
 			}
 
 			//The above for loop goes through each of the corners and checks which of the  
@@ -277,7 +287,7 @@ public:
 
 			if (edge_check == false) {
 				std::cout << "Edge " << k << " has not been defined \n\n";
-				return cc;
+				return error;
 			}
 		}
 		return cc;
@@ -285,7 +295,31 @@ public:
 
 	void print_string() {
 		for (short i = 0; i != 54; i++) {
-			std::cout << facelet_rep[i];
+			switch (facelet_rep[i]) {
+			case 0:
+				std::cout << "U";
+				break;
+			
+			case 1:
+				std::cout << "R";
+				break;
+
+			case 2:
+				std::cout << "F";
+				break;
+
+			case 3:
+				std::cout << "D";
+				break;
+
+			case 4:
+				std::cout << "L";
+				break;
+
+			case 5:
+				std::cout << "B";
+				break;
+			}
 		}
 	}
 };

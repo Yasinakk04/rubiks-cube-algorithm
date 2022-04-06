@@ -7,24 +7,22 @@
 #include <windows.h>  // for MS Windows
 #include <GL/glut.h>  // GLUT, include glu.h and gl.h
 
-
 #include <iostream>
 #include <string>
 #include <array>
 #include <vector>
 #include <fstream>
-#include <math.h>
 
 #include "enums.h"
 #include "cubie.h"
 #include "facelets.h"
 #include "constants.h"
-#include "miscellaneous functions.h"
-#include "coord.h"
-#include "symmetries.h"
-#include "moves.h"
+//#include "miscellaneous functions.h"
+//#include "coord.h"
+//#include "symmetries.h"
+//#include "moves.h"
 #include "turns.h"
-#include "pruning.h"
+//#include "pruning.h"
 
 #include "solver.h"
 
@@ -37,12 +35,44 @@ const std::string edge_pos[12] = { "UR", "UF", "UL", "UB", "DR", "DF", "DL", "DB
 cubie cube = cubie();
 
 int main(int argc, char** argv) {
+
+	std::cout << "\n"
+		"Controls:\n\n"
+		"Press the following keys to turn the matching face 90 degrees\n"
+		"U - White face\n"
+		"R - Red face\n"
+		"F - Green face\n"
+		"D - Yellow face\n"
+		"L - Orange face\n"
+		"B - Blue face\n\n\n"
+
+		"Solve:\n\n"
+		"To choose the colours on a face click on the square with the mouse\n"
+		"This willl cycle through the colours in the order:\n"
+		"White, Red, Green, Yellow, Orange, Blue\n"
+		"You cannot change the centre colour of any face\n"
+		"To output the solution press enter"
+		"To have the moves performed on the cube press the right and left arrow keys\n\n\n"
+
+		"Miscellaneous:\n\n"
+		"To swap between the cube view and net view press space\n"
+		"To reset the cube press q\n"
+		"To invert the camera press i\n"
+		"To learn how to solve the Rubik's cube I advise using this site:\n"
+		"https://www.wikihow.com/Solve-a-Rubik%27s-Cube-with-the-Layer-by-Layer-Method \n\n"
+		"This is also the method used by the program\n"
+		
+		;
+
+	//https://stackoverflow.com/questions/1135841/c-multiline-string-literal
+
+
 	// init GLUT and create window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(320, 320);
-	glutCreateWindow("Lighthouse3D - GLUT Tutorial");
+	glutCreateWindow("Rubiks cube solver");
 
 	// register callbacks
 	glutDisplayFunc(renderScene);
@@ -56,7 +86,7 @@ int main(int argc, char** argv) {
 
 	// here are the two new functions
 	glutMouseFunc(mouseButton);
-	glutMouseFunc(checkColour);
+	//glutMouseFunc(checkColour);
 	glutMotionFunc(mouseMove);
 
 	// OpenGL init

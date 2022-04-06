@@ -5,6 +5,9 @@
 #include "moves.h"
 #include "cubie.h"
 #include "enums.h"
+#include "make facelets.h"
+
+bool debug = false;
 
 
 std::vector <short> solution;
@@ -51,7 +54,10 @@ void cubie::doB(int times) {
 	}
 }
 
-void read_solution() {
+std::vector <short> read_solution() {
+	std::vector <short> optimised_solution;
+	short m;
+
 	unsigned short i = 0;
 	unsigned short size = solution.size();
 	solution.push_back(100);
@@ -65,32 +71,39 @@ void read_solution() {
 	solution.push_back(100);
 	unsigned short count = 1;
 	while (i != solution.size()){
-		const char* x;
+		const char* move;
+		short times = 0;
 
 		switch (solution[i]) {
 		case U:
-			x = "U";
+			move = "U";
+			m = U;
 			break;
 		case R:
-			x = "R";
+			move = "R";
+			m = R;
 			break;
 		case F:
-			x = "F";
+			move = "F";
+			m = F;
 			break; 
 		case D:
-			x = "D";
+			move = "D";
+			m = D;
 			break;
 		case L:
-			x = "L";
+			move = "L";
+			m = L;
 			break;
 		case B:
-			x = "B";
+			move = "B";
+			m = B;
 			break;
 		case 100:
-			x = "";
+			move = "";
 			break;
 		default:
-			x = "fail";
+			move = "fail";
 			break;
 		}
 
@@ -108,7 +121,6 @@ void read_solution() {
 			i = i + 8;
 		}
 
-
 		else if (solution[i] == solution[i + 1] &&
 			solution[i + 2] == solution[i + 3] &&
 			solution[i + 3] == solution[i]) {
@@ -117,24 +129,510 @@ void read_solution() {
 
 		else if (solution[i] == solution[i + 2] &&
 			solution[i] == solution[i + 1]) {
-			std::cout << count << ") " << x << 3 << "\n";
+			std::cout << count << ") " << move << 3 << "\n";
 			i = i + 3;
 			count++;
+			times = 3;			
 		}
 
 		else if (solution[i] == solution[i + 1]) {
 			i = i + 2;
-			std::cout << count << ") " << x << 2 << "\n";
+			std::cout << count << ") " << move << 2 << "\n";
 			count++;
+			times = 2;
 		}
 
 		else {
 			i = i + 1;
-			std::cout << count << ") " << x << "\n";
+			std::cout << count << ") " << move << "\n";
 			count++;
+			times = 1;
 		}
 
+		for (short j = 0; j != times; j++) {
+			optimised_solution.push_back(m);
+		}
+	}
+	solution.clear();
+
+	if (debug == true) {
+		std::cout << "\n\n";
+		for (short j = 0; j != optimised_solution.size(); j++) {
+			const char* m;
+			switch (optimised_solution[j]) {
+			case U:
+				m = "U";
+				break;
+			case R:
+				m = "R";
+				break;
+			case F:
+				m = "F";
+				break;
+			case D:
+				m = "D";
+				break;
+			case L:
+				m = "L";
+				break;
+			case B:
+				m = "B";
+				break;
+			default:
+				m = "fail";
+				break;
+			}
+			std::cout << m << " ";
+		}
 	}
 
-	solution.clear();
+	return optimised_solution;
+}
+
+void reset_colours() {
+	for (short i = 0; i != 54; i++) {
+		facelet_numbers[i] = i / 9;
+	}
+}
+
+
+void do_move_on_cube(std::vector <short> do_solution) {
+	unsigned short i = 0;
+
+	std::array <unsigned short, 54> temp_facelet_numbers = {
+	U, U, U, U, U, U, U, U, U,
+	R, R, R, R, R, R, R, R, R,
+	F, F, F, F, F, F, F, F, F,
+	D, D, D, D, D, D, D, D, D,
+	L, L, L, L, L, L, L, L, L,
+	B, B, B, B, B, B, B, B, B
+	};
+	
+	do {
+		switch (do_solution[i]) {
+		case U:
+			temp_facelet_numbers = {
+				facelet_numbers[6], facelet_numbers[3], facelet_numbers[0],
+				facelet_numbers[7], 		U,			facelet_numbers[1],
+				facelet_numbers[8], facelet_numbers[5], facelet_numbers[2],
+
+
+				facelet_numbers[53], facelet_numbers[52], facelet_numbers[51],
+				facelet_numbers[12],		R,			  facelet_numbers[14],
+				facelet_numbers[15], facelet_numbers[16], facelet_numbers[17],
+
+
+				facelet_numbers[9], facelet_numbers[10], facelet_numbers[11],
+				facelet_numbers[21],		F,	 		 facelet_numbers[23],
+				facelet_numbers[24], facelet_numbers[25], facelet_numbers[26],
+
+
+				facelet_numbers[27], facelet_numbers[28], facelet_numbers[29],
+				facelet_numbers[30], 		D,			  facelet_numbers[32],
+				facelet_numbers[33], facelet_numbers[34], facelet_numbers[35],
+
+
+				facelet_numbers[18], facelet_numbers[19], facelet_numbers[20],
+				facelet_numbers[39],		L,			  facelet_numbers[41],
+				facelet_numbers[42], facelet_numbers[43], facelet_numbers[44],
+
+
+				facelet_numbers[45], facelet_numbers[46], facelet_numbers[47],
+				facelet_numbers[48],		B,			  facelet_numbers[50],
+				facelet_numbers[38], facelet_numbers[37], facelet_numbers[36]
+			};
+			break;
+
+		case R:
+			temp_facelet_numbers = {
+				facelet_numbers[0], facelet_numbers[1], facelet_numbers[20],
+				facelet_numbers[3],			U,			facelet_numbers[23],
+				facelet_numbers[6], facelet_numbers[7], facelet_numbers[26],
+
+
+				facelet_numbers[15], facelet_numbers[12], facelet_numbers[9],
+				facelet_numbers[16],		R,			  facelet_numbers[10],
+				facelet_numbers[17], facelet_numbers[14], facelet_numbers[11],
+
+
+				facelet_numbers[18], facelet_numbers[19], facelet_numbers[29],
+				facelet_numbers[21],		F,			  facelet_numbers[32],
+				facelet_numbers[24], facelet_numbers[25], facelet_numbers[35],
+
+
+				facelet_numbers[27], facelet_numbers[28], facelet_numbers[47],
+				facelet_numbers[30],		D,	   		  facelet_numbers[50],
+				facelet_numbers[33], facelet_numbers[34], facelet_numbers[53],
+
+
+				facelet_numbers[36], facelet_numbers[37], facelet_numbers[38],
+				facelet_numbers[39],		L,	 		  facelet_numbers[41],
+				facelet_numbers[42], facelet_numbers[43], facelet_numbers[44],
+
+
+				facelet_numbers[45], facelet_numbers[46], facelet_numbers[2],
+				facelet_numbers[48],		B,			  facelet_numbers[5],
+				facelet_numbers[51], facelet_numbers[52], facelet_numbers[8]
+			};
+			break;
+
+		case F:
+			temp_facelet_numbers = {
+				facelet_numbers[0] , facelet_numbers[1] , facelet_numbers[2],
+				facelet_numbers[3] ,		U,			  facelet_numbers[5],
+				facelet_numbers[44], facelet_numbers[41], facelet_numbers[38],
+
+
+				facelet_numbers[6] , facelet_numbers[10], facelet_numbers[11],
+				facelet_numbers[7] ,		R,			  facelet_numbers[14],
+				facelet_numbers[8] , facelet_numbers[16], facelet_numbers[17],
+
+
+				facelet_numbers[24], facelet_numbers[21], facelet_numbers[18],
+				facelet_numbers[25],		F,			  facelet_numbers[19],
+				facelet_numbers[26], facelet_numbers[23], facelet_numbers[20],
+
+
+				facelet_numbers[15], facelet_numbers[12], facelet_numbers[9],
+				facelet_numbers[30],		D,	   		  facelet_numbers[32],
+				facelet_numbers[33], facelet_numbers[34], facelet_numbers[35],
+
+
+				facelet_numbers[36], facelet_numbers[37], facelet_numbers[27],
+				facelet_numbers[39],		L,	 		  facelet_numbers[28],
+				facelet_numbers[42], facelet_numbers[43], facelet_numbers[29],
+
+
+				facelet_numbers[45], facelet_numbers[46], facelet_numbers[47],
+				facelet_numbers[48],		B,			  facelet_numbers[50],
+				facelet_numbers[51], facelet_numbers[52], facelet_numbers[53]
+			};
+			break;
+
+		case D:
+			temp_facelet_numbers = {
+				facelet_numbers[0] , facelet_numbers[1] , facelet_numbers[2],
+				facelet_numbers[3] ,		U,			  facelet_numbers[5],
+				facelet_numbers[6] , facelet_numbers[7] , facelet_numbers[8],
+
+
+				facelet_numbers[9] , facelet_numbers[10], facelet_numbers[11],
+				facelet_numbers[12],		R,			  facelet_numbers[14],
+				facelet_numbers[24], facelet_numbers[25], facelet_numbers[26],
+
+
+				facelet_numbers[18], facelet_numbers[19], facelet_numbers[20],
+				facelet_numbers[21],		F,			  facelet_numbers[23],
+				facelet_numbers[42], facelet_numbers[43], facelet_numbers[44],
+
+
+				facelet_numbers[33], facelet_numbers[30], facelet_numbers[27],
+				facelet_numbers[34],		D,	   		  facelet_numbers[28],
+				facelet_numbers[35], facelet_numbers[32], facelet_numbers[29],
+
+
+				facelet_numbers[36], facelet_numbers[37], facelet_numbers[38],
+				facelet_numbers[39],		L,	 		  facelet_numbers[41],
+				facelet_numbers[47], facelet_numbers[46], facelet_numbers[45],
+
+
+				facelet_numbers[17], facelet_numbers[16], facelet_numbers[15],
+				facelet_numbers[48],		B,			  facelet_numbers[50],
+				facelet_numbers[51], facelet_numbers[52], facelet_numbers[53]
+			};
+			break;
+
+		case L:
+			temp_facelet_numbers = {
+				facelet_numbers[45], facelet_numbers[1] , facelet_numbers[2],
+				facelet_numbers[48],		U,			  facelet_numbers[5],
+				facelet_numbers[51], facelet_numbers[7] , facelet_numbers[8],
+
+
+				facelet_numbers[9] , facelet_numbers[10], facelet_numbers[11],
+				facelet_numbers[12],		R,			  facelet_numbers[14],
+				facelet_numbers[15], facelet_numbers[16], facelet_numbers[17],
+
+
+				facelet_numbers[0] , facelet_numbers[19], facelet_numbers[20],
+				facelet_numbers[3] ,		F,			  facelet_numbers[23],
+				facelet_numbers[6] , facelet_numbers[25], facelet_numbers[26],
+
+
+				facelet_numbers[18], facelet_numbers[28], facelet_numbers[29],
+				facelet_numbers[21],		D,	   		  facelet_numbers[32],
+				facelet_numbers[24], facelet_numbers[34], facelet_numbers[35],
+
+
+				facelet_numbers[42], facelet_numbers[39], facelet_numbers[36],
+				facelet_numbers[43],		L,	 		  facelet_numbers[37],
+				facelet_numbers[44], facelet_numbers[41], facelet_numbers[38],
+
+
+				facelet_numbers[27], facelet_numbers[46], facelet_numbers[47],
+				facelet_numbers[30],		B,			  facelet_numbers[50],
+				facelet_numbers[33], facelet_numbers[52], facelet_numbers[53]
+			};
+			break;
+
+		case B:
+			temp_facelet_numbers = {
+				facelet_numbers[11], facelet_numbers[14], facelet_numbers[17],
+				facelet_numbers[3] ,		U,			  facelet_numbers[5],
+				facelet_numbers[6] , facelet_numbers[7] , facelet_numbers[8],
+
+
+				facelet_numbers[9] , facelet_numbers[10], facelet_numbers[35],
+				facelet_numbers[12],		R,			  facelet_numbers[34],
+				facelet_numbers[15], facelet_numbers[16], facelet_numbers[33],
+
+
+				facelet_numbers[18], facelet_numbers[19], facelet_numbers[20],
+				facelet_numbers[21],		F,			  facelet_numbers[23],
+				facelet_numbers[24], facelet_numbers[25], facelet_numbers[26],
+
+
+				facelet_numbers[27], facelet_numbers[28], facelet_numbers[29],
+				facelet_numbers[30],		D,	   		  facelet_numbers[32],
+				facelet_numbers[36], facelet_numbers[39], facelet_numbers[42],
+
+
+				facelet_numbers[2] , facelet_numbers[37], facelet_numbers[38],
+				facelet_numbers[1] ,		L,	 		  facelet_numbers[41],
+				facelet_numbers[0] , facelet_numbers[43], facelet_numbers[44],
+
+
+				facelet_numbers[51], facelet_numbers[48], facelet_numbers[45],
+				facelet_numbers[52],		B,			  facelet_numbers[46],
+				facelet_numbers[53], facelet_numbers[50], facelet_numbers[47]
+			};
+			break;
+		}
+		
+		i++;
+
+		for (unsigned char i = 0; i != 54; i++) {
+			facelet_numbers[i] = temp_facelet_numbers[i];
+		}
+	} while (i != do_solution.size());
+}
+
+void do_move_on_cube(short m) {
+	unsigned short i = 0;
+
+	std::array <unsigned short, 54> temp_facelet_numbers = {
+	U, U, U, U, U, U, U, U, U,
+	R, R, R, R, R, R, R, R, R,
+	F, F, F, F, F, F, F, F, F,
+	D, D, D, D, D, D, D, D, D,
+	L, L, L, L, L, L, L, L, L,
+	B, B, B, B, B, B, B, B, B
+	};
+
+	
+	switch (m) {
+	case U:
+		temp_facelet_numbers = {
+				facelet_numbers[6], facelet_numbers[3], facelet_numbers[0],
+				facelet_numbers[7], 		U,			facelet_numbers[1],
+				facelet_numbers[8], facelet_numbers[5], facelet_numbers[2],
+
+
+				facelet_numbers[53], facelet_numbers[52], facelet_numbers[51],
+				facelet_numbers[12],		R,			  facelet_numbers[14],
+				facelet_numbers[15], facelet_numbers[16], facelet_numbers[17],
+
+
+				facelet_numbers[9], facelet_numbers[10], facelet_numbers[11],
+				facelet_numbers[21],		F,	 		 facelet_numbers[23],
+				facelet_numbers[24], facelet_numbers[25], facelet_numbers[26],
+
+
+				facelet_numbers[27], facelet_numbers[28], facelet_numbers[29],
+				facelet_numbers[30], 		D,			  facelet_numbers[32],
+				facelet_numbers[33], facelet_numbers[34], facelet_numbers[35],
+
+
+				facelet_numbers[18], facelet_numbers[19], facelet_numbers[20],
+				facelet_numbers[39],		L,			  facelet_numbers[41],
+				facelet_numbers[42], facelet_numbers[43], facelet_numbers[44],
+
+
+				facelet_numbers[45], facelet_numbers[46], facelet_numbers[47],
+				facelet_numbers[48],		B,			  facelet_numbers[50],
+				facelet_numbers[38], facelet_numbers[37], facelet_numbers[36]
+			};
+		break;
+
+	case R:
+		temp_facelet_numbers = {
+				facelet_numbers[0], facelet_numbers[1], facelet_numbers[20],
+				facelet_numbers[3],			U,			facelet_numbers[23],
+				facelet_numbers[6], facelet_numbers[7], facelet_numbers[26],
+
+
+				facelet_numbers[15], facelet_numbers[12], facelet_numbers[9],
+				facelet_numbers[16],		R,			  facelet_numbers[10],
+				facelet_numbers[17], facelet_numbers[14], facelet_numbers[11],
+
+
+				facelet_numbers[18], facelet_numbers[19], facelet_numbers[29],
+				facelet_numbers[21],		F,			  facelet_numbers[32],
+				facelet_numbers[24], facelet_numbers[25], facelet_numbers[35],
+
+
+				facelet_numbers[27], facelet_numbers[28], facelet_numbers[47],
+				facelet_numbers[30],		D,	   		  facelet_numbers[50],
+				facelet_numbers[33], facelet_numbers[34], facelet_numbers[53],
+
+
+				facelet_numbers[36], facelet_numbers[37], facelet_numbers[38],
+				facelet_numbers[39],		L,	 		  facelet_numbers[41],
+				facelet_numbers[42], facelet_numbers[43], facelet_numbers[44],
+
+
+				facelet_numbers[45], facelet_numbers[46], facelet_numbers[2],
+				facelet_numbers[48],		B,			  facelet_numbers[5],
+				facelet_numbers[51], facelet_numbers[52], facelet_numbers[8]
+			};
+		break;
+
+	case F:
+		temp_facelet_numbers = {
+				facelet_numbers[0] , facelet_numbers[1] , facelet_numbers[2],
+				facelet_numbers[3] ,		U,			  facelet_numbers[5],
+				facelet_numbers[44], facelet_numbers[41], facelet_numbers[38],
+
+
+				facelet_numbers[6] , facelet_numbers[10], facelet_numbers[11],
+				facelet_numbers[7] ,		R,			  facelet_numbers[14],
+				facelet_numbers[8] , facelet_numbers[16], facelet_numbers[17],
+
+
+				facelet_numbers[24], facelet_numbers[21], facelet_numbers[18],
+				facelet_numbers[25],		F,			  facelet_numbers[19],
+				facelet_numbers[26], facelet_numbers[23], facelet_numbers[20],
+
+
+				facelet_numbers[15], facelet_numbers[12], facelet_numbers[9],
+				facelet_numbers[30],		D,	   		  facelet_numbers[32],
+				facelet_numbers[33], facelet_numbers[34], facelet_numbers[35],
+
+
+				facelet_numbers[36], facelet_numbers[37], facelet_numbers[27],
+				facelet_numbers[39],		L,	 		  facelet_numbers[28],
+				facelet_numbers[42], facelet_numbers[43], facelet_numbers[29],
+
+
+				facelet_numbers[45], facelet_numbers[46], facelet_numbers[47],
+				facelet_numbers[48],		B,			  facelet_numbers[50],
+				facelet_numbers[51], facelet_numbers[52], facelet_numbers[53]
+			};
+		break;
+
+	case D:
+		temp_facelet_numbers = {
+				facelet_numbers[0] , facelet_numbers[1] , facelet_numbers[2],
+				facelet_numbers[3] ,		U,			  facelet_numbers[5],
+				facelet_numbers[6] , facelet_numbers[7] , facelet_numbers[8],
+
+
+				facelet_numbers[9] , facelet_numbers[10], facelet_numbers[11],
+				facelet_numbers[12],		R,			  facelet_numbers[14],
+				facelet_numbers[24], facelet_numbers[25], facelet_numbers[26],
+
+
+				facelet_numbers[18], facelet_numbers[19], facelet_numbers[20],
+				facelet_numbers[21],		F,			  facelet_numbers[23],
+				facelet_numbers[42], facelet_numbers[43], facelet_numbers[44],
+
+
+				facelet_numbers[33], facelet_numbers[30], facelet_numbers[27],
+				facelet_numbers[34],		D,	   		  facelet_numbers[28],
+				facelet_numbers[35], facelet_numbers[32], facelet_numbers[29],
+
+
+				facelet_numbers[36], facelet_numbers[37], facelet_numbers[38],
+				facelet_numbers[39],		L,	 		  facelet_numbers[41],
+				facelet_numbers[47], facelet_numbers[46], facelet_numbers[45],
+
+
+				facelet_numbers[17], facelet_numbers[16], facelet_numbers[15],
+				facelet_numbers[48],		B,			  facelet_numbers[50],
+				facelet_numbers[51], facelet_numbers[52], facelet_numbers[53]
+			};
+		break;
+
+	case L:
+		temp_facelet_numbers = {
+				facelet_numbers[45], facelet_numbers[1] , facelet_numbers[2],
+				facelet_numbers[48],		U,			  facelet_numbers[5],
+				facelet_numbers[51], facelet_numbers[7] , facelet_numbers[8],
+
+
+				facelet_numbers[9] , facelet_numbers[10], facelet_numbers[11],
+				facelet_numbers[12],		R,			  facelet_numbers[14],
+				facelet_numbers[15], facelet_numbers[16], facelet_numbers[17],
+
+
+				facelet_numbers[0] , facelet_numbers[19], facelet_numbers[20],
+				facelet_numbers[3] ,		F,			  facelet_numbers[23],
+				facelet_numbers[6] , facelet_numbers[25], facelet_numbers[26],
+
+
+				facelet_numbers[18], facelet_numbers[28], facelet_numbers[29],
+				facelet_numbers[21],		D,	   		  facelet_numbers[32],
+				facelet_numbers[24], facelet_numbers[34], facelet_numbers[35],
+
+
+				facelet_numbers[42], facelet_numbers[39], facelet_numbers[36],
+				facelet_numbers[43],		L,	 		  facelet_numbers[37],
+				facelet_numbers[44], facelet_numbers[41], facelet_numbers[38],
+
+
+				facelet_numbers[27], facelet_numbers[46], facelet_numbers[47],
+				facelet_numbers[30],		B,			  facelet_numbers[50],
+				facelet_numbers[33], facelet_numbers[52], facelet_numbers[53]
+			};
+		break;
+
+	case B:
+		temp_facelet_numbers = {
+				facelet_numbers[11], facelet_numbers[14], facelet_numbers[17],
+				facelet_numbers[3] ,		U,			  facelet_numbers[5],
+				facelet_numbers[6] , facelet_numbers[7] , facelet_numbers[8],
+
+
+				facelet_numbers[9] , facelet_numbers[10], facelet_numbers[35],
+				facelet_numbers[12],		R,			  facelet_numbers[34],
+				facelet_numbers[15], facelet_numbers[16], facelet_numbers[33],
+
+
+				facelet_numbers[18], facelet_numbers[19], facelet_numbers[20],
+				facelet_numbers[21],		F,			  facelet_numbers[23],
+				facelet_numbers[24], facelet_numbers[25], facelet_numbers[26],
+
+
+				facelet_numbers[27], facelet_numbers[28], facelet_numbers[29],
+				facelet_numbers[30],		D,	   		  facelet_numbers[32],
+				facelet_numbers[36], facelet_numbers[39], facelet_numbers[42],
+
+
+				facelet_numbers[2] , facelet_numbers[37], facelet_numbers[38],
+				facelet_numbers[1] ,		L,	 		  facelet_numbers[41],
+				facelet_numbers[0] , facelet_numbers[43], facelet_numbers[44],
+
+
+				facelet_numbers[51], facelet_numbers[48], facelet_numbers[45],
+				facelet_numbers[52],		B,			  facelet_numbers[46],
+				facelet_numbers[53], facelet_numbers[50], facelet_numbers[47]
+			};
+		break;
+	}
+
+	i++;
+
+	for (unsigned char i = 0; i != 54; i++) {
+		facelet_numbers[i] = temp_facelet_numbers[i];
+	}
 }

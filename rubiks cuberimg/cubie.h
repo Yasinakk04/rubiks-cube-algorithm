@@ -11,6 +11,7 @@
 
 //#include "facelets.h"
 
+bool testing = false;
 
 class cubie {
 public:
@@ -72,11 +73,12 @@ public:
 			}
 			std::cout << "\tOrientation: " << corn_ori[i] << "\n";
 		}
+		std::cout << "\n";
 	}
 
 
 	void output_cubie_edges() {
-		std::cout << "\n\nThe edge positions are: \n";
+		std::cout << "\nThe edge positions are: \n";
 		for (short i = 0; i != No_edge; i++) {
 			std::string pos = edge_pos[i];
 			if (edge_perm[i] == -1) {
@@ -521,13 +523,20 @@ public:
 	}
 
 	bool compare(cubie b) {
-		if ((edge_perm == b.edge_perm) &&
-			(edge_ori == b.edge_ori) &&
-			(corn_perm == b.corn_perm) &&
-			(corn_ori == b.corn_ori)){
-			return true;
+
+		for (short i = 0; i != 8; i++) {
+			if (corn_perm[i] != b.corn_perm[i] || corn_ori[i] != b.corn_ori[i]) {
+				return false;
 			}
-			return false;
+		}
+
+		for (short i = 0; i != 12; i++) {
+			if (edge_perm[i] != b.edge_perm[i] || edge_ori[i] != b.edge_ori[i]) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	// ------------------------------------------------
@@ -722,7 +731,17 @@ public:
 			case B:
 				doB(1);
 				break;
+			default:
+				std::cout << "error";
+				break;
 			}
+
+			if (testing == true) {
+				std::cout << a_moves[i] << " ";
+			}
+
+
+			
 		}
 	}
 

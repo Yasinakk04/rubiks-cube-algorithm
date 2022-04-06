@@ -10,46 +10,48 @@ void cubie::put_edge_in_D_face(short edge) {
 	std::array <cubie, 18> moves = make_moves();
 	short count = 0;
 
+	if (edge_in_D_face(edge) == false) {
 
-	if (edge_in_R_face(edge) == true) {
-		do {
-			doR(1);
-			count++;
-		} while (edge_in_D_face(edge) == false);	//for do while loop
-													//https://www.w3schools.com/cpp/cpp_do_while_loop.asp					
-		doD(1);
-		doR(4 - count);						
-	}												
+		if (edge_in_R_face(edge) == true) {
+			while (edge_in_D_face(edge) == false) {
+				doR(1);
+				count++;
+			}
+			//https://www.w3schools.com/cpp/cpp_do_while_loop.asp					
+			doD(1);
+			doR(4 - count);
+		}
 
-	else if (edge_in_F_face(edge) == true) {
-		do {
-			doF(1);
-			count++;
-		} while (edge_in_D_face(edge) == false);
+		else if (edge_in_F_face(edge) == true) {
+			while (edge_in_D_face(edge) == false) {
+				doF(1);
+				count++;
+			}
 
-		doD(1);
-		doF(4 - count);
-	}
+			doD(1);
+			doF(4 - count);
+		}
 
-	else if (edge_in_L_face(edge) == true) {
-		do {
-			doL(1);
-			count++;
-		} while (edge_in_D_face(edge) == false);
+		else if (edge_in_L_face(edge) == true) {
+			while (edge_in_D_face(edge) == false) {
+				doL(1);
+				count++;
+			}
 
-		doD(1);
-		doL(4 - count);
-	}
+			doD(1);
+			doL(4 - count);
+		}
 
-	else if (edge_in_B_face(edge) == true) {
-		do {
-			doB(1);
-			count++;
-		} while (edge_in_D_face(edge) == false);
+		else if (edge_in_B_face(edge) == true) {
+			while (edge_in_D_face(edge) == false) {
+				doB(1);
+				count++;
+			}
 
-		doD(1);
-		doB(4 - count); //This places what was in the UB space back in 
-									//case it was a U edge
+			doD(1);
+			doB(4 - count); //This places what was in the UB space back in 
+										//case it was a U edge
+		}
 	}
 }
 
@@ -184,6 +186,9 @@ void cubie::put_U_corner_in_U_face(short corner) {
 		doU(1);
 	}
 
+	/*if (corner == UBR) {
+	}*/
+
 	while (find_corner_ori(corner) != 1) {
 		doR(3);
 		doD(1);
@@ -195,6 +200,6 @@ void cubie::put_U_corner_in_U_face(short corner) {
 	doR(3);
 	doD(1);
 	doR(1);
-	//This places the corner is URF
+	//This places the corner in URF
 	//But correct with respect to the other U edges
 } 
