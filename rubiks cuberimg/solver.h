@@ -254,7 +254,6 @@ cubie mid_layer_algorithm_R(cubie cube, cubie F_move, cubie R_move) {
 
 
 	for (short i = 0; i != 2; i++) {
-
 		for (short m = 0; m != 6; m++) {
 
 			if (i == 0) { y = F_move; }
@@ -955,12 +954,11 @@ std::vector <short> solve(std::string facelet_rep) {
 
 	c = white_cross(c);
 	c = white_face(c);
-	c.output_cubie();
 	c = middle_layer(c);
-	//c = yellow_cross(c);
-	//c = yellow_face(c);
-	//c = second_to_last_step(c);
-	//c = final(c);
+	c = yellow_cross(c);
+	c = yellow_face(c);
+	c = second_to_last_step(c);
+	c = final(c);
 	std::vector <short> optimised_solution = read_solution();
 
 	std::cout << "\nsolved\n";
