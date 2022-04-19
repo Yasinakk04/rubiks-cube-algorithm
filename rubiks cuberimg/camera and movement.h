@@ -208,7 +208,7 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		}
 	}
 
-	if (key == 27) {
+	else  if (key == 27) {
 		exit(0);
 	}
 
@@ -243,10 +243,12 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		optimised_solution.clear();
 		optimised_solution = solve(facelet_rep);
 
+		if (optimised_solution[0] == -1) { optimised_solution.clear(); }
+
 		if (debug == true) {
 			do_move_on_cube(optimised_solution);
+			m = optimised_solution.size();
 		}
-
 	}
 
 	else if (key == 32) {					//press space to swap

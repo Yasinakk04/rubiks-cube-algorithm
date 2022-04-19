@@ -737,11 +737,8 @@ public:
 			}
 
 			if (testing == true) {
-				std::cout << a_moves[i] << " ";
-			}
-
-
-			
+				output_cubie();
+			}			
 		}
 	}
 
