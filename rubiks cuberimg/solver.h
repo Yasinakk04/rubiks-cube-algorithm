@@ -966,17 +966,29 @@ std::vector <short> solve(std::string facelet_rep) {
 		return error;
 	}
 
-	c = white_cross(c);
-	c = white_face(c);
-	c.output_cubie();
-	c = middle_layer(c);
-	c = yellow_cross(c);
-	c = yellow_face(c);
-	c = second_to_last_step(c);
-	c = final(c);
-	std::vector <short> optimised_solution = read_solution();
+	cubie I;
+	I.reset();
 
-	std::cout << "\nsolved\n";
+	if (c.compare(I) == false) {
+		c = white_cross(c);
+		c = white_face(c);
+		c = middle_layer(c);
+		c = yellow_cross(c);
+		c = yellow_face(c);
+		c = second_to_last_step(c);
+		c = final(c);
+		std::vector <short> optimised_solution = read_solution();
 
-	return optimised_solution;
+		for (short i = 0; i != solution.size(); i++) {
+			std::cout << solution[i] << "\n";
+		}
+
+		std::cout << "\nsolved\n";
+		return optimised_solution;
+	}
+
+	else {
+		return { -1 };
+	}
+
 }

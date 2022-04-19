@@ -711,6 +711,7 @@ public:
 	void doB(int times);
 
 	void do_move_vector(std::vector <short> a_moves) {
+		cubie I;
 		for (short i = 0; i != a_moves.size(); i++) {
 			switch (a_moves[i]) {
 			case U:
@@ -736,9 +737,10 @@ public:
 				break;
 			}
 
-			if (testing == true) {
-				output_cubie();
-			}			
+			//if (testing == true) {
+			//	output_cubie();
+			//}
+			//std::cout << a_moves[i] << "\n";
 		}
 	}
 
