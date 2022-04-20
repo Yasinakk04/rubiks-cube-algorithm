@@ -129,7 +129,7 @@ std::vector <short> read_solution() {
 
 		else if (solution[i] == solution[i + 2] &&
 			solution[i] == solution[i + 1]) {
-			std::cout << count << ") " << move << 3 << "\n";
+			std::cout << count << ") " << move << "'" << "\n";
 			i = i + 3;
 			count++;
 			times = 3;			
@@ -153,7 +153,7 @@ std::vector <short> read_solution() {
 			optimised_solution.push_back(m);
 		}
 	}
-	solution.clear();
+	//solution.clear();
 
 	if (debug == true) {
 		std::cout << "\n\n";
@@ -407,6 +407,11 @@ void do_move_on_cube(std::vector <short> do_solution) {
 				facelet_numbers[53], facelet_numbers[50], facelet_numbers[47]
 			};
 			break;
+		default:
+			for (unsigned char i = 0; i != 54; i++) {
+				temp_facelet_numbers[i] = facelet_numbers[i];
+			}
+			break;
 		}
 		
 		i++;
@@ -627,6 +632,12 @@ void do_move_on_cube(short m) {
 				facelet_numbers[52],		B,			  facelet_numbers[46],
 				facelet_numbers[53], facelet_numbers[50], facelet_numbers[47]
 			};
+		break;
+
+	default:
+		for (unsigned char i = 0; i != 54; i++) {
+			temp_facelet_numbers[i] = facelet_numbers[i];
+		}
 		break;
 	}
 

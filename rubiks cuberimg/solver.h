@@ -332,7 +332,7 @@ cubie mid_layer_algorithm_L(cubie cube, cubie F_move, cubie L_move) {
 }
 
 cubie white_cross(cubie cube) {
-		std::array <cubie, 18> moves = make_moves();
+	std::array <cubie, 18> moves = make_moves();
 
 	if (cube.edge_perm[0] != 0 || cube.edge_ori[0] != 0			//This checks if there is already
 		|| cube.edge_perm[1] != 1 || cube.edge_ori[1] != 0			//a white cross or not
@@ -396,7 +396,7 @@ cubie white_cross(cubie cube) {
 }
 
 cubie white_face(cubie cube) {
-	if (   cube.corn_perm[0] != 0 || cube.corn_ori[0] != 0		//This checks that U face is done or not	
+	if (   cube.corn_perm[0] != 0 || cube.corn_ori[0] != 0				//This checks that U face is done or not	
 		|| cube.corn_perm[1] != 1 || cube.corn_ori[1] != 0
 		|| cube.corn_perm[2] != 2 || cube.corn_ori[2] != 0
 		|| cube.corn_perm[3] != 3 || cube.corn_ori[3] != 0) {
@@ -424,9 +424,8 @@ cubie white_face(cubie cube) {
 		while (cube.corn_perm[0] != 0) {
 			cube.doU(1);
 		}
-
-		return cube;
 	}
+	return cube;
 }
 
 cubie middle_layer(cubie cube) {
@@ -439,13 +438,27 @@ cubie middle_layer(cubie cube) {
 			&& cube.edge_in_D_face(FL) == false //to begin in the D face
 			&&	cube.edge_in_D_face(BR) == false 
 			&& cube.edge_in_D_face(BL) == false) {
+
+			if (cube.edge_perm[FL] != FL || cube.edge_ori[FL] != 0) {		
+				cube.doR(1);
+				cube.doD(1);					//In some cases where all the F and B edges are in the middle layer 
+				cube.doR(3);					//but not in the right spaces or orientated
+				cube.doD(3);					//it can enter an infinite loop
+				cube.doB(3);					//proving 2 different paths here should prevent that
+				cube.doD(3);
+				cube.doB(1);
+			}
+
+
+			else {
 			cube.doF(1);
 			cube.doD(1);
 			cube.doF(3);
 			cube.doD(3);
 			cube.doR(3);
 			cube.doD(3);
-			cube.doR(1); //this sequence of moves will swap the edge in FR with
+			cube.doR(1);
+			}//this sequence of moves will swap the edge in FR with
 		}				 //DL with DF with DB back to FR
 
 		cube.output_cubie();
@@ -475,6 +488,7 @@ cubie middle_layer(cubie cube) {
 				R_move = moves[R * 3];
 
 				cube = mid_layer_algorithm_R(cube, F_move, R_move);
+				testing = true;
 				break;
 			
 			case FL:
@@ -492,7 +506,6 @@ cubie middle_layer(cubie cube) {
 				F_move = moves[B * 3];
 				R_move = moves[L * 3];
 
-				testing = true;
 				cube = mid_layer_algorithm_R(cube, F_move, R_move);
 				break;
 
@@ -952,16 +965,29 @@ std::vector <short> solve(std::string facelet_rep) {
 		return error;
 	}
 
-	c = white_cross(c);
-	c = white_face(c);
-	c = middle_layer(c);
-	c = yellow_cross(c);
-	c = yellow_face(c);
-	c = second_to_last_step(c);
-	c = final(c);
-	std::vector <short> optimised_solution = read_solution();
+	cubie I;
+	I.reset();
 
-	std::cout << "\nsolved\n";
+	if (c.compare(I) == false) {
+		c = white_cross(c);
+		c = white_face(c);
+		c = middle_layer(c);
+		c = yellow_cross(c);
+		c = yellow_face(c);
+		c = second_to_last_step(c);
+		c = final(c);
+		std::vector <short> optimised_solution = read_solution();
 
-	return optimised_solution;
+		for (short i = 0; i != solution.size(); i++) {
+			std::cout << solution[i] << "\n";
+		}
+
+		std::cout << "\nsolved\n";
+		return optimised_solution;
+	}
+
+	else {
+		return { -1 };
+	}
+
 }
