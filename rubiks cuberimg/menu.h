@@ -10,6 +10,7 @@
 
 GLuint _textureId; //The id of the texture
 
+
 GLUquadric* quad;
 
 GLuint loadTexture(Image* image) {
@@ -65,6 +66,31 @@ void initRendering(const char* f) {
 	delete image;
 }
 
+
+void drawButton(float xBL, float yBL, float xTR, float yTR, const char* tex_name) {
+	GLuint tex;
+
+	Image* bmp = loadBMP(tex_name);
+	tex = loadTexture(bmp);
+	delete bmp;
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, tex);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glBegin(GL_POLYGON);
+
+	//This displays the solver mode
+	glTexCoord2f(0.0, 0.0); glVertex2f(xBL, yBL);
+	glTexCoord2f(1.0, 0.0); glVertex2f(xTR, yBL);
+	glTexCoord2f(1.0, 1.0); glVertex2f(xTR, yTR);
+	glTexCoord2f(0.0, 1.0); glVertex2f(xBL, yTR);
+
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
 void drawMenu() {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -73,43 +99,11 @@ void drawMenu() {
 	glPushMatrix();
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
+	drawButton(-0.7f, 0.2f, 0.7f, 0.6f, "TITLE.bmp"); //the title
 
-	glColor3ub(255, 255, 255);
+	drawButton(-0.65f, -0.6f, -0.05f, -0.3f, "virtual cube.bmp"); //This displays the virtual cube mode
 
-
-	glEnable(GL_TEXTURE_2D);
-
-	//Bottom
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-
-	glBegin(GL_QUADS);
-	glVertex2f(-0.7f, 0.2f);		//Title
-	glVertex2f(0.7f, 0.2f);
-	glVertex2f(0.7f, 0.6f);
-	glVertex2f(-0.7f, 0.6f);
-		
-
-	initRendering("hello.bmp");
-	glBindTexture(GL_TEXTURE_2D, _textureId);
-
-								//This displays the solver mode
-	glVertex2f(-0.65f, -0.3f);
-	glVertex2f(-0.05f, -0.3f);
-	glVertex2f(-0.05f, -0.6f);
-	glVertex2f(-0.65f, -0.6f);
-
-	glVertex2f(0.65f, -0.3f);	//This displays the virtual cube mode
-	glVertex2f(0.05f, -0.3f);
-	glVertex2f(0.05f, -0.6f);
-	glVertex2f(0.65f, -0.6f);
-	glEnd();
-
-	glDisable(GL_TEXTURE_2D);
-
+	drawButton(0.05f, -0.6f, 0.65f, -0.3f, "solver.bmp"); //This displays the solver mode
 
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -119,12 +113,6 @@ void drawMenu() {
 }
 
 void drawColourSelection() {
-
-
-
-}
-
-void drawBack() {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -133,14 +121,71 @@ void drawBack() {
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 
-	glColor3ub(255, 255, 255);
 
 	glBegin(GL_QUADS);
-	glVertex2f(-0.9f, -0.9f);
-	glVertex2f(-0.7f, -0.9f);
-	glVertex2f(-0.7f, -0.55f);
-	glVertex2f(-0.9f, -0.55f);
+
+
+	glColor3ub(255, 255, 255);	//U - White
+	glVertex2f(0.8f, -0.4f);
+	glVertex2f(0.7f, -0.4f);
+	glVertex2f(0.7f, -0.55f);
+	glVertex2f(0.8f, -0.55f);
+
+	glColor3ub(255, 0, 0);	//R - Red
+	glVertex2f(0.8f, -0.6f);
+	glVertex2f(0.7f, -0.6f);
+	glVertex2f(0.7f, -0.75f);
+	glVertex2f(0.8f, -0.75f);
+
+	
+	glColor3ub(0, 255, 0);	//F - Green
+	glVertex2f(0.8f, -0.8f);
+	glVertex2f(0.7f, -0.8f);
+	glVertex2f(0.7f, -0.95f);
+	glVertex2f(0.8f, -0.95f);
+
+
+	glColor3ub(255, 255, 0);	//D - Yellow
+	glVertex2f(0.95f, -0.4f);
+	glVertex2f(0.85f, -0.4f);
+	glVertex2f(0.85f, -0.55f);
+	glVertex2f(0.95f, -0.55f);
+
+	glColor3ub(255, 169, 0);	//L - Orange	
+	glVertex2f(0.95f, -0.6f);
+	glVertex2f(0.85f, -0.6f);
+	glVertex2f(0.85f, -0.75f);
+	glVertex2f(0.95f, -0.75f);
+
+	glColor3ub(0, 0, 255);	//B - Blue			
+	glVertex2f(0.95f, -0.8f);
+	glVertex2f(0.85f, -0.8f);
+	glVertex2f(0.85f, -0.95f);
+	glVertex2f(0.95f, -0.95f);
+	
 	glEnd();
+
+
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+
+	glColor3ub(255, 255, 255);
+}
+
+void drawBack() {
+	glColor3ub(255, 255, 255);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	glDisable(GL_DEPTH_TEST);
+
+	drawButton(-0.9f, -0.9f, -0.7f, -0.55f, "back button.bmp");
 
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -149,7 +194,42 @@ void drawBack() {
 	glPopMatrix();
 }
 
+void drawReset() {
+	glColor3ub(255, 255, 255);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	glDisable(GL_DEPTH_TEST);
 
+	drawButton(0.7f, -0.35f, 0.95f, -0.2f, "RESET.bmp");
+	
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
+void drawSolve() {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	glDisable(GL_DEPTH_TEST);
+
+	drawButton(0.7f, -0.15f, 0.95f, 0.0f, "solve.bmp");
+
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
 
 //Makes the image into a texture, and returns the id of the texture
 

@@ -179,7 +179,12 @@
     <None Include="ud slice phase 2 move table.bin" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="hello.bmp" />
+    <Image Include="back button.bmp" />
+    <Image Include="solve.bmp" />
+    <Image Include="RESET.bmp" />
+    <Image Include="solver.bmp" />
+    <Image Include="TITLE.bmp" />
+    <Image Include="virtual cube.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

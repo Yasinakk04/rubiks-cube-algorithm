@@ -81,7 +81,6 @@ int main(int argc, char** argv) {
 
 	glutIgnoreKeyRepeat(1);
 	glutKeyboardFunc(processNormalKeys);
-	glutSpecialFunc(pressKey);
 	glutSpecialUpFunc(releaseKey);
 
 	// here are the two new functions

@@ -111,7 +111,22 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="hello.bmp">
+    <Image Include="virtual cube.bmp">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="solver.bmp">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="TITLE.bmp">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="back button.bmp">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="RESET.bmp">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="solve.bmp">
       <Filter>Resource Files\textures</Filter>
     </Image>
   </ItemGroup>
