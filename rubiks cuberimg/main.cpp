@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 
 		"Solve:\n\n"
 		"To choose the colours on a face click on the square with the mouse\n"
-		"This willl cycle through the colours in the order:\n"
+		"This will cycle through the colours in the order:\n"
 		"White, Red, Green, Yellow, Orange, Blue\n"
 		"You cannot change the centre colour of any face\n"
 		"To output the solution press enter"
@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(320, 320);
+	glutInitWindowSize(800, 450);
 	glutCreateWindow("Rubiks cube solver");
 
 	// register callbacks
