@@ -66,7 +66,6 @@ void initRendering(const char* f) {
 	delete image;
 }
 
-
 void drawButton(float xBL, float yBL, float xTR, float yTR, const char* tex_name) {
 	GLuint tex;
 

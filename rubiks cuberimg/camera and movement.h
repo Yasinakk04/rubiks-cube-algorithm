@@ -60,6 +60,8 @@ bool solve_mode = false;
 //This tells you if you're colouring the squares with the colours in the bottom right or not
 short colouring = -1;
 
+void processNormalKeys(unsigned char key, int xx, int yy);
+
 void renderScene(void) {
 	// Clear Color and Depth Buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -282,18 +284,70 @@ void mouseButton(int button, int state, int x, int y) {
 			menu = false;
 			net = true;
 			solve_mode = true;
+
+			colouring = -1;
 		}
 	}
 	
-	if (button == GLUT_LEFT_BUTTON && menu == false && state == GLUT_UP) {  //This is for returning to the menu
+	if (button == GLUT_LEFT_BUTTON && menu == false && state == GLUT_UP) {  
 		float xPos = mousePosX(x);
 		float yPos = mousePosY(y);
 		
-		if (xPos <= -0.7f && xPos >= -0.9f &&	
+		if (xPos <= -0.7f && xPos >= -0.9f &&	//This is for returning to the menu
 			yPos <= -0.55f && yPos >= -0.9f) {
 			menu = true;
 			colouring = -1;
 			solve_mode = false;
+		}
+
+		else if (xPos <= 0.95f && xPos >= 0.7f &&	//This is for resetting the cube
+			yPos <= -0.2f && yPos >= -0.35f) {
+			reset_colours();
+			m = 0;
+			optimised_solution.clear();
+			prev_moves.clear();
+		}
+
+		else if (xPos <= 0.95f && xPos >= 0.7f &&	//This is for solvng the cube
+			yPos <= 0.0f && yPos >= -0.15f &&
+			solve_mode == true) {
+			std::string facelet_rep;
+			for (unsigned short i = 0; i != 54; i++) {
+				switch (facelet_numbers[i]) {
+				case U:
+					facelet_rep.push_back('U');
+					break;
+				case R:
+					facelet_rep.push_back('R');
+					break;
+				case F:
+					facelet_rep.push_back('F');
+					break;
+				case D:
+					facelet_rep.push_back('D');
+					break;
+				case L:
+					facelet_rep.push_back('L');
+					break;
+				case B:
+					facelet_rep.push_back('B');
+					break;
+				default:
+					break;
+				}
+			}
+
+			m = 0;
+			optimised_solution.clear();
+			prev_moves.clear();
+			optimised_solution = solve(facelet_rep);
+
+			if (optimised_solution[0] == -1) { optimised_solution.clear(); }
+
+			if (debug == true) {
+				do_move_on_cube(optimised_solution);
+				m = optimised_solution.size();
+			}
 		}
 	}
 }
