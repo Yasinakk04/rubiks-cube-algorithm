@@ -35,6 +35,30 @@ const std::string edge_pos[12] = { "UR", "UF", "UL", "UB", "DR", "DF", "DL", "DB
 cubie cube = cubie();
 
 int main(int argc, char** argv) {
+//
+//Controls:
+//	Press the following keys to turn the matching face 90 degrees
+//		U - White face
+//		R - Red face
+//		F - Green face
+//		D - Yellow face
+//		L - Orange face
+//		B - Blue face
+//
+//		Solve :
+//	To choose the colours on a face click on the square with the mouse
+//		This will cycle through the colours in the order :
+//	White, Red, Green, Yellow, Orange, Blue
+//		You cannot change the centre colour of any face
+//		To output the solution press enter or press solve
+//		To have the moves performed on the cube press the right and left arrow keys
+//
+//		Miscellaneous :
+//	To swap between the cube view and net view press space
+//		To reset the cube press q or press reset
+//		To invert the camera press i or press invert
+
+
 
 	std::cout << "\n"
 		"Controls:\n\n"
@@ -74,6 +98,7 @@ int main(int argc, char** argv) {
 	glutInitWindowSize(800, 450);
 	glutCreateWindow("Rubiks cube solver");
 
+	initRendering();
 	// register callbacks
 	glutDisplayFunc(renderScene);
 	glutReshapeFunc(changeSize);
@@ -85,7 +110,6 @@ int main(int argc, char** argv) {
 
 	// here are the two new functions
 	glutMouseFunc(mouseButton);
-	//glutMouseFunc(checkColour);
 	glutMotionFunc(mouseMove);
 
 	// OpenGL init
