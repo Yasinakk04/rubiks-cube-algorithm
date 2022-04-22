@@ -28,6 +28,9 @@
     <Filter Include="Resource Files\textures">
       <UniqueIdentifier>{8e21e07b-fc6d-4225-b066-bccf8cde99d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\textures\LETTERS">
+      <UniqueIdentifier>{3a80ec59-3353-40f7-9f6f-457b55a9d2b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="facelets.h">
@@ -127,6 +130,33 @@
       <Filter>Resource Files\textures</Filter>
     </Image>
     <Image Include="solve.bmp">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="question mark.bmp">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="instructions.bmp">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="B.bmp">
+      <Filter>Resource Files\textures\LETTERS</Filter>
+    </Image>
+    <Image Include="L.bmp">
+      <Filter>Resource Files\textures\LETTERS</Filter>
+    </Image>
+    <Image Include="D.bmp">
+      <Filter>Resource Files\textures\LETTERS</Filter>
+    </Image>
+    <Image Include="F.bmp">
+      <Filter>Resource Files\textures\LETTERS</Filter>
+    </Image>
+    <Image Include="R.bmp">
+      <Filter>Resource Files\textures\LETTERS</Filter>
+    </Image>
+    <Image Include="U.bmp">
+      <Filter>Resource Files\textures\LETTERS</Filter>
+    </Image>
+    <Image Include="SOLUTION.bmp">
       <Filter>Resource Files\textures</Filter>
     </Image>
   </ItemGroup>

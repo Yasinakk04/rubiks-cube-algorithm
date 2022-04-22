@@ -47,10 +47,10 @@ bool net = true;
 //this determines if you should be on the menu or not
 bool menu = true;
 
-//The below stores the moves in the solution
-std::vector <short> optimised_solution;
-short m = 0;
-//m is the move n=in the vector that's to be done
+//this determines if it should display the instructions
+bool instructions = false;
+
+
 
 //The below vector stores moves that have previously been performed
 std::vector <short> prev_moves;
@@ -79,10 +79,15 @@ void renderScene(void) {
 		drawMenu();
 	}
 
+	else if (instructions == true) {
+		drawInstructions();
+	}
+
 	else if (net == true) {
 		drawNet(1, -1, 6);
 		centrex = 0.0f; centrey = 0.0f; centrez = 10.0f;
 		eyex = 0.0f; eyey = 0.0f; eyez = 11.0f;
+		drawReset();
 	}
 
 	else if (net == false) {
@@ -90,16 +95,17 @@ void renderScene(void) {
 					 2,  3,  0, 
 					-1,  0,  0,
 					-1,  3, -3);
+		drawReset();
 	}
 
 	if (solve_mode == true) {
 		drawColourSelection();
 		drawSolve();
+		drawMoves();
 	}
 
 	if (menu == false) {
 		drawBack();
-		drawReset();
 	}
 
 	glutSwapBuffers();
@@ -148,6 +154,7 @@ void releaseKey(int key, int x, int y) {
 		if (m < optimised_solution.size()) {
 			do_move_on_cube(optimised_solution[m]);
 			m++;
+			std::cout << m << "\n";
 		}
 
 		break;
@@ -279,13 +286,21 @@ void mouseButton(int button, int state, int x, int y) {
 			xangle = -4.0f; yangle = -1.0f;
 		}
 
-		if (xPos >= 0.05f && xPos <= 0.65f &&			//This is for the solver
+		else if (xPos >= 0.05f && xPos <= 0.65f &&			//This is for the solver
 			yPos <= -0.3f && yPos >= -0.6f) {
 			menu = false;
 			net = true;
 			solve_mode = true;
 
 			colouring = -1;
+		}
+
+		else if (xPos >= 0.8f && xPos <= 0.95f &&			//This is for the instructions
+			yPos <= -0.7f && yPos >= -0.95f) {
+			menu = false;
+			instructions = true;
+			net = false;
+			solve_mode = false;
 		}
 	}
 	
@@ -298,6 +313,13 @@ void mouseButton(int button, int state, int x, int y) {
 			menu = true;
 			colouring = -1;
 			solve_mode = false;
+			instructions = false;
+
+			reset_colours();
+			m = 0;
+			optimised_solution.clear();
+			prev_moves.clear();
+			up_vec = 1.0f;
 		}
 
 		else if (xPos <= 0.95f && xPos >= 0.7f &&	//This is for resetting the cube
@@ -306,6 +328,7 @@ void mouseButton(int button, int state, int x, int y) {
 			m = 0;
 			optimised_solution.clear();
 			prev_moves.clear();
+			up_vec = 1.0f;
 		}
 
 		else if (xPos <= 0.95f && xPos >= 0.7f &&	//This is for solvng the cube
@@ -379,37 +402,38 @@ void mouseMove(int x, int y) {
 }
 
 void processNormalKeys(unsigned char key, int xx, int yy) {
-	if (key == 'v') {
-		if (glutGetModifiers() == GLUT_ACTIVE_ALT) {
-			debug = true;
-			std::cout << "DEBUG SCTIVATE\n\n";
+	if (menu == false) {
+		if (key == 'v') {
+			if (glutGetModifiers() == GLUT_ACTIVE_ALT) {
+				debug = true;
+				std::cout << "DEBUG SCTIVATE\n\n";
+			}
 		}
-	}
 
-	else  if (key == 27) {
-		exit(0);
-	}
+		else  if (key == 27) {
+			exit(0);
+		}
 
-	else if (key == 13) {			//press enter to solve
+		else if (key == 13) {			//press enter to solve
 		std::string facelet_rep;
 		for (unsigned short i = 0; i != 54; i++) {
 			switch (facelet_numbers[i]) {
 			case U:
 				facelet_rep.push_back('U');
-				break;				  
-			case R:					  
+				break;
+			case R:
 				facelet_rep.push_back('R');
-				break;				 
-			case F:					 
+				break;
+			case F:
 				facelet_rep.push_back('F');
-				break;				
-			case D:					
+				break;
+			case D:
 				facelet_rep.push_back('D');
-				break;				 
-			case L:					 
+				break;
+			case L:
 				facelet_rep.push_back('L');
-				break;				 
-			case B:					 
+				break;
+			case B:
 				facelet_rep.push_back('B');
 				break;
 			default:
@@ -428,9 +452,11 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 			do_move_on_cube(optimised_solution);
 			m = optimised_solution.size();
 		}
+
+		std::cout << optimised_solution.size() << "fdsahfduha\n";
 	}
 
-	else if (key == 32) {					//press space to swap
+		else if (key == 32) {					//press space to swap
 		net = !net;
 
 		centrex = 0.5f; centrey = 1.5f; centrez = -1.5f;
@@ -438,64 +464,64 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		xangle = -4.0f; yangle = -1.0f;
 	}
 
-	else if (	key == 'u' || key == 'U' ||
-				key == 'r' || key == 'R' ||
-				key == 'f' || key == 'F' ||
-				key == 'd' || key == 'D' ||
-				key == 'l' || key == 'L' ||
-				key == 'b' || key == 'B' ) {
+		else if (key == 'u' || key == 'U' ||
+			key == 'r' || key == 'R' ||
+			key == 'f' || key == 'F' ||
+			key == 'd' || key == 'D' ||
+			key == 'l' || key == 'L' ||
+			key == 'b' || key == 'B') {
 
-		key = tolower(key);
-		short m;
-		switch (key) {
-		case 'u':
-			m = U;
-			break;
+			key = tolower(key);
+			short m;
+			switch (key) {
+			case 'u':
+				m = U;
+				break;
 
-		case 'r':
-			m = R;
-			break;
+			case 'r':
+				m = R;
+				break;
 
-		case 'f':
-			m = F;
-			break;
+			case 'f':
+				m = F;
+				break;
 
-		case 'd':
-			m = D;
-			break;
+			case 'd':
+				m = D;
+				break;
 
-		case 'l':
-			m = L;
-			break;
+			case 'l':
+				m = L;
+				break;
 
-		case 'b':
-			m = B;
-			break;
+			case 'b':
+				m = B;
+				break;
 
-		default:
-			m = -1;
-			break;
-		}
+			default:
+				m = -1;
+				break;
+			}
 
-		int shift = glutGetModifiers();		//if shift is pressed it does U', R', F'...
-											//https://www.opengl.org/resources/libraries/glut/spec3/node73.html
-		
-		if (shift == GLUT_ACTIVE_SHIFT) {		
+			int shift = glutGetModifiers();		//if shift is pressed it does U', R', F'...
+												//https://www.opengl.org/resources/libraries/glut/spec3/node73.html
+
+			if (shift == GLUT_ACTIVE_SHIFT) {
+				do_move_on_cube(m);
+				do_move_on_cube(m);
+				do_move_on_cube(m);
+			}
+
+			else {
 			do_move_on_cube(m);
-			do_move_on_cube(m);
-			do_move_on_cube(m);
-		}
+			}
 
-		else {
-			do_move_on_cube(m);
-		}
-
-		if (m != -1) {
+			if (m != -1) {
 			prev_moves.push_back(m);
+			}
 		}
-	}
 
-	else if (key == 'Z') {		//output the facelet colours
+		else if (key == 'Z') {		//output the facelet colours
 		std::cout << "\n";
 		for (unsigned short i = 0; i != 54; i++) {
 			switch (facelet_numbers[i]) {
@@ -504,17 +530,17 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 				break;
 			case R:
 				std::cout << "R, ";
-				break;		  
-			case F:			  
+				break;
+			case F:
 				std::cout << "F, ";
-				break;		  
-			case D:			  
+				break;
+			case D:
 				std::cout << "D, ";
-				break;		  
-			case L:			  
+				break;
+			case L:
 				std::cout << "L, ";
-				break;		  
-			case B:			  
+				break;
+			case B:
 				std::cout << "B, ";
 				break;
 			default:
@@ -529,7 +555,7 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		std::cout << "\n\n";
 	}
 
-	else if (key == 'z') {
+		else if (key == 'z') {
 		std::cout << "enter the cube number: ";
 		short n;
 		std::cin >> n;
@@ -542,7 +568,7 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 							R, R, L, F, F, L, L, B, B,
 							F, U, U, B, D, B, R, D, F,
 							R, L, B, U, L, D, F, D, D,
-							D, R, U, F, B, R, F, F, B};
+							D, R, U, F, B, R, F, F, B };
 			break;
 
 		case 2:
@@ -645,14 +671,15 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		set_facelet_numbers(colour_perm);
 	}
 
-	else if (key == 'q') {
+		else if (key == 'q') {
 		reset_colours();
 		m = 0;
 		optimised_solution.clear();
 		prev_moves.clear();
 	}
 
-	else if (key == 'i' && net == false) {
-		up_vec = -up_vec;
+		else if (key == 'i' && net == false) {
+			up_vec = -up_vec;
+		}
 	}
 }

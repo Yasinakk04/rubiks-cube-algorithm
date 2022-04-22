@@ -3,15 +3,38 @@
 #include <windows.h>
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 
 #include "TextureMapper.h"
 //#include "TextureMapper.cpp"
 #include "GL\glut.h"
 
+//The below stores the moves in the solution
+std::vector <short> optimised_solution;
+short m = 0;
+//m is the move n=in the vector that's to be done
+
+
+
 GLuint _textureId; //The id of the texture
 
-
 GLUquadric* quad;
+
+GLuint U_tex;
+GLuint R_tex;
+GLuint F_tex;
+GLuint D_tex;
+GLuint L_tex;
+GLuint B_tex;
+GLuint back_button_tex;
+GLuint instructions_tex;
+GLuint question_mark_tex;
+GLuint reset_tex;
+GLuint solution_tex;
+GLuint solve_tex;
+GLuint title_tex;
+GLuint solver_tex;
+GLuint virtual_cube_tex;
 
 GLuint loadTexture(Image* image) {
 
@@ -45,7 +68,7 @@ GLuint loadTexture(Image* image) {
 
 }
 
-void initRendering(const char* f) {
+void initRendering() {
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -59,19 +82,69 @@ void initRendering(const char* f) {
 
 	quad = gluNewQuadric();
 
-	Image* image = loadBMP(f);
+	Image* image = loadBMP("U.bmp");
+	U_tex = loadTexture(image);
+	delete image;
 
-	_textureId = loadTexture(image);
+	image = loadBMP("R.bmp");
+	R_tex = loadTexture(image);
+	delete image;
 
+	image = loadBMP("F.bmp");
+	F_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("D.bmp");
+	D_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("L.bmp");
+	L_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("B.bmp");
+	B_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("back button.bmp");
+	back_button_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("instructions.bmp");
+	instructions_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("question mark.bmp");
+	question_mark_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("RESET.bmp");
+	reset_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("SOLUTION.bmp");
+	solution_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("solve.bmp");
+	solve_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("solver.bmp");
+	solver_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("TITLE.bmp");
+	title_tex = loadTexture(image);
+	delete image;
+
+	image = loadBMP("virtual cube.bmp");
+	virtual_cube_tex = loadTexture(image);
 	delete image;
 }
 
-void drawButton(float xBL, float yBL, float xTR, float yTR, const char* tex_name) {
-	GLuint tex;
+void drawButton(float xBL, float yBL, float xTR, float yTR, GLuint tex) {
 
-	Image* bmp = loadBMP(tex_name);
-	tex = loadTexture(bmp);
-	delete bmp;
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, tex);
 
@@ -80,7 +153,6 @@ void drawButton(float xBL, float yBL, float xTR, float yTR, const char* tex_name
 
 	glBegin(GL_POLYGON);
 
-	//This displays the solver mode
 	glTexCoord2f(0.0, 0.0); glVertex2f(xBL, yBL);
 	glTexCoord2f(1.0, 0.0); glVertex2f(xTR, yBL);
 	glTexCoord2f(1.0, 1.0); glVertex2f(xTR, yTR);
@@ -88,6 +160,7 @@ void drawButton(float xBL, float yBL, float xTR, float yTR, const char* tex_name
 
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
+
 }
 
 void drawMenu() {
@@ -98,11 +171,13 @@ void drawMenu() {
 	glPushMatrix();
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
-	drawButton(-0.7f, 0.2f, 0.7f, 0.6f, "TITLE.bmp"); //the title
+	drawButton(-0.7f, 0.2f, 0.7f, 0.6f, title_tex); //the title
 
-	drawButton(-0.65f, -0.6f, -0.05f, -0.3f, "virtual cube.bmp"); //This displays the virtual cube mode
+	drawButton(-0.65f, -0.6f, -0.05f, -0.3f, virtual_cube_tex); //This displays the virtual cube mode
 
-	drawButton(0.05f, -0.6f, 0.65f, -0.3f, "solver.bmp"); //This displays the solver mode
+	drawButton(0.05f, -0.6f, 0.65f, -0.3f, solver_tex); //This displays the solver mode
+
+	drawButton(0.8f, -0.95f, 0.95f, -0.7f, question_mark_tex);  //click this to view the instructions
 
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -184,7 +259,7 @@ void drawBack() {
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 
-	drawButton(-0.9f, -0.9f, -0.7f, -0.55f, "back button.bmp");
+	drawButton(-0.9f, -0.9f, -0.7f, -0.55f, back_button_tex);
 
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -203,7 +278,7 @@ void drawReset() {
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 
-	drawButton(0.7f, -0.35f, 0.95f, -0.2f, "RESET.bmp");
+	drawButton(0.7f, -0.35f, 0.95f, -0.2f, reset_tex);
 	
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -221,7 +296,7 @@ void drawSolve() {
 	glLoadIdentity();
 	glDisable(GL_DEPTH_TEST);
 
-	drawButton(0.7f, -0.15f, 0.95f, 0.0f, "solve.bmp");
+	drawButton(0.7f, -0.15f, 0.95f, 0.0f, solve_tex);
 
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -230,76 +305,144 @@ void drawSolve() {
 	glPopMatrix();
 }
 
-//Makes the image into a texture, and returns the id of the texture
+void drawInstructions() {
+	glColor3ub(255, 255, 255);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	glDisable(GL_DEPTH_TEST);
+
+	drawButton(-0.7f, -1.2f, 0.95f, 1.0f, instructions_tex);
+
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
+void drawMoves() {
+	glColor3ub(255, 255, 255);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	glDisable(GL_DEPTH_TEST);
+
+	GLuint tex = 0;
+
+	if (optimised_solution.size() != 0) {
+		if (optimised_solution[0] != -1) {
+			drawButton(-0.92f, 0.68f, -0.4f, 1.15f, solution_tex);
+
+			if (m >= 1 && m < optimised_solution.size() - 1) {
+				for (char i = 0; i != 3; i++) {
+					switch (optimised_solution[m + i - 1]) {
+					case U:
+						tex = U_tex;
+						break;
+					case R:
+						tex = R_tex;
+						break;
+					case F:
+						tex = F_tex;
+						break;
+					case D:
+						tex = D_tex;
+						break;
+					case L:
+						tex = L_tex;
+						break;
+					case B:
+						tex = B_tex;
+						break;
+					default:
+						std::cout << "error";
+						break;
+					}
+					drawButton(-0.98f + i * 0.2f, 0.4f, -0.73f + i * 0.2f, 0.7f, tex);
+				}
+			}
+
+			else if (m == 0) {
+				for (char i = 1; i != 3; i++) {
+					switch (optimised_solution[m + i]) {
+					case U:
+						tex = U_tex;
+						break;
+					case R:
+						tex = R_tex;
+						break;
+					case F:
+						tex = F_tex;
+						break;
+					case D:
+						tex = D_tex;
+						break;
+					case L:
+						tex = L_tex;
+						break;
+					case B:
+						tex = B_tex;
+						break;
+					default:
+						std::cout << "error";
+						break;
+					}
+					drawButton(-0.98f + i * 0.2f, 0.4f, -0.73f + i * 0.2f, 0.7f, tex);
+				}
+			}
+
+			else if (m >= optimised_solution.size() - 1) {
+				for (char i = 0; i != 2; i++){
+					switch (optimised_solution[optimised_solution.size() + i - 2]) {
+					case U:
+						tex = U_tex;
+						break;
+					case R:
+						tex = R_tex;
+						break;
+					case F:
+						tex = F_tex;
+						break;
+					case D:
+						tex = D_tex;
+						break;
+					case L:
+						tex = L_tex;
+						break;
+					case B:
+						tex = B_tex;
+						break;
+					default:
+						std::cout << "error";
+						break;
+					}
+					drawButton(-0.98f + i * 0.2f, 0.4f, -0.73f + i * 0.2f, 0.7f, tex);
+				}
+			}
+
+			glBegin(GL_QUADS);
+			glColor3ub(255, 255, 255);
+			
+			glVertex2f(-0.7085f, 0.38f);
+			glVertex2f(-0.6085f, 0.38f);
+			glVertex2f(-0.6085f, 0.39f);
+			glVertex2f(-0.7085f, 0.39f);
+
+			glEnd();
+		}
+	}
 
 
-
-
-
-
-//GLUquadricObj quad;
-
-//
-//
-//void drawScene() {
-//
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//
-//	glMatrixMode(GL_MODELVIEW);
-//
-//	glLoadIdentity();
-//
-//
-//	glTranslatef(0.0f, 1.0f, -16.0f);
-//
-//
-//	glEnable(GL_TEXTURE_2D);
-//
-//	glBindTexture(GL_TEXTURE_2D, _textureId);
-//
-//
-//	//Bottom
-//
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//
-//	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//
-//	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//
-//	gluQuadricTexture(quad, 1);
-//
-//	gluSphere(quad, 2, 20, 20);
-//
-//
-//	glutSwapBuffers();
-//
-//}
-
-//int main(int argc, char** argv) {
-//
-//	glutInit(&argc, argv);
-//
-//	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-//
-//	glutInitWindowSize(800, 800);
-//
-//
-//	glutCreateWindow("Textures-codeincodeblock.blogspot.com");
-//
-//	initRendering();
-//
-//
-//	glutTimerFunc(25, update, 0);
-//
-//
-//	glutDisplayFunc(drawScene);
-//
-//
-//	glutMainLoop();
-//
-//	return 0;
-//
-//}
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
