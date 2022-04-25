@@ -157,7 +157,7 @@
     <ClInclude Include="make facelets.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="moves.h" />
-    <ClInclude Include="place edge in right place.h" />
+    <ClInclude Include="place edge and corner in right place.h" />
     <ClInclude Include="pruning.h" />
     <ClInclude Include="solver.h" />
     <ClInclude Include="symmetries.h" />

@@ -58,7 +58,7 @@ public:
 		facelet_rep = string;
 	}
 
-	std::array <short, 54> from_string(std::string face_string) {	//facelets are defined in the odrer shown
+	std::array <short, 54> from_string(std::string face_string) {	//facelets are defined in the order shown
 																	//at the top
 		std::array<short, 54> error{};
 		error.fill(-1);
@@ -186,26 +186,19 @@ public:
 		cc.corn_perm.fill(-1);
 		cc.edge_perm.fill(-1);
 
-
 		cubie error;
 		error.corn_perm.fill(-1);
 		error.edge_perm.fill(-1);
 		error.corn_ori.fill(-1);
 		error.edge_ori.fill(-1);
 
-
-
 		//The above invalidates the permutation after it is initialised
-
-
 		//Calculating the corner cubie arrangement 
 		short ori{};
-		bool corner_check;
 
 		for (short i = 0; i != No_corner; i++) {
-
 			std::array <short, 3> face = cornerFacelet[i];
-			corner_check = false;
+			bool corner_check = false;
 
 			for (short j = 0; j != 3; j++) {
 				if (facelet_rep[face[j]] == U || facelet_rep[face[j]] == D) { ori = j; break; }
@@ -241,19 +234,22 @@ public:
 			//possible corners matches the facelet arrangement 
 		}
 
-		//std::cout << "The corners were valid\n\n";
+		short c_val = 0;
+		for (short i = 0; i != 8; i++) {
+			c_val = cc.corn_ori[i] + c_val;
+		}
 
-
+		if (c_val % 3 != 0) {
+			std::cout << "Corners not defined correctly\n";
+			return error;
+		}
 
 		//Calculating the edge cubie arrangement 
 		for (short k = 0; k != No_edge; k++) { //This first loop is to loop through each 
 											//cubie position
 
-
-			//std::cout << k << "\n";
 			bool edge_check = false;
 			//This variable is used to check if an edge is or isn't present
-
 
 			for (short l = 0; l != No_edge; l++) {  //The second loop is to loop through each
 													//possible edge colour combination
@@ -290,6 +286,19 @@ public:
 				return error;
 			}
 		}
+
+
+		short e_val = 0;
+		for (short i = 0; i != 12; i++) {
+			e_val = cc.edge_ori[i] + e_val;
+		}
+
+		if (e_val % 2 != 0) {
+			std::cout << "Edges not defined correctly\n";
+			return error;
+		}
+
+
 		return cc;
 	}
 

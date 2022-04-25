@@ -8,11 +8,6 @@
 #include "enums.h"
 #include "constants.h"
 
-
-//#include "facelets.h"
-
-bool testing = false;
-
 class cubie {
 public:
 
@@ -34,11 +29,11 @@ public:
 		std::array <short, 8> c_ori,
 		std::array <short, 12> e_perm,
 		std::array <short, 12> e_ori) {
-			corn_perm = c_perm;
-			corn_ori = c_ori;
+		corn_perm = c_perm;
+		corn_ori = c_ori;
 
-			edge_perm = e_perm;
-			edge_ori = e_ori;
+		edge_perm = e_perm;
+		edge_ori = e_ori;
 	}
 
 
@@ -99,6 +94,324 @@ public:
 		output_cubie_edges();
 		std::cout << "\n\n";
 	}
+
+
+	void corner_multiply(cubie B) {
+		std::array <short, 8> c_ori{};
+		std::array <short, 8> c_perm{};
+
+		for (short i = 0; i != No_corner; i++) {
+
+
+			c_perm[i] = corn_perm[B.corn_perm[i]];
+
+			short oriA = corn_ori[B.corn_perm[i]];
+			short oriB = B.corn_ori[i];
+
+			if (oriA < 3 && oriB < 3) {
+				//In this scenario neither
+				//cube is a symmetry cube
+				c_ori[i] = oriA + oriB;
+				if (c_ori[i] >= 3) {
+					//Non symmetry cubes can
+					//only multiply to produce other
+					//non symmetry cubes
+					//so the final orientation should be
+					//between 0 and 2
+					c_ori[i] -= 3;
+				}
+			}
+
+			else if (oriA < 3 && oriB >= 3) {
+				//This is the scenario where A is a normal cube
+				//and B is a symmetry cube
+				c_ori[i] = oriA + oriB;
+				if (c_ori[i] >= 6) {
+					c_ori[i] -= 3;
+					//Products of symmetry cubes cannot take
+					//values greater than 5
+				}
+			}
+
+			else if (oriA >= 3 && oriB < 3) {
+				//This is the scenario where A is a symmetry cube and
+				//B is not
+				c_ori[i] = oriA - oriB;
+				if (c_ori[i] < 3) {
+					c_ori[i] += 3;
+					//If the orientation were less than 3
+					//It would stop being a symmetry cube
+					//which cannot be
+				}
+			}
+
+			else if (oriA >= 3 && oriB > 3) {
+				c_ori[i] = oriA - oriB;
+				if (c_ori[i] < 0) {
+					c_ori[i] += 3;
+					//The product of 2 symmetry cubes must be 1
+					//normal cube
+					//so its orientation will be between 0 and 2
+				}
+			}
+		}
+
+		for (short i = 0; i != 8; i++) {
+			corn_ori[i] = c_ori[i];
+			corn_perm[i] = c_perm[i];
+		}
+	}
+
+	void edge_multiply(cubie B) {
+		std::array <short, 12> e_ori{};
+		std::array <short, 12> e_perm{};
+
+		e_ori.fill(0);
+		e_perm.fill(0);
+
+		for (short i = 0; i != No_edge; i++) {
+			e_perm[i] = edge_perm[B.edge_perm[i]];
+			e_ori[i] = (B.edge_ori[i] + edge_ori[B.edge_perm[i]]) % 2;
+		}
+
+		for (short i = 0; i != No_edge; i++) {
+			edge_perm[i] = e_perm[i];
+			edge_ori[i] = e_ori[i];
+		}
+	}
+
+	void multiply(cubie B) {
+		corner_multiply(B);
+		edge_multiply(B);
+	}
+
+	void reset() {
+		corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };						//This is the permutation of a solved rubik's cube
+		corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+		edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	}
+
+	bool compare(cubie b) {
+
+		for (short i = 0; i != 8; i++) {
+			if (corn_perm[i] != b.corn_perm[i] || corn_ori[i] != b.corn_ori[i]) {		//This functions goes throuhg each corner and
+				return false;															//edge for 2 cubes
+			}																			//returning false if any of them don't match
+		}
+
+		for (short i = 0; i != 12; i++) {
+			if (edge_perm[i] != b.edge_perm[i] || edge_ori[i] != b.edge_ori[i]) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	// ------------------------------------------------
+
+	short find_edge_pos(short edge) {
+		for (char i = 0; i != 12; i++) {
+			if (edge_perm[i] == edge) {		//Each of the 4 functions here perform a linear search to find
+				return i;					//the location of the edge or the corner and its orientation
+			}
+		}
+	}
+
+	short find_edge_ori(short edge) {
+		for (char i = 0; i != 12; i++) {
+			if (edge_perm[i] == edge) {
+				return edge_ori[i];
+			}
+		}
+	}
+
+	short find_corner_pos(short corner) {
+		for (char i = 0; i != 8; i++) {
+			if (corn_perm[i] == corner) {
+				return i;
+			}
+		}
+	}
+
+	short find_corner_ori(short corner) {
+		for (char i = 0; i != 8; i++) {
+			if (corn_perm[i] == corner) {
+				return corn_ori[i];
+			}
+		}
+	}
+
+	// ------------------------------------------------
+
+	bool corner_in_U_face(short corner) {
+		if (find_corner_pos(corner) <= UBR) {	//UBR is the last U corner
+			return true;						//if its position is less than it it must be in the U face
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool corner_in_F_face(short corner) {
+		if (find_corner_pos(corner) <= UFL ||	//The corners are specified by U face first then D face
+			find_corner_pos(corner) == DFR ||	//so here it was necessary to specify each individually
+			find_corner_pos(corner) == DLF) {	//except the first 2 corners
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool corner_in_D_face(short corner) {
+		if (corner_in_U_face(corner) == false) {	//this should be self explanatory
+			return true;							//if a corner is not in the U face it's in the 
+		}											//D face by default
+		else {
+			return false;
+		}
+	}
+
+	bool corner_in_B_face(short corner) {
+		if (corner_in_F_face(corner) == false) {	//as with this
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	// ------------------------------------------------
+
+	bool edge_in_U_face(short edge) {
+		if (find_edge_pos(edge) <= UB) {	//the last U edge is UB so if it's less than that it must be in the U face
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_R_face(short edge) {
+		short edge_pos = find_edge_pos(edge);		//Here each of the R edges are enumerated
+		if (edge_pos == UR ||
+			edge_pos == FR ||
+			edge_pos == BR ||
+			edge_pos == DR) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_F_face(short edge) {
+		unsigned short edge_pos = find_edge_pos(edge);		//here each of the F edges are enumerated
+		if (edge_pos == UF ||
+			edge_pos == FR ||
+			edge_pos == FL ||
+			edge_pos == DF) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_D_face(short edge) {
+		if (DR <= find_edge_pos(edge) && find_edge_pos(edge) <= DB) {		//Here it checks the edge is between the start and end D edge
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_L_face(short edge) {							//here it enumerates each of the L edges
+		unsigned short edge_pos = find_edge_pos(edge);
+		if (edge_pos == UL ||
+			edge_pos == FL ||
+			edge_pos == BL ||
+			edge_pos == DL) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool edge_in_B_face(short edge) {							//Here each of the B edges are enumerated
+		unsigned short edge_pos = find_edge_pos(edge);
+		if (edge_pos == UB ||
+			edge_pos == BR ||
+			edge_pos == BL ||
+			edge_pos == DB) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	// ------------------------------------------------
+
+	void put_edge_in_D_face(short edge);				//Each of these methods have to be declared here
+
+	void put_U_corner_in_DBR(short corner);				//in order to prevent a linking error
+
+	// ------------------------------------------------
+
+	void check_U_edge_in_pos(short e_pos);
+
+	// ------------------------------------------------
+
+	void put_U_edge_in_U_face(short edge);
+
+	void put_U_corner_in_U_face(short corner);
+
+	// ------------------------------------------------
+
+	void doU(int times);
+	void doR(int times);
+	void doF(int times);
+	void doD(int times);
+	void doL(int times);
+	void doB(int times);
+
+	void do_move_vector(std::vector <short> a_moves) {		//this function accepts an algorithm as a vector
+		cubie I;											//and performs moves on the cube based on the values in the vector
+		for (short i = 0; i != a_moves.size(); i++) {
+			switch (a_moves[i]) {
+			case U:
+				doU(1);
+				break;
+			case R:
+				doR(1);
+				break;
+			case F:
+				doF(1);
+				break;
+			case D:
+				doD(1);
+				break;
+			case L:
+				doL(1);
+				break;
+			case B:
+				doB(1);
+				break;
+			default:
+				std::cout << "error";
+				break;
+			}
+		}
+	}
+
+	// ------------------------------------------------
+	std::array <short, 54> to_facelet_rep();
 
 	// ------------------------------------------------
 
@@ -248,7 +561,6 @@ public:
 
 		return ud_slice_phase_1;
 	}
-
 
 	void set_ud_slice_phase_1(short ud_slice_value) {
 		short n = 3;
@@ -424,328 +736,5 @@ public:
 	}
 
 	// ------------------------------------------------
-
-	void corner_multiply(cubie B) {
-		std::array <short, 8> c_ori{};
-		std::array <short, 8> c_perm{};
-
-		for (short i = 0; i != No_corner; i++) {
-
-
-			c_perm[i] = corn_perm[B.corn_perm[i]];
-
-			short oriA = corn_ori[B.corn_perm[i]];
-			short oriB = B.corn_ori[i];
-
-			if (oriA < 3 && oriB < 3) {
-				//In this scenario neither
-				//cube is a symmetry cube
-				c_ori[i] = oriA + oriB;
-				if (c_ori[i] >= 3) {
-					//Non symmetry cubes can
-					//only multiply to produce other
-					//non symmetry cubes
-					//so the final orientation should be
-					//between 0 and 2
-					c_ori[i] -= 3;
-				}
-			}
-
-			else if (oriA < 3 && oriB >= 3) {
-				//This is the scenario where A is a normal cube
-				//and B is a symmetry cube
-				c_ori[i] = oriA + oriB;
-				if (c_ori[i] >= 6) {
-					c_ori[i] -= 3;
-					//Products of symmetry cubes cannot take
-					//values greater than 5
-				}
-			}
-
-			else if (oriA >= 3 && oriB < 3) {
-				//This is the scenario where A is a symmetry cube and
-				//B is not
-				c_ori[i] = oriA - oriB;
-				if (c_ori[i] < 3) {
-					c_ori[i] += 3;
-					//If the orientation were less than 3
-					//It would stop being a symmetry cube
-					//which cannot be
-				}
-			}
-
-			else if (oriA >= 3 && oriB > 3) {
-				c_ori[i] = oriA - oriB;
-				if (c_ori[i] < 0) {
-					c_ori[i] += 3;
-					//The product of 2 symmetry cubes must be 1
-					//normal cube
-					//so its orientation will be between 0 and 2
-				}
-			}
-		}
-
-		for (short i = 0; i != 8; i++) {
-			corn_ori[i] = c_ori[i];
-			corn_perm[i] = c_perm[i];
-		}
-	}
-
-	void edge_multiply(cubie B) {
-		std::array <short, 12> e_ori{};
-		std::array <short, 12> e_perm{};
-
-		e_ori.fill(0);
-		e_perm.fill(0);
-
-		for (short i = 0; i != No_edge; i++) {
-			e_perm[i] = edge_perm[B.edge_perm[i]];
-			e_ori[i] = (B.edge_ori[i] + edge_ori[B.edge_perm[i]]) % 2;
-		}
-
-		for (short i = 0; i != No_edge; i++) {
-			edge_perm[i] = e_perm[i];
-			edge_ori[i] = e_ori[i];
-		}
-	}
-
-	void multiply(cubie B) {
-		corner_multiply(B);
-		edge_multiply(B);
-	}
-
-	void reset() {
-		corn_perm = { 0, 1, 2, 3, 4, 5, 6, 7 };
-		corn_ori = { 0, 0, 0, 0, 0, 0, 0, 0 };
-
-		edge_perm = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		edge_ori = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	}
-
-	bool compare(cubie b) {
-
-		for (short i = 0; i != 8; i++) {
-			if (corn_perm[i] != b.corn_perm[i] || corn_ori[i] != b.corn_ori[i]) {
-				return false;
-			}
-		}
-
-		for (short i = 0; i != 12; i++) {
-			if (edge_perm[i] != b.edge_perm[i] || edge_ori[i] != b.edge_ori[i]) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	// ------------------------------------------------
-	
-	short find_edge_pos(short edge) {
-		for (char i = 0; i != 12; i++) {
-			if (edge_perm[i] == edge) {
-				return i;
-			}
-		}
-	}
-
-	short find_edge_ori(short edge) {
-		for (char i = 0; i != 12; i++) {
-			if (edge_perm[i] == edge) {
-				return edge_ori[i];
-			}
-		}
-	}
-
-	short find_corner_pos(short corner) {
-		for (char i = 0; i != 8; i++) {
-			if (corn_perm[i] == corner) {
-				return i;
-			}
-		}
-	}
-
-	short find_corner_ori(short corner) {
-		for (char i = 0; i != 8; i++) {
-			if (corn_perm[i] == corner) {
-				return corn_ori[i];
-			}
-		}
-	}
-
-	// ------------------------------------------------
-
-	bool corner_in_U_face(short corner) {
-		if (find_corner_pos(corner) <= UBR) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	bool corner_in_F_face(short corner) {
-		if (find_corner_pos(corner) <= UFL || 
-			find_corner_pos(corner) == DFR ||
-			find_corner_pos(corner) == DLF) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	bool corner_in_D_face(short corner) {
-		if (corner_in_U_face(corner) == false) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	bool corner_in_B_face(short corner) {
-		if (corner_in_F_face(corner) == false) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	// ------------------------------------------------
-
-	bool edge_in_U_face(short edge) {
-		if (find_edge_pos(edge) <= UB) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	bool edge_in_R_face(short edge) {
-		short edge_pos = find_edge_pos(edge);
-		if (edge_pos == UR ||
-			edge_pos == FR ||
-			edge_pos == BR ||
-			edge_pos == DR  ) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	bool edge_in_F_face(short edge) {
-		unsigned short edge_pos = find_edge_pos(edge);
-		if (edge_pos == UF ||
-			edge_pos == FR ||
-			edge_pos == FL ||
-			edge_pos == DF) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	bool edge_in_D_face(short edge) {
-		if (DR <= find_edge_pos(edge) && find_edge_pos(edge) <= DB ) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	bool edge_in_L_face(short edge) {
-		unsigned short edge_pos = find_edge_pos(edge);
-		if (edge_pos == UL ||
-			edge_pos == FL ||
-			edge_pos == BL ||
-			edge_pos == DL) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	bool edge_in_B_face(short edge) {
-		unsigned short edge_pos = find_edge_pos(edge);
-		if (edge_pos == UB ||
-			edge_pos == BR ||
-			edge_pos == BL ||
-			edge_pos == DB) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	// ------------------------------------------------
-
-	void put_edge_in_D_face(short edge);
-
-	void put_U_corner_in_DBR(short corner);
-
-	// ------------------------------------------------
-
-	void check_U_edge_in_pos(short e_pos);
-
-	// ------------------------------------------------
-
-	void put_U_edge_in_U_face(short edge);
-
-	void put_U_corner_in_U_face(short corner);
-
-	// ------------------------------------------------
-
-	void doU(int times);
-	void doR(int times);
-	void doF(int times);
-	void doD(int times);
-	void doL(int times);
-	void doB(int times);
-
-	void do_move_vector(std::vector <short> a_moves) {
-		cubie I;
-		for (short i = 0; i != a_moves.size(); i++) {
-			switch (a_moves[i]) {
-			case U:
-				doU(1);
-				break;
-			case R:
-				doR(1);
-				break;
-			case F:
-				doF(1);
-				break;
-			case D:
-				doD(1);
-				break;
-			case L:
-				doL(1);
-				break;
-			case B:
-				doB(1);
-				break;
-			default:
-				std::cout << "error";
-				break;
-			}
-
-			//if (testing == true) {
-			//	output_cubie();
-			//}
-			//std::cout << a_moves[i] << "\n";
-		}
-	}
-
-	// ------------------------------------------------
-
-	std::array <short, 54> to_facelet_rep();
 };
 

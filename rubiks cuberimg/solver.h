@@ -1,135 +1,13 @@
 #pragma once
-
 #include <array>
 #include <iostream>
 
 #include "enums.h"
-
 #include "facelets.h"
 #include "to facelet.h"
 #include "cubie.h"
 #include "moves.h"
-#include "place edge in right place.h"
-
-cubie D_corner_solved_but_edges_not_algorithm_clock(cubie cube, cubie L_move, cubie R_move, cubie F_move, cubie B_move) {
-	std::vector <short> algorithm =
-	{ R + 6, R + 6,
-	U, U,
-	F + 6, F + 6,
-	R + 6, R + 6,
-	B + 6, B + 6,
-	D, D, D,
-	R + 6, R + 6,
-	F + 6, F + 6,
-	L + 6, L + 6,
-	U,
-	R + 6, R + 6
-	};
-
-	std::array <cubie, 18> moves = make_moves();
-
-	cubie x;
-	cubie y;
-	cubie I;
-	I.reset();
-
-	for (short i = 0; i != 4; i++) {
-		for (short m = 0; m != 6; m++) {
-			x = moves[m * 3 + 2];
-
-			if (i == 0) { y = F_move; }
-			else if (i == 1) { y = L_move; }
-			else if (i == 2) { y = R_move; }
-			else { y = B_move; }
-
-			y.multiply(x);
-
-			if (I.compare(y) == true) {
-				for (short j = 0; j != algorithm.size(); j++) {
-					if (algorithm[j] == F + 6 && i == 0) {
-						algorithm[j] = m;
-					}
-
-					else if (algorithm[j] == L + 6 && i == 1) {
-						algorithm[j] = m;
-					}
-
-					else if (algorithm[j] == R + 6 && i == 2) {
-						algorithm[j] = m;
-					}
-
-					else if (algorithm[j] == B + 6 && i == 3) {
-						algorithm[j] = m;
-					}
-				}
-				break;
-			}
-		}
-	}
-
-	cube.do_move_vector(algorithm);
-	return cube;
-}
-
-cubie D_corner_solved_but_edges_not_algorithm_anti(cubie cube, cubie L_move, cubie R_move, cubie F_move, cubie B_move) {
-	std::vector <short> algorithm =
-	{ R + 6, R + 6,
-	U, U, U,
-	R + 6, R + 6,
-	F + 6, F + 6,
-	L + 6, L + 6,
-	D,
-	F + 6, F + 6,
-	R + 6, R + 6,
-	B + 6, B + 6,
-	U, U,
-	R + 6, R + 6
-	};
-
-	std::array <cubie, 18> moves = make_moves();
-
-	cubie x;
-	cubie y;
-	cubie I;
-	I.reset();
-
-	for (short i = 0; i != 4; i++) {
-		for (short m = 0; m != 6; m++) {
-			x = moves[m * 3 + 2];
-
-			if (i == 0) { y = F_move; }
-			else if (i == 1) { y = L_move; }
-			else if (i == 2) { y = R_move; }
-			else { y = B_move; }
-
-			y.multiply(x);
-
-			if (I.compare(y) == true) {
-				for (short j = 0; j != algorithm.size(); j++) {
-					if (algorithm[j] == F + 6 && i == 0) {
-						algorithm[j] = m;
-					}
-
-					else if (algorithm[j] == L + 6 && i == 1) {
-						algorithm[j] = m;
-					}
-
-					else if (algorithm[j] == R + 6 && i == 2) {
-						algorithm[j] = m;
-					}
-
-					else if (algorithm[j] == B + 6 && i == 3) {
-						algorithm[j] = m;
-					}
-				}
-				break;
-			}
-		}
-	}
-
-	cube.do_move_vector(algorithm);
-	return cube;
-}
+#include "place edge and corner in right place.h"
 
 cubie final_algorithm(cubie cube, cubie F_move, cubie L_move, cubie B_move) {
 	std::vector <short> algorithm =
@@ -144,13 +22,8 @@ cubie final_algorithm(cubie cube, cubie F_move, cubie L_move, cubie B_move) {
 	L + 6, L + 6, L + 6 };
 
 	//L2 B2 L' F' L B2 L' F L'
-
 	std::array <cubie, 18> moves = make_moves();
-
-	cubie x;
-	cubie y;
-	cubie I;
-	I.reset();
+	cubie x; cubie y; cubie I; I.reset();
 
 	for (short i = 0; i != 3; i++) {
 		for (short m = 0; m != 6; m++) {
@@ -159,7 +32,6 @@ cubie final_algorithm(cubie cube, cubie F_move, cubie L_move, cubie B_move) {
 			if (i == 0) { y = F_move; }
 			else if (i == 1) { y = L_move; }
 			else { y = B_move; }
-
 			y.multiply(x);
 
 			if (I.compare(y) == true) {
@@ -180,7 +52,6 @@ cubie final_algorithm(cubie cube, cubie F_move, cubie L_move, cubie B_move) {
 			}
 		}
 	}
-
 	cube.do_move_vector(algorithm);
 	return cube;
 }
@@ -243,6 +114,7 @@ cubie mid_layer_algorithm_R(cubie cube, cubie F_move, cubie R_move) {
 	R + 6, R + 6, R + 6, 
 	D, D, D, 
 	R + 6 };
+	//the algorithm being carried out
 	//F D F' D' R' D' R
 	
 
@@ -264,8 +136,8 @@ cubie mid_layer_algorithm_R(cubie cube, cubie F_move, cubie R_move) {
 
 			
 
-			if (I.compare(y) == true) {
-				for (short j = 0; j != algorithm.size(); j++) {
+			if (I.compare(y) == true) {								//the algorithm used is only true from a certain perspective
+				for (short j = 0; j != algorithm.size(); j++) {		//here it works out what move it acutally would be from a fixed perspective
 					if (algorithm[j] == F + 6 && i == 0) {
 						algorithm[j] = m;
 					}
@@ -293,6 +165,7 @@ cubie mid_layer_algorithm_L(cubie cube, cubie F_move, cubie L_move) {
 	D, 
 	L + 6, L + 6, L + 6 };
 
+	//below is the algorithm thats meant to be carried out
 	// F' D' F D L D L'
 
 	//URFDLB
@@ -333,17 +206,14 @@ cubie mid_layer_algorithm_L(cubie cube, cubie F_move, cubie L_move) {
 
 cubie white_cross(cubie cube) {
 	std::array <cubie, 18> moves = make_moves();
-
 	if (cube.edge_perm[0] != 0 || cube.edge_ori[0] != 0			//This checks if there is already
 		|| cube.edge_perm[1] != 1 || cube.edge_ori[1] != 0			//a white cross or not
 		|| cube.edge_perm[2] != 2 || cube.edge_ori[2] != 0
 		|| cube.edge_perm[3] != 3 || cube.edge_ori[3] != 0) {
-
 		cube.put_U_edge_in_U_face(UR);
 		cube.put_U_edge_in_U_face(UL);
 		cube.put_U_edge_in_U_face(UF);
 		cube.put_U_edge_in_U_face(UB);
-
 		//This ensures each of the 4 edges have been placed in the U face
 	}
 
@@ -376,7 +246,6 @@ cubie white_cross(cubie cube) {
 				cube.doL(2);
 			}
 		}
-
 		//At this point UF and UR are in the correct places
 		//Now it need to swap UB and UL or 
 		//they already are in the corrct places
@@ -390,7 +259,6 @@ cubie white_cross(cubie cube) {
 			cube.doB(2);
 		}
 	}
-
 	//white cross extended
 	return cube;
 }
@@ -401,33 +269,25 @@ cubie white_face(cubie cube) {
 		|| cube.corn_perm[2] != 2 || cube.corn_ori[2] != 0
 		|| cube.corn_perm[3] != 3 || cube.corn_ori[3] != 0) {
 
-		if (cube.corn_perm[0] != 0 || cube.find_corner_ori(0) != 0) {
+		if (cube.corn_perm[0] != 0 || cube.find_corner_ori(0) != 0) {			//This places URF in the U face
 			cube.put_U_corner_in_DBR(URF);
 			cube.put_U_corner_in_U_face(URF);
 		}
-		cube.output_cubie();
 
-		if (cube.find_corner_pos(UFL) != (cube.find_corner_pos(URF) + 1) % 4 || cube.find_corner_ori(UFL) != 0) {
+		if (cube.find_corner_pos(UFL) != (cube.find_corner_pos(URF) + 1) % 4 || cube.find_corner_ori(UFL) != 0) {	//this places UFL correct with respect to URF
 			cube.put_U_corner_in_DBR(UFL);
-			cube.output_cubie();
 			cube.put_U_corner_in_U_face(UFL);
 		}
-		cube.output_cubie();
 
-		if (cube.find_corner_pos(ULB) != (cube.find_corner_pos(UFL) + 1) % 4 || cube.find_corner_ori(ULB) != 0) {
+		if (cube.find_corner_pos(ULB) != (cube.find_corner_pos(UFL) + 1) % 4 || cube.find_corner_ori(ULB) != 0) {	//This places ULB correct with respect to UFL
 			cube.put_U_corner_in_DBR(ULB);
-			cube.output_cubie();
 			cube.put_U_corner_in_U_face(ULB);
 		}
-		cube.output_cubie();
 
-		if (cube.find_corner_pos(UBR) != (cube.find_corner_pos(ULB) + 1) % 4 || cube.find_corner_ori(UBR) != 0) {
+		if (cube.find_corner_pos(UBR) != (cube.find_corner_pos(ULB) + 1) % 4 || cube.find_corner_ori(UBR) != 0) {	//this places UBR correct with respect to ULB
 			cube.put_U_corner_in_DBR(UBR); 
-			cube.output_cubie();
 			cube.put_U_corner_in_U_face(UBR);
 		}
-
-		cube.output_cubie();
 
 		while (cube.corn_perm[0] != 0) {
 			cube.doU(1);
@@ -447,10 +307,10 @@ cubie middle_layer(cubie cube) {
 			&&	cube.edge_in_D_face(BR) == false 
 			&& cube.edge_in_D_face(BL) == false) {
 
-			cube.output_cubie();
-			std::cout << "no F or B edges in D faace\n\n";
+			//the if statements below enumerate each case of all the F and B edges being in the F and B faces but incorrectly
+			//this is necessary in order to prevent an infinite loop
 
-			if ((cube.edge_perm[FL] != FL && cube.edge_perm[BL] != FL) || cube.edge_ori[BR] == 1) {
+			if ((cube.edge_perm[FL] != FL && cube.edge_perm[BL] != FL) || cube.edge_ori[BR] == 1) {		
 				cube.doR(1);
 				cube.doD(1);					//In some cases where all the F and B edges are in the middle layer 
 				cube.doR(3);					//but not in the right spaces or orientated
@@ -489,10 +349,8 @@ cubie middle_layer(cubie cube) {
 				cube.doR(3);
 				cube.doD(3);
 				cube.doR(1);
-			}//this sequence of moves will swap the edge in FR with
-		}				 //DL with DF with DB back to FR
-
-		cube.output_cubie();
+			}											//this sequence of moves will swap the edge in FR with
+		}												 //DL with DF with DB back to FR
 
 		short edge = 0;
 		for (short i = DR; i <= DB; i++) {
@@ -508,18 +366,15 @@ cubie middle_layer(cubie cube) {
 		cubie R_move;
 		cubie L_move;
 
-		std::cout << edge << " " << cube.find_edge_ori(edge) << "\n\n";
-
-		if (cube.find_edge_ori(edge) == 0) {
-			switch (edge) {
-			case FR:
+		if (cube.find_edge_ori(edge) == 0) {				//the algorithm being used on works from a certain perspective for each 
+			switch (edge) {									//of the edge cubies
+			case FR:										//here each possible case is enumerated so the correct move is used
 				while (cube.find_edge_pos(edge) != DB) { cube.doD(1); }
 
 				F_move = moves[F * 3];
 				R_move = moves[R * 3];
 
 				cube = mid_layer_algorithm_R(cube, F_move, R_move);
-				testing = true;
 				break;
 			
 			case FL:
@@ -659,8 +514,8 @@ cubie yellow_face(cubie cube) {
 		cube.corn_ori[6] != 0 ||
 		cube.corn_ori[7] != 0) {
 
-		if (cube.corn_ori[7] == 1) {
-			cube.doU(1);
+		if (cube.corn_ori[7] == 1) {		//this algorithm is necessary to orientate each of the yellow corners
+			cube.doU(1);					//this executes if the corner in position 7 is orientated clockwise
 			cube.doB(1);
 			cube.doU(3);
 			cube.doB(3);
@@ -670,8 +525,8 @@ cubie yellow_face(cubie cube) {
 			cube.doB(3);
 		}
 
-		else if (cube.corn_ori[7] == 2) {
-			cube.doB(1);
+		else if (cube.corn_ori[7] == 2) {		//this executes if the corner in position 7 is orientated
+			cube.doB(1);						//anticlockwise
 			cube.doU(1);
 			cube.doB(3);
 			cube.doU(3);
@@ -681,7 +536,7 @@ cubie yellow_face(cubie cube) {
 			cube.doU(3);
 		}
 
-		if (cube.corn_ori[4] != 0 ||
+		if (cube.corn_ori[4] != 0 ||		//this checks if all the corners are orientated yet or not
 			cube.corn_ori[5] != 0 ||
 			cube.corn_ori[6] != 0 ||
 			cube.corn_ori[7] != 0) {
@@ -723,9 +578,9 @@ cubie second_to_last_step(cubie cube) {
 			}
 		}
 		
-		if (check != 1) {
-			cube.doR(2);
-			cube.doU(3);
+		if (check != 1) {		//this is necessary to ensure only 1 of the D
+			cube.doR(2);		//edges is in the correct place otherwise the algorithm
+			cube.doU(3);		//will fail
 			cube.doR(3);
 			cube.doL(1);
 			cube.doB(2);
@@ -748,17 +603,17 @@ cubie second_to_last_step(cubie cube) {
 	short next_edge = edge + 1;
 	short other_edge = edge - 2;
 
-	if (next_edge == 8) { next_edge = 4; } 
-	if (other_edge < 4) { other_edge = other_edge + 4; }
-
+	if (next_edge == 8) { next_edge = 4; }					//these are used to calculate which edge is 
+	if (other_edge < 4) { other_edge = other_edge + 4; }	//meant to be adjacent to the chosen edge
+															//and ensures that they are between 4 and 7
 	cubie F_move;
 	cubie R_move;
 	cubie L_move;
 
 	std::array <cubie, 18> moves = make_moves();
 
-	if (cube.edge_perm[next_edge] == other_edge) {
-		switch (next_edge) {
+	if (cube.edge_perm[next_edge] == other_edge) {	//this is the case where each of the 3 remaining 
+		switch (next_edge) {						//edges have been swapped with eachother clockwise
 		case DR:
 			F_move = moves[R * 3];
 			R_move = moves[F * 3];
@@ -784,7 +639,7 @@ cubie second_to_last_step(cubie cube) {
 	else {
 		cube.doD(2); //Turn cube so what's in your face is the R face
 
-		switch (next_edge) {
+		switch (next_edge) {		//this is the case where they've been swapped anti clockwise
 		case DB:
 			F_move = moves[L * 3];
 			R_move = moves[B * 3];
@@ -829,10 +684,10 @@ cubie final(cubie cube) {
 					break;
 				}
 			}
-			if (found == true) { break; }
+			if (found == true) { break; }	//this checks if at least one D corner is in 
+											//the correct location
 
-
-			if (found == false) {
+			if (found == false) {			//if none are this algorithm places at least one
 				cube.doL(2);
 				cube.doF(2);
 				cube.doL(3);
@@ -852,14 +707,10 @@ cubie final(cubie cube) {
 		cubie I;
 		I.reset();
 
-		std::array <cubie, 18> moves = make_moves();
-
-		facelet a(cube.to_facelet_rep());
-		a.to_2D_string();
-
-		switch (corner) {
-		case DFR:
-			F_move = moves[R * 3];
+		std::array <cubie, 18> moves = make_moves();		//this enumerates each case for 
+		switch (corner) {									//which corner is correct
+		case DFR:											//and the algorithm to do in each case
+			F_move = moves[R * 3];	
 			L_move = moves[B * 3];
 			B_move = moves[L * 3];
 			break;
@@ -905,84 +756,7 @@ cubie final(cubie cube) {
 	return cube;
 }
 
-cubie D_corner_solved_but_edges_not(cubie cube) {
-	if (cube.edge_perm[4] != 4 ||
-		cube.edge_perm[5] != 5 ||		//this is for the rare scenario where everything exccept some edges are solved
-		cube.edge_perm[6] != 6 ||
-		cube.edge_perm[7] != 7) {
-
-		for (char i = 0; i != 4; i++) {
-			if (cube.corn_perm[4] == 4 &&
-				cube.corn_perm[5] == 5 &&
-				cube.corn_perm[6] == 6 &&
-				cube.corn_perm[7] == 7) {
-				break;
-			}
-			cube.doD(1);
-		}
-
-		short edge{};
-		for (char i = DR; i <= DB; i++) {
-			if (cube.edge_perm[i] == i) {
-				edge = i;
-				break;
-			}
-		}
-
-		//2 scenarios, the remaining edges are shifted clockwise or anti clockwise
-
-		std::array <cubie, 18> moves = make_moves();
-
-		switch (edge) {
-		case DR:
-			if (cube.edge_perm[DB] == DF) { //it can only be shifted 2 ways if 3 edges are out of place
-											//so this is sufficient to uniquely define it
-											//clockwise
-				cube = D_corner_solved_but_edges_not_algorithm_clock(cube, moves[F * 3], moves[B * 3], moves[R * 3], moves[L * 3]);
-			}
-
-			else {
-				cube = D_corner_solved_but_edges_not_algorithm_anti(cube, moves[F * 3], moves[B * 3], moves[R * 3], moves[L * 3]);
-			}
-			break;
-
-
-		case DF:
-			if (cube.edge_perm[DR] == DL) {
-				cube = D_corner_solved_but_edges_not_algorithm_clock(cube, moves[L * 3], moves[R * 3], moves[F * 3], moves[B * 3]);
-			}
-
-			else {
-				cube = D_corner_solved_but_edges_not_algorithm_anti(cube, moves[L * 3], moves[R * 3], moves[F * 3], moves[B * 3]);
-			}
-			break;
-
-		case DL:
-			if (cube.edge_perm[DF] == DB) {
-				cube = D_corner_solved_but_edges_not_algorithm_clock(cube, moves[B * 3], moves[F * 3], moves[L * 3], moves[R * 3]);
-			}
-
-			else {
-				cube = D_corner_solved_but_edges_not_algorithm_anti(cube, moves[B * 3], moves[F * 3], moves[L * 3], moves[R * 3]);
-			}
-			break;
-
-		case DB:
-			if (cube.edge_perm[DL] == DR) {
-				cube = D_corner_solved_but_edges_not_algorithm_clock(cube, moves[R * 3], moves[L * 3], moves[B * 3], moves[F * 3]);
-			}
-
-			else {
-				cube = D_corner_solved_but_edges_not_algorithm_anti(cube, moves[R * 3], moves[L * 3], moves[B * 3], moves[F * 3]);
-			}
-			break;
-		}
-	}
-
-	return cube;
-}
-
-std::vector <short> solve(std::string facelet_rep) {
+std::vector <short> solve(std::string facelet_rep) {		//this function combines each of the previous functions together
 
 	solution.clear();
 	facelet a(facelet_rep);
@@ -1020,5 +794,4 @@ std::vector <short> solve(std::string facelet_rep) {
 	else {
 		return { -1 };
 	}
-
 }

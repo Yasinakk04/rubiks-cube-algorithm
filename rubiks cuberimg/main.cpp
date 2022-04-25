@@ -1,4 +1,3 @@
-
 /*
  * GL03Viewport.cpp: Clipping-area and Viewport
  * Implementing reshape to ensure same aspect ratio between the
@@ -17,13 +16,7 @@
 #include "cubie.h"
 #include "facelets.h"
 #include "constants.h"
-//#include "miscellaneous functions.h"
-//#include "coord.h"
-//#include "symmetries.h"
-//#include "moves.h"
 #include "turns.h"
-//#include "pruning.h"
-
 #include "solver.h"
 
 #include "make facelets.h"
@@ -84,9 +77,7 @@ int main(int argc, char** argv) {
 		"To invert the camera press i\n"
 		"To learn how to solve the Rubik's cube I advise using this site:\n"
 		"https://www.wikihow.com/Solve-a-Rubik%27s-Cube-with-the-Layer-by-Layer-Method \n\n"
-		"This is also the method used by the program\n"
-		
-		;
+		"This is also the method used by the program\n";
 
 	//https://stackoverflow.com/questions/1135841/c-multiline-string-literal
 
@@ -119,7 +110,6 @@ int main(int argc, char** argv) {
 
 	// enter GLUT event processing cycle
 	glutMainLoop();
-
 
 	return 1;
 }

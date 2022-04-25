@@ -31,12 +31,12 @@
     <Filter Include="Resource Files\textures\LETTERS">
       <UniqueIdentifier>{3a80ec59-3353-40f7-9f6f-457b55a9d2b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\unused stuff">
+      <UniqueIdentifier>{a6032060-5551-46c0-ad53-ac153f8db218}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="facelets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="miscellaneous functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="constants.h">
@@ -49,15 +49,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="turns.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="coord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="symmetries.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pruning.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="solver.h">
@@ -78,11 +69,23 @@
     <ClInclude Include="menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="place edge in right place.h">
+    <ClInclude Include="place edge and corner in right place.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextureMapper.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="coord.h">
+      <Filter>Header Files\unused stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="miscellaneous functions.h">
+      <Filter>Header Files\unused stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="pruning.h">
+      <Filter>Header Files\unused stuff</Filter>
+    </ClInclude>
+    <ClInclude Include="symmetries.h">
+      <Filter>Header Files\unused stuff</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
