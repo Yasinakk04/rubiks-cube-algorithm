@@ -60,8 +60,6 @@ bool solve_mode = false;
 //This tells you if you're colouring the squares with the colours in the bottom right or not
 short colouring = -1;
 
-void processNormalKeys(unsigned char key, int xx, int yy);
-
 void renderScene(void) {
 	// Clear Color and Depth Buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -154,7 +152,6 @@ void releaseKey(int key, int x, int y) {
 		if (m < optimised_solution.size()) {
 			do_move_on_cube(optimised_solution[m]);
 			m++;
-			std::cout << m << "\n";
 		}
 
 		break;
@@ -401,22 +398,20 @@ void mouseMove(int x, int y) {
 	//https://www.sciencedirect.com/topics/computer-science/spherical-polar-coordinate
 }
 
-void processNormalKeys(unsigned char key, int xx, int yy) {
+void processNormalKeys(unsigned char key, int x, int y) {
 	if (menu == false) {
-		if (key == 'v') {
-			if (glutGetModifiers() == GLUT_ACTIVE_ALT) {
-				debug = true;
-				std::cout << "DEBUG SCTIVATE\n\n";
-			}
+
+		if (glutGetModifiers() == GLUT_ACTIVE_SHIFT) {
+			key = tolower(key);
 		}
 
-		else  if (key == 27) {
+		if (key == 27) {
 			exit(0);
 		}
 
 		else if (key == 13) {			//press enter to solve
 		std::string facelet_rep;
-		for (unsigned short i = 0; i != 54; i++) {
+		for (unsigned short i = 0; i != 54; i++) {	//This converts the permutation to the facelet representation
 			switch (facelet_numbers[i]) {
 			case U:
 				facelet_rep.push_back('U');
@@ -451,18 +446,17 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		if (debug == true) {
 			do_move_on_cube(optimised_solution);
 			m = optimised_solution.size();
+			std::cout << optimised_solution.size() << "\n";
 		}
-
-		std::cout << optimised_solution.size() << "fdsahfduha\n";
 	}
 
 		else if (key == 32) {					//press space to swap
-		net = !net;
+			net = !net;
 
-		centrex = 0.5f; centrey = 1.5f; centrez = -1.5f;
-		eyex = 6.5f; eyey = 5.0f; eyez = 4.5f;
-		xangle = -4.0f; yangle = -1.0f;
-	}
+			centrex = 0.5f; centrey = 1.5f; centrez = -1.5f;	//This is the default camera angle
+			eyex = 6.5f; eyey = 5.0f; eyez = 4.5f;
+			xangle = -4.0f; yangle = -1.0f;
+		}
 
 		else if (	key == 'u' ||
 					key == 'r' ||
@@ -471,38 +465,36 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 					key == 'l' ||
 					key == 'b' ) {
 
-			std::cout << "hello";
+				key = tolower(key);
+				short m;
+				switch (key) {
+				case 'u':
+					m = U;
+					break;
 
-			key = tolower(key);
-			short m;
-			switch (key) {
-			case 'u':
-				m = U;
-				break;
+				case 'r':
+					m = R;
+					break;
 
-			case 'r':
-				m = R;
-				break;
+				case 'f':
+					m = F;
+					break;
 
-			case 'f':
-				m = F;
-				break;
+				case 'd':
+					m = D;
+					break;
 
-			case 'd':
-				m = D;
-				break;
+				case 'l':
+					m = L;
+					break;
 
-			case 'l':
-				m = L;
-				break;
+				case 'b':
+					m = B;
+					break;
 
-			case 'b':
-				m = B;
-				break;
-
-			default:
-				m = -1;
-				break;
+				default:
+					m = -1;
+					break;
 			}
 
 			int shift = glutGetModifiers();		//if shift is pressed it does U', R', F'...
@@ -557,6 +549,8 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		std::cout << "\n\n";
 	}
 
+		//the below if statement was to predefine each of the 26 cubes
+		//used for testing
 		else if (key == 'z') {
 		std::cout << "enter the cube number: ";
 		short n;
@@ -830,9 +824,6 @@ void change_colour_keypress(unsigned char key, int x, int y) {
 		key == 'D' ||
 		key == 'L' ||
 		key == 'B') && glutGetModifiers() != GLUT_ACTIVE_SHIFT){
-
-		std::cout << "YO";
-
 		unsigned char pixel[4];
 		glReadPixels(x, glutGet(GLUT_WINDOW_HEIGHT) - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
 
@@ -842,6 +833,7 @@ void change_colour_keypress(unsigned char key, int x, int y) {
 
 			short colour_key = -1;
 
+			//The below switch case enumerates each of the 6 cases and sets the colour for the key based of the input
 			switch (key) {
 			case 'U':
 				colour_key = U;

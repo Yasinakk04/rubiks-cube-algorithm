@@ -405,29 +405,21 @@ cubie white_face(cubie cube) {
 			cube.put_U_corner_in_DBR(URF);
 			cube.put_U_corner_in_U_face(URF);
 		}
-		cube.output_cubie();
 
 		if (cube.find_corner_pos(UFL) != (cube.find_corner_pos(URF) + 1) % 4 || cube.find_corner_ori(UFL) != 0) {
 			cube.put_U_corner_in_DBR(UFL);
-			cube.output_cubie();
 			cube.put_U_corner_in_U_face(UFL);
 		}
-		cube.output_cubie();
 
 		if (cube.find_corner_pos(ULB) != (cube.find_corner_pos(UFL) + 1) % 4 || cube.find_corner_ori(ULB) != 0) {
 			cube.put_U_corner_in_DBR(ULB);
-			cube.output_cubie();
 			cube.put_U_corner_in_U_face(ULB);
 		}
-		cube.output_cubie();
 
 		if (cube.find_corner_pos(UBR) != (cube.find_corner_pos(ULB) + 1) % 4 || cube.find_corner_ori(UBR) != 0) {
 			cube.put_U_corner_in_DBR(UBR); 
-			cube.output_cubie();
 			cube.put_U_corner_in_U_face(UBR);
 		}
-
-		cube.output_cubie();
 
 		while (cube.corn_perm[0] != 0) {
 			cube.doU(1);
@@ -446,9 +438,6 @@ cubie middle_layer(cubie cube) {
 			&& cube.edge_in_D_face(FL) == false //to begin in the D face
 			&&	cube.edge_in_D_face(BR) == false 
 			&& cube.edge_in_D_face(BL) == false) {
-
-			cube.output_cubie();
-			std::cout << "no F or B edges in D faace\n\n";
 
 			if ((cube.edge_perm[FL] != FL && cube.edge_perm[BL] != FL) || cube.edge_ori[BR] == 1) {
 				cube.doR(1);
@@ -492,8 +481,6 @@ cubie middle_layer(cubie cube) {
 			}//this sequence of moves will swap the edge in FR with
 		}				 //DL with DF with DB back to FR
 
-		cube.output_cubie();
-
 		short edge = 0;
 		for (short i = DR; i <= DB; i++) {
 			if (cube.edge_perm[i] >= FR) {
@@ -507,8 +494,6 @@ cubie middle_layer(cubie cube) {
 		cubie F_move;
 		cubie R_move;
 		cubie L_move;
-
-		std::cout << edge << " " << cube.find_edge_ori(edge) << "\n\n";
 
 		if (cube.find_edge_ori(edge) == 0) {
 			switch (edge) {
@@ -554,8 +539,6 @@ cubie middle_layer(cubie cube) {
 		else { //the orientation is 1
 			switch (edge) {
 			case FR:
-				cube.output_cubie();
-
 				while (cube.find_edge_pos(edge) != DL) { cube.doD(1); }
 
 				F_move = moves[R * 3];
@@ -855,8 +838,7 @@ cubie final(cubie cube) {
 		std::array <cubie, 18> moves = make_moves();
 
 		facelet a(cube.to_facelet_rep());
-		a.to_2D_string();
-
+		
 		switch (corner) {
 		case DFR:
 			F_move = moves[R * 3];
