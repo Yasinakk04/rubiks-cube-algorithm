@@ -468,12 +468,13 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		xangle = -4.0f; yangle = -1.0f;
 	}
 
-		else if (	key == 'u' ||
-					key == 'r' ||
-					key == 'f' ||
-					key == 'd' ||
-					key == 'l' ||
-					key == 'b' ) {
+		else if (key == 'u' || key == 'U' ||
+			key == 'r' || key == 'R' ||
+			key == 'f' || key == 'F' ||
+			key == 'd' || key == 'D' ||
+			key == 'l' || key == 'L' ||
+			key == 'b' || key == 'B') {
+
 			key = tolower(key);
 			short m;
 			switch (key) {
