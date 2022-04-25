@@ -290,6 +290,28 @@ public:
 				return error;
 			}
 		}
+
+		short c_val = 0;
+		for (short i = 0; i != 8; i++) {
+			c_val = cc.corn_ori[i] + c_val;
+		}
+
+		if (c_val % 3 != 0) {
+			std::cout << "Corners not defined correctly\n";
+			return error;
+		}
+
+		short e_val = 0;
+		for (short i = 0; i != 12; i++) {
+			e_val = cc.edge_ori[i] + e_val;
+		}
+
+		if (e_val % 2 != 0) {
+			std::cout << "Edges not defined correctly\n";
+			return error;
+		}
+
+
 		return cc;
 	}
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include "moves.h"
 #include "cubie.h"
@@ -57,6 +58,7 @@ void cubie::doB(int times) {
 std::vector <short> read_solution() {
 	std::vector <short> optimised_solution;
 	short m;
+	std::string string_solution;
 
 	unsigned short i = 0;
 	unsigned short size = solution.size();
@@ -71,39 +73,39 @@ std::vector <short> read_solution() {
 	solution.push_back(100);
 	unsigned short count = 1;
 	while (i != solution.size()){
-		const char* move;
+		char move;
 		short times = 0;
 
 		switch (solution[i]) {
 		case U:
-			move = "U";
+			move = 'U';
 			m = U;
 			break;
 		case R:
-			move = "R";
+			move = 'R';
 			m = R;
 			break;
 		case F:
-			move = "F";
+			move = 'F';
 			m = F;
 			break; 
 		case D:
-			move = "D";
+			move = 'D';
 			m = D;
 			break;
 		case L:
-			move = "L";
+			move = 'L';
 			m = L;
 			break;
 		case B:
-			move = "B";
+			move = 'B';
 			m = B;
 			break;
 		case 100:
-			move = "";
+			move = ' ';
 			break;
 		default:
-			move = "fail";
+			move = '-';
 			break;
 		}
 
@@ -152,38 +154,24 @@ std::vector <short> read_solution() {
 		for (short j = 0; j != times; j++) {
 			optimised_solution.push_back(m);
 		}
+
+		string_solution.push_back(move);
+
+		if (times == 2) {
+			string_solution.push_back('2'); //https://stackoverflow.com/questions/16349817/how-to-convert-an-int-to-a-char-c
+		}
+
+		else if (times == 3) {
+			string_solution.push_back(39); //ascii code for ' is 39	https://theasciicode.com.ar/ascii-printable-characters/single-quote-apostrophe-ascii-code-39.html
+		}
+
+		string_solution.push_back(' ');
 	}
 	//solution.clear();
 
 	if (debug == true) {
 		std::cout << "\n\n";
-		for (short j = 0; j != optimised_solution.size(); j++) {
-			const char* m;
-			switch (optimised_solution[j]) {
-			case U:
-				m = "U";
-				break;
-			case R:
-				m = "R";
-				break;
-			case F:
-				m = "F";
-				break;
-			case D:
-				m = "D";
-				break;
-			case L:
-				m = "L";
-				break;
-			case B:
-				m = "B";
-				break;
-			default:
-				m = "fail";
-				break;
-			}
-			std::cout << m << " ";
-		}
+		std::cout << string_solution;
 	}
 
 	return optimised_solution;

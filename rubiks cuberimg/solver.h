@@ -401,25 +401,33 @@ cubie white_face(cubie cube) {
 		|| cube.corn_perm[2] != 2 || cube.corn_ori[2] != 0
 		|| cube.corn_perm[3] != 3 || cube.corn_ori[3] != 0) {
 
-		if (cube.corn_perm[1] != 0 || cube.find_corner_ori(0) != 0) {
+		if (cube.corn_perm[0] != 0 || cube.find_corner_ori(0) != 0) {
 			cube.put_U_corner_in_DBR(URF);
 			cube.put_U_corner_in_U_face(URF);
 		}
+		cube.output_cubie();
 
-		if (cube.corn_perm[1] != 1 || cube.find_corner_ori(1) != 0) {
+		if (cube.find_corner_pos(UFL) != (cube.find_corner_pos(URF) + 1) % 4 || cube.find_corner_ori(UFL) != 0) {
 			cube.put_U_corner_in_DBR(UFL);
+			cube.output_cubie();
 			cube.put_U_corner_in_U_face(UFL);
 		}
+		cube.output_cubie();
 
-		if (cube.corn_perm[1] != 2 || cube.find_corner_ori(2) != 0) {
+		if (cube.find_corner_pos(ULB) != (cube.find_corner_pos(UFL) + 1) % 4 || cube.find_corner_ori(ULB) != 0) {
 			cube.put_U_corner_in_DBR(ULB);
+			cube.output_cubie();
 			cube.put_U_corner_in_U_face(ULB);
 		}
+		cube.output_cubie();
 
-		if (cube.corn_perm[1] != 3 || cube.find_corner_ori(3) != 0) {
-			cube.put_U_corner_in_DBR(UBR);
+		if (cube.find_corner_pos(UBR) != (cube.find_corner_pos(ULB) + 1) % 4 || cube.find_corner_ori(UBR) != 0) {
+			cube.put_U_corner_in_DBR(UBR); 
+			cube.output_cubie();
 			cube.put_U_corner_in_U_face(UBR);
 		}
+
+		cube.output_cubie();
 
 		while (cube.corn_perm[0] != 0) {
 			cube.doU(1);
@@ -439,25 +447,48 @@ cubie middle_layer(cubie cube) {
 			&&	cube.edge_in_D_face(BR) == false 
 			&& cube.edge_in_D_face(BL) == false) {
 
-			if (cube.edge_perm[FL] != FL || cube.edge_ori[FL] != 0) {		
+			cube.output_cubie();
+			std::cout << "no F or B edges in D faace\n\n";
+
+			if ((cube.edge_perm[FL] != FL && cube.edge_perm[BL] != FL) || cube.edge_ori[BR] == 1) {
 				cube.doR(1);
 				cube.doD(1);					//In some cases where all the F and B edges are in the middle layer 
 				cube.doR(3);					//but not in the right spaces or orientated
 				cube.doD(3);					//it can enter an infinite loop
-				cube.doB(3);					//proving 2 different paths here should prevent that
+				cube.doB(3);					
 				cube.doD(3);
 				cube.doB(1);
 			}
 
+			else if ((cube.edge_perm[BR] != BR && cube.edge_perm[FR] != BR) || cube.edge_ori[FL] == 1) {
+				cube.doL(1);
+				cube.doD(1);
+				cube.doL(3);
+				cube.doD(3);
+				cube.doF(3);
+				cube.doD(3);
+				cube.doF(1);
+			}
+
+			else if ((cube.edge_perm[BL] != BL && cube.edge_perm[BR] != BL) || cube.edge_ori[BL] == 1) {
+				cube.doB(1);
+				cube.doD(1);
+				cube.doB(3);
+				cube.doD(3);
+				cube.doL(3);
+				cube.doD(3);
+				cube.doL(1);
+
+			}
 
 			else {
-			cube.doF(1);
-			cube.doD(1);
-			cube.doF(3);
-			cube.doD(3);
-			cube.doR(3);
-			cube.doD(3);
-			cube.doR(1);
+				cube.doF(1);
+				cube.doD(1);
+				cube.doF(3);
+				cube.doD(3);
+				cube.doR(3);
+				cube.doD(3);
+				cube.doR(1);
 			}//this sequence of moves will swap the edge in FR with
 		}				 //DL with DF with DB back to FR
 
@@ -781,90 +812,94 @@ cubie second_to_last_step(cubie cube) {
 }
 
 cubie final(cubie cube) {
-	short count = 0;
-	short corner;
+	cubie I;
+	I.reset();
+	if (cube.compare(I) == false) {
+		short count = 0;
+		short corner;
 
-	bool found = false;
+		bool found = false;
 
-	while (found == false) {
-		
-		for (short i = DFR; i <= DRB; i++) {
-			if (cube.corn_perm[i] == i) {
-				found = true;
-				corner = i;
+		while (found == false) {
+
+			for (short i = DFR; i <= DRB; i++) {
+				if (cube.corn_perm[i] == i) {
+					found = true;
+					corner = i;
+					break;
+				}
+			}
+			if (found == true) { break; }
+
+
+			if (found == false) {
+				cube.doL(2);
+				cube.doF(2);
+				cube.doL(3);
+				cube.doB(3);
+				cube.doL(1);
+				cube.doF(2);
+				cube.doL(3);
+				cube.doB(1);
+				cube.doL(3);
+			}
+		}
+
+		cubie F_move;
+		cubie L_move;
+		cubie B_move;
+
+		cubie I;
+		I.reset();
+
+		std::array <cubie, 18> moves = make_moves();
+
+		facelet a(cube.to_facelet_rep());
+		a.to_2D_string();
+
+		switch (corner) {
+		case DFR:
+			F_move = moves[R * 3];
+			L_move = moves[B * 3];
+			B_move = moves[L * 3];
+			break;
+		case DLF:
+			F_move = moves[F * 3];
+			L_move = moves[R * 3];
+			B_move = moves[B * 3];
+			break;
+		case DBL:
+			F_move = moves[L * 3];
+			L_move = moves[F * 3];
+			B_move = moves[R * 3];
+			break;
+		case DRB:
+			F_move = moves[B * 3];
+			L_move = moves[L * 3];
+			B_move = moves[F * 3];
+			break;
+		}
+
+		cube = final_algorithm(cube, F_move, L_move, B_move);
+
+		bool solved = true;
+		for (short i = 0; i != 8; i++) {
+			if (cube.corn_perm[i] != i) {
+				solved = false;
 				break;
 			}
 		}
-		if (found == true) { break; }
 
-
-		if (found == false) {
-			cube.doL(2);
-			cube.doF(2);
-			cube.doL(3);
-			cube.doB(3);
-			cube.doL(1);
-			cube.doF(2);
-			cube.doL(3);
-			cube.doB(1);
-			cube.doL(3);
+		for (short i = 0; i != 12; i++) {
+			if (cube.edge_perm[i] != i) {
+				solved = false;
+				break;
+			}
 		}
-	}	
 
-	cubie F_move;
-	cubie L_move; 
-	cubie B_move;
-
-	cubie I;
-	I.reset();
-
-	std::array <cubie, 18> moves = make_moves();
-
-	facelet a(cube.to_facelet_rep());
-	a.to_2D_string();
-
-	switch (corner) {
-	case DFR:
-		F_move = moves[R * 3];
-		L_move = moves[B * 3];
-		B_move = moves[L * 3];
-		break;
-	case DLF:
-		F_move = moves[F * 3];
-		L_move = moves[R * 3];
-		B_move = moves[B * 3];
-		break;
-	case DBL:
-		F_move = moves[L * 3];
-		L_move = moves[F * 3];
-		B_move = moves[R * 3];
-		break;
-	case DRB:
-		F_move = moves[B * 3];
-		L_move = moves[L * 3];
-		B_move = moves[F * 3];
-		break;
-	}
-
-	cube = final_algorithm(cube, F_move, L_move, B_move);
-
-	bool solved = true;
-	for (short i = 0; i != 8; i++) {
-		if (cube.corn_perm[i] != i) {
-			solved = false;
-			break;
+		if (solved == false) {
+			cube = final_algorithm(cube, F_move, L_move, B_move);
 		}
-	}
-
-	for (short i = 0; i != 12; i++) {
-		if (cube.edge_perm[i] != i) {
-			solved = false;
-			break;
-		}
-	}
-
-	if (solved == false){
-		cube = final_algorithm(cube, F_move, L_move, B_move);
 	}
 
 	return cube;
@@ -977,10 +1012,6 @@ std::vector <short> solve(std::string facelet_rep) {
 		c = second_to_last_step(c);
 		c = final(c);
 		std::vector <short> optimised_solution = read_solution();
-
-		for (short i = 0; i != solution.size(); i++) {
-			std::cout << solution[i] << "\n";
-		}
 
 		std::cout << "\nsolved\n";
 		return optimised_solution;
