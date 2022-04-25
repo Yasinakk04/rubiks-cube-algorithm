@@ -185,7 +185,7 @@ void mouseButton(int button, int state, int x, int y) {
 		start = clock();
 	}
 
-	if (((clock() < CLOCKS_PER_SEC * 0.3f + start) || net == true) && mousePosX(x) < 0.65f) {
+	if (((clock() < CLOCKS_PER_SEC * 0.3f + start) || net == true) && mousePosX(x) < 0.65f && mousePosX(x) > -0.2f && solve_mode == true) {
 
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && optimised_solution.size() == 0) {
 			unsigned char pixel[4];
@@ -464,12 +464,14 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		xangle = -4.0f; yangle = -1.0f;
 	}
 
-		else if (key == 'u' || key == 'U' ||
-			key == 'r' || key == 'R' ||
-			key == 'f' || key == 'F' ||
-			key == 'd' || key == 'D' ||
-			key == 'l' || key == 'L' ||
-			key == 'b' || key == 'B') {
+		else if (	key == 'u' ||
+					key == 'r' ||
+					key == 'f' ||
+					key == 'd' ||
+					key == 'l' ||
+					key == 'b' ) {
+
+			std::cout << "hello";
 
 			key = tolower(key);
 			short m;
@@ -513,11 +515,11 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 			}
 
 			else {
-			do_move_on_cube(m);
+				do_move_on_cube(m);
 			}
 
 			if (m != -1) {
-			prev_moves.push_back(m);
+				prev_moves.push_back(m);
 			}
 		}
 
@@ -662,10 +664,147 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 							L, U, F, B, B, U, R, B, L };
 			break;
 
+		case 12:
+			colour_perm = { L, B, L, F, U, F, F, B, L,
+							F, R, F, U, R, D, U, D, B,
+							R, U, D, L, F, R, L, F, R,
+							D, U, B, L, D, B, F, L, R,
+							B, D, D, L, L, B, R, D, B,
+							U, U, D, F, B, R, U, R, U };
+			break;
+
+		case 13:
+			colour_perm = { L, R, F, B, U, U, F, R, B,
+							L, R, R, U, R, B, F, L, F,
+							D, F, D, F, F, L, D, B, U,
+							R, L, L, B, D, D, U, F, D,
+							B, D, L, F, L, L, R, U, B,
+							B, D, R, U, B, R, U, D, U };
+			break;
+
+		case 14:
+			colour_perm = { B, L, F, R, U, D, F, F, B,
+							D, B, L, B, R, U, B, D, L,
+							R, R, R, U, F, L, U, L, L,
+							B, F, U, R, D, F, R, L, F,
+							L, D, D, U, L, R, U, B, R,
+							F, D, U, F, B, B, D, U, D };
+
+			break;
+
+		case 15:
+			colour_perm = { L, B, U, R, U, U, U, F, F,
+							R, L, B, L, R, U, D, F, R,
+							F, U, D, B, F, F, B, L, L,
+							R, D, B, R, D, D, R, F, D,
+							F, B, L, D, L, L, U, U, U,
+							F, R, B, R, B, B, D, D, L };
+			break;
+
+		case 16:
+			colour_perm = { D, B, B, D, U, F, R, D, F,
+							U, L, U, R, R, F, D, B, U,
+							B, F, R, B, F, U, L, D, R,
+							U, R, F, R, D, L, L, L, B,
+							L, B, D, U, L, U, B, F, F,
+							D, D, L, L, B, U, F, R, R };
+			break;
+
+		case 17:
+			colour_perm = { R, L, F, F, U, B, U, D, B,
+							U, D, L, R, R, R, B, B, R,
+							F, F, L, U, F, D, U, D, R,
+							B, L, D, R, D, U, L, L, F,
+							F, U, L, R, L, L, B, B, R,
+							D, B, D, F, B, U, U, F, D };
+			break;
+
+		case 18:
+			colour_perm = { B, U, F, U, U, U, U, F, U,
+							B, L, D, F, R, L, D, B, L,
+							F, R, R, D, F, D, R, B, F,
+							F, R, L, L, D, U, B, D, B,
+							U, R, L, L, L, R, R, B, U,
+							D, B, D, D, B, F, L, F, R };
+			break;
+
+		case 19:
+			colour_perm = { U, B, B, L, U, R, L, D, B,
+							U, U, D, B, R, R, U, F, D,
+							F, F, L, U, F, D, D, B, L,
+							R, U, F, D, D, L, R, B, R,
+							B, D, D, U, L, F, U, R, B,
+							F, L, F, L, B, F, R, R, L };
+			break;
+
+		case 20:
+			colour_perm = { D, B, F, F, U, L, B, L, U,
+							R, U, U, D, R, B, R, R, L,
+							L, F, F, R, F, B, R, F, F,
+							U, R, D, D, D, B, L, D, U,
+							R, D, D, F, L, U, D, L, B,
+							F, R, B, U, B, U, B, L, L };
+			break;
+
+		case 21:
+			colour_perm = { F, B, D, F, U, L, D, R, R,
+							U, F, F, F, R, L, B, D, R,
+							F, D, B, U, F, U, L, B, R,
+							D, R, D, L, D, B, U, R, U,
+							L, D, R, L, L, R, B, B, B,
+							L, F, F, D, B, U, U, U, L };
+			break;
+
+		case 22:
+			colour_perm = { L, L, F, U, U, B, B, B, R,
+							U, U, U, D, R, D, R, D, F,
+							L, R, B, R, F, B, U, L, F,
+							L, F, D, L, D, R, B, F, R,
+							F, L, D, R, L, U, R, B, B,
+							D, U, U, F, B, F, D, D, L };
+			break;
+
+		case 23:
+			colour_perm = { F, F, B, L, U, U, B, R, L,
+							B, B, R, L, R, U, B, B, U,
+							R, D, U, R, F, F, L, U, D,
+							U, R, L, U, D, L, D, D, F,
+							R, D, U, F, L, B, F, L, F,
+							L, B, R, D, B, F, D, R, D };
+			break;
+
+		case 24:
+			colour_perm = { U, L, F, U, U, R, L, R, R,
+							B, B, U, D, R, U, F, D, F,
+							D, U, D, F, F, L, D, F, L,
+							F, U, D, F, D, B, U, R, R,
+							B, B, B, R, L, L, B, D, R,
+							L, D, U, F, B, L, R, B, L };
+			break;
+
+		case 25:
+			colour_perm = { U, B, D, F, U, D, D, B, D,
+							F, B, L, D, R, R, B, F, B,
+							R, U, R, R, F, L, F, L, L,
+							D, U, U, D, D, U, U, L, U,
+							R, L, B, R, L, F, L, F, L,
+							F, B, R, U, B, D, F, R, B };
+			break;
+
+		case 26:
+			colour_perm = { D, R, F, B, U, D, U, D, U,
+							R, F, D, L, R, U, U, D, B,
+							F, R, F, F, F, B, U, F, B,
+							B, R, L, U, D, L, F, L, R,
+							B, D, L, U, L, U, L, L, R,
+							D, F, D, B, B, R, L, B, R };
+			
+
 		default:
 			for (char i = 0; i != 54; i++) {
 				colour_perm[i] = facelet_numbers[i];
 			}
+			break;
 		}
 
 		set_facelet_numbers(colour_perm);
@@ -683,3 +822,55 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		}
 	}
 }
+
+void change_colour_keypress(unsigned char key, int x, int y) {
+	if ((key == 'U' ||
+		key == 'R' ||
+		key == 'F' ||
+		key == 'D' ||
+		key == 'L' ||
+		key == 'B') && glutGetModifiers() != GLUT_ACTIVE_SHIFT){
+
+		std::cout << "YO";
+
+		unsigned char pixel[4];
+		glReadPixels(x, glutGet(GLUT_WINDOW_HEIGHT) - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
+
+		if (!(pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0) && mousePosX(x) < 0.65f && mousePosX(x) > -0.2f) {
+			unsigned char face = pixel[0] % 247;
+			unsigned short facelet_number = pixel[2] % 247;
+
+			short colour_key = -1;
+
+			switch (key) {
+			case 'U':
+				colour_key = U;
+				break;
+			case 'R':
+				colour_key = R;
+				break;
+			case 'F':
+				colour_key = F;
+				break;
+			case 'D':
+				colour_key = D;
+				break;
+			case 'L':
+				colour_key = L;
+				break;
+			case 'B':
+				colour_key = B;
+				break;
+			default:
+
+				std::cout << "error\n";
+				break;
+			}
+
+			if (facelet_number != 4 && colour_key != -1) {
+				facelet_numbers[9 * face + facelet_number] = colour_key;
+			}
+		}
+	}	
+}
+
