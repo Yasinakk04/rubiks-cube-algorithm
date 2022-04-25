@@ -401,8 +401,13 @@ void mouseMove(int x, int y) {
 	//https://www.sciencedirect.com/topics/computer-science/spherical-polar-coordinate
 }
 
-void processNormalKeys(unsigned char key, int xx, int yy) {
+void processNormalKeys(unsigned char key, int x, int y) {
 	if (menu == false) {
+
+		if (glutGetModifiers() == GLUT_ACTIVE_SHIFT) {
+			key = tolower(key);
+		}
+
 		if (key == 'v') {
 			if (glutGetModifiers() == GLUT_ACTIVE_ALT) {
 				debug = true;
@@ -416,7 +421,7 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 
 		else if (key == 13) {			//press enter to solve
 		std::string facelet_rep;
-		for (unsigned short i = 0; i != 54; i++) {
+		for (unsigned short i = 0; i != 54; i++) {	//This converts the permutation to the facelet representation
 			switch (facelet_numbers[i]) {
 			case U:
 				facelet_rep.push_back('U');
@@ -451,9 +456,8 @@ void processNormalKeys(unsigned char key, int xx, int yy) {
 		if (debug == true) {
 			do_move_on_cube(optimised_solution);
 			m = optimised_solution.size();
+			std::cout << optimised_solution.size() << "\n";
 		}
-
-		std::cout << optimised_solution.size() << "fdsahfduha\n";
 	}
 
 		else if (key == 32) {					//press space to swap
