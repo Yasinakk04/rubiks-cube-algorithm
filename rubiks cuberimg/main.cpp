@@ -111,6 +111,8 @@ int main(int argc, char** argv) {
 	// here are the two new functions
 	glutMouseFunc(mouseButton);
 	glutMotionFunc(mouseMove);
+	//uuuglutKeyboardFunc(change_colour_keypress);
+	
 
 	// OpenGL init
 	glEnable(GL_DEPTH_TEST);
