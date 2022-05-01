@@ -1,5 +1,4 @@
 #pragma once
-
 #include <cmath>
 #include <string>
 #include <iostream>
@@ -13,7 +12,6 @@
 
 //Some of the code used here was sourced from 
 //http://www.lighthouse3d.com/tutorials/glut-tutorial/the-code-so-far-ii/
-
 //this timer records how long the left mouse button is held down
 clock_t start = 0;
 
@@ -49,8 +47,6 @@ bool menu = true;
 
 //this determines if it should display the instructions
 bool instructions = false;
-
-
 
 //The below vector stores moves that have previously been performed
 std::vector <short> prev_moves;
@@ -113,7 +109,7 @@ void changeSize(int w, int h) {
 	h = w / 16.0 * 9.0;
 	float ratio = w * 1.0 / h;
 
-	h = w / 16.0 * 9.0;
+	h = w / 16.0 * 9.0;		//this ensures it's in 16:9
 	glutReshapeWindow(w, h); //Return window to my size.
 								//https://www.opengl.org/resources/libraries/glut/spec3/node23.html
 
@@ -136,9 +132,9 @@ void changeSize(int w, int h) {
 	width = w;
 }
 
-float mousePosX(int x) {
-	return 2.0f * ((float)x - ((float)width / 2.0f)) / (float)width;
-}
+float mousePosX(int x) {												//these functions calculate the mouse position
+	return 2.0f * ((float)x - ((float)width / 2.0f)) / (float)width;	//in terms of the space coordinates
+}												
 float mousePosY(int y) {
 	return -2.0f * ((float)y - ((float)height / 2.0f)) / (float)height;
 }
@@ -149,7 +145,7 @@ void releaseKey(int key, int x, int y) {
 
 	switch (key) {
 	case GLUT_KEY_RIGHT:
-		if (m < optimised_solution.size()) {
+		if (m < optimised_solution.size()) {			//this will do a move 
 			do_move_on_cube(optimised_solution[m]);
 			m++;
 		}
@@ -158,7 +154,7 @@ void releaseKey(int key, int x, int y) {
 
 	case GLUT_KEY_LEFT: 
 		std::vector <short> last_move;
-		if (m - 1 >= 0 && prev_moves.size() == 0) {
+		if (m - 1 >= 0 && prev_moves.size() == 0) {					//this will undo a move
 			for (unsigned char i = 0; i != 3; i++) {
 				last_move.push_back(optimised_solution[m - 1]);
 			}
@@ -169,7 +165,7 @@ void releaseKey(int key, int x, int y) {
 		else if (prev_moves.size() > 0) {
 			short m = prev_moves.back();
 			prev_moves.pop_back();
-			do_move_on_cube(m);	do_move_on_cube(m);	do_move_on_cube(m);
+			do_move_on_cube(m);	do_move_on_cube(m);	do_move_on_cube(m);		//performing a move 3 times reverses it
 		}
 
 		break;
@@ -182,9 +178,9 @@ void mouseButton(int button, int state, int x, int y) {
 		start = clock();
 	}
 
-	if (((clock() < CLOCKS_PER_SEC * 0.3f + start) || net == true) && mousePosX(x) < 0.65f && mousePosX(x) > -0.1f && solve_mode == true) {
+	if (((clock() < CLOCKS_PER_SEC * 0.3f + start) || net == true) && mousePosX(x) < 0.65f && mousePosX(x) > -0.1f && solve_mode == true) {		
 
-		if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && optimised_solution.size() == 0) {
+		if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && optimised_solution.size() == 0) {				
 			unsigned char pixel[4];
 			glReadPixels(x, glutGet(GLUT_WINDOW_HEIGHT) - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
 
@@ -192,13 +188,13 @@ void mouseButton(int button, int state, int x, int y) {
 				unsigned char face = pixel[0] % 247;
 				unsigned short facelet_number = pixel[2] % 247;
 
-				if (facelet_number != 4 && colouring == -1) {
+				if (facelet_number != 4 && colouring == -1) {					//this will cycle through each of the colours
 					facelet_numbers[9 * face + facelet_number]++;
 					facelet_numbers[9 * face + facelet_number] = facelet_numbers[9 * face + facelet_number] % 6;
 				}
 
-				else if (facelet_number != 4 && facelet_numbers[9 * face + facelet_number] != colouring) {
-					facelet_numbers[9 * face + facelet_number] = colouring;
+				else if (facelet_number != 4 && facelet_numbers[9 * face + facelet_number] != colouring) {		//this sets the colour to what was clicked
+					facelet_numbers[9 * face + facelet_number] = colouring;										//in the bottom right
 				}
 
 				else if (facelet_number != 4 && facelet_numbers[9 * face + facelet_number] == colouring) {
@@ -212,28 +208,23 @@ void mouseButton(int button, int state, int x, int y) {
 
 	else if (mousePosX(x) > 0.65f) {
 		unsigned char pixel[4];
-		glReadPixels(x, glutGet(GLUT_WINDOW_HEIGHT) - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
-
-		if (pixel[0] == 255 && pixel[1] == 255 && pixel[2] == 255) {
-			colouring = U;
+		glReadPixels(x, glutGet(GLUT_WINDOW_HEIGHT) - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);		//this determines what 
+																										//to colour a square in
+		if (pixel[0] == 255 && pixel[1] == 255 && pixel[2] == 255) {									//based off what you pressed
+			colouring = U;																				//in the bottom right
 		}
-
 		else if (pixel[0] == 255 && pixel[1] == 0 && pixel[2] == 0) {
 			colouring = R;
 		}
-
 		else if (pixel[0] == 0 && pixel[1] == 255 && pixel[2] == 0) {
 			colouring = F;
 		}
-
 		else if (pixel[0] == 255 && pixel[1] == 255 && pixel[2] == 0) {
 			colouring = D;
 		}
-
 		else if (pixel[0] == 255 && pixel[1] == 169 && pixel[2] == 0) {
 			colouring = L;
 		}
-
 		else if (pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 255) {
 			colouring = B;
 		}
@@ -244,8 +235,8 @@ void mouseButton(int button, int state, int x, int y) {
 
 		// when the button is released
 		if (state == GLUT_UP) {
-			xangle += deltaAngleA;
-			yangle += deltaAngleB;
+			xangle += deltaAngleA;		//this determines the angle to leave the cube in
+			yangle += deltaAngleB;		//when you release the button
 			oldx = -1;
 			oldy = -1;
 
@@ -267,8 +258,8 @@ void mouseButton(int button, int state, int x, int y) {
 		}
 	}
 
-	if (button == GLUT_LEFT_BUTTON && menu == true && state == GLUT_UP) {
-		float xPos = mousePosX(x);
+	if (button == GLUT_LEFT_BUTTON && menu == true && state == GLUT_UP) { //this checks for clicking on each of the buttons on	 
+		float xPos = mousePosX(x);											//on the menu
 		float yPos = mousePosY(y);
 
 		if (xPos <= -0.05f && xPos >= -0.65f &&			//This is for the virtual cube
@@ -373,6 +364,7 @@ void mouseButton(int button, int state, int x, int y) {
 }
 
 void mouseMove(int x, int y) {
+	//this rotates around a cube by changing the coordinates of the camera position
 
 	// this will only be true when the left button is down
 	if ((oldx >= 0 || oldy >= 0) && net == false) {
@@ -410,52 +402,52 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		}
 
 		else if (key == 13) {			//press enter to solve
-		std::string facelet_rep;
-		for (unsigned short i = 0; i != 54; i++) {	//This converts the permutation to the facelet representation
-			switch (facelet_numbers[i]) {
-			case U:
-				facelet_rep.push_back('U');
-				break;
-			case R:
-				facelet_rep.push_back('R');
-				break;
-			case F:
-				facelet_rep.push_back('F');
-				break;
-			case D:
-				facelet_rep.push_back('D');
-				break;
-			case L:
-				facelet_rep.push_back('L');
-				break;
-			case B:
-				facelet_rep.push_back('B');
-				break;
-			default:
-				break;
+			std::string facelet_rep;
+			for (unsigned short i = 0; i != 54; i++) {	//This converts the permutation to the facelet representation
+				switch (facelet_numbers[i]) {
+				case U:
+					facelet_rep.push_back('U');
+					break;
+				case R:
+					facelet_rep.push_back('R');
+					break;
+				case F:
+					facelet_rep.push_back('F');
+					break;
+				case D:
+					facelet_rep.push_back('D');
+					break;
+				case L:
+					facelet_rep.push_back('L');
+					break;
+				case B:
+					facelet_rep.push_back('B');
+					break;
+				default:
+					break;
+				}
+			}
+
+			m = 0;
+			optimised_solution.clear();
+			prev_moves.clear();
+			optimised_solution = solve(facelet_rep);
+
+			if (optimised_solution[0] == -1) { optimised_solution.clear(); }
+
+			if (debug == true) {
+				do_move_on_cube(optimised_solution);
+				m = optimised_solution.size();
+				std::cout << optimised_solution.size() << "\n";
 			}
 		}
-
-		m = 0;
-		optimised_solution.clear();
-		prev_moves.clear();
-		optimised_solution = solve(facelet_rep);
-
-		if (optimised_solution[0] == -1) { optimised_solution.clear(); }
-
-		if (debug == true) {
-			do_move_on_cube(optimised_solution);
-			m = optimised_solution.size();
-			std::cout << optimised_solution.size() << "\n";
-		}
-	}
 
 		else if (key == 32) {					//press space to swap
 			net = !net;
 
-			centrex = 0.5f; centrey = 1.5f; centrez = -1.5f;	//This is the default camera angle
-			eyex = 6.5f; eyey = 5.0f; eyez = 4.5f;
-			xangle = -4.0f; yangle = -1.0f;
+		centrex = 0.5f; centrey = 1.5f; centrez = -1.5f;
+		eyex = 6.5f; eyey = 5.0f; eyez = 4.5f;
+		xangle = -4.0f; yangle = -1.0f;
 		}
 
 		else if (	key == 'u' ||
@@ -465,12 +457,12 @@ void processNormalKeys(unsigned char key, int x, int y) {
 					key == 'l' ||
 					key == 'b' ) {
 
-				key = tolower(key);
-				short m;
-				switch (key) {
-				case 'u':
-					m = U;
-					break;
+			key = tolower(key);
+			short m;
+			switch (key) {
+			case 'u':
+				m = U;
+				break;
 
 				case 'r':
 					m = R;
@@ -516,38 +508,38 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		}
 
 		else if (key == 'Z') {		//output the facelet colours
-		std::cout << "\n";
-		for (unsigned short i = 0; i != 54; i++) {
-			switch (facelet_numbers[i]) {
-			case U:
-				std::cout << "U, ";
-				break;
-			case R:
-				std::cout << "R, ";
-				break;
-			case F:
-				std::cout << "F, ";
-				break;
-			case D:
-				std::cout << "D, ";
-				break;
-			case L:
-				std::cout << "L, ";
-				break;
-			case B:
-				std::cout << "B, ";
-				break;
-			default:
-				break;
+			std::cout << "\n";
+			for (unsigned short i = 0; i != 54; i++) {
+				switch (facelet_numbers[i]) {
+				case U:
+					std::cout << "U, ";
+					break;
+				case R:
+					std::cout << "R, ";
+					break;
+				case F:
+					std::cout << "F, ";
+					break;
+				case D:
+					std::cout << "D, ";
+					break;
+				case L:
+					std::cout << "L, ";
+					break;
+				case B:
+					std::cout << "B, ";
+					break;
+				default:
+					break;
+				}
+			
+				if ((i + 1) % 9 == 0 && i > 0) {
+					std::cout << "\n";
+				}
 			}
-
-			if ((i + 1) % 9 == 0 && i > 0) {
-				std::cout << "\n";
-			}
+			
+			std::cout << "\n\n";
 		}
-
-		std::cout << "\n\n";
-	}
 
 		//the below if statement was to predefine each of the 26 cubes
 		//used for testing
@@ -802,67 +794,65 @@ void processNormalKeys(unsigned char key, int x, int y) {
 		}
 
 		set_facelet_numbers(colour_perm);
-	}
+		}	//all of this is test data so I have not included it in the final code in my report
 
 		else if (key == 'q') {
 		reset_colours();
 		m = 0;
 		optimised_solution.clear();
 		prev_moves.clear();
-	}
+		}
 
 		else if (key == 'i' && net == false) {
 			up_vec = -up_vec;
 		}
-	}
-}
 
-void change_colour_keypress(unsigned char key, int x, int y) {
-	if ((key == 'U' ||
-		key == 'R' ||
-		key == 'F' ||
-		key == 'D' ||
-		key == 'L' ||
-		key == 'B') && glutGetModifiers() != GLUT_ACTIVE_SHIFT){
-		unsigned char pixel[4];
-		glReadPixels(x, glutGet(GLUT_WINDOW_HEIGHT) - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
+		if ((key == 'U' ||
+			key == 'R' ||
+			key == 'F' ||
+			key == 'D' ||
+			key == 'L' ||
+			key == 'B') && glutGetModifiers() != GLUT_ACTIVE_SHIFT) {		//this will only occur if caps lock is pressed
 
-		if (!(pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0) && mousePosX(x) < 0.65f && mousePosX(x) > -0.2f) {
-			unsigned char face = pixel[0] % 247;
-			unsigned short facelet_number = pixel[2] % 247;
+			unsigned char pixel[4];
+			glReadPixels(x, glutGet(GLUT_WINDOW_HEIGHT) - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
 
-			short colour_key = -1;
+			if (!(pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0) && mousePosX(x) < 0.65f && mousePosX(x) > -0.1f) {
+				unsigned char face = pixel[0] % 247;
+				unsigned short facelet_number = pixel[2] % 247;
 
-			//The below switch case enumerates each of the 6 cases and sets the colour for the key based of the input
-			switch (key) {
-			case 'U':
-				colour_key = U;
-				break;
-			case 'R':
-				colour_key = R;
-				break;
-			case 'F':
-				colour_key = F;
-				break;
-			case 'D':
-				colour_key = D;
-				break;
-			case 'L':
-				colour_key = L;
-				break;
-			case 'B':
-				colour_key = B;
-				break;
-			default:
+				short colour_key = -1;
 
-				std::cout << "error\n";
-				break;
-			}
+				switch (key) {
+				case 'U':
+					colour_key = U;
+					break;
+				case 'R':
+					colour_key = R;
+					break;
+				case 'F':
+					colour_key = F;
+					break;
+				case 'D':
+					colour_key = D;
+					break;
+				case 'L':
+					colour_key = L;
+					break;
+				case 'B':
+					colour_key = B;
+					break;
+				default:
 
-			if (facelet_number != 4 && colour_key != -1) {
-				facelet_numbers[9 * face + facelet_number] = colour_key;
+					std::cout << "error\n";
+					break;
+				}
+
+				if (facelet_number != 4 && colour_key != -1) {
+					facelet_numbers[9 * face + facelet_number] = colour_key;
+				}
 			}
 		}
-	}	
+	}
 }
 

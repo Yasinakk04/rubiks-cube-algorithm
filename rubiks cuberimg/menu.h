@@ -6,15 +6,12 @@
 #include <vector>
 
 #include "TextureMapper.h"
-//#include "TextureMapper.cpp"
 #include "GL\glut.h"
 
 //The below stores the moves in the solution
 std::vector <short> optimised_solution;
 short m = 0;
-//m is the move n=in the vector that's to be done
-
-
+//m is the move in the vector that's to be done
 
 GLuint _textureId; //The id of the texture
 
@@ -71,10 +68,6 @@ GLuint loadTexture(Image* image) {
 void initRendering() {
 
 	glEnable(GL_DEPTH_TEST);
-
-	//glEnable(GL_LIGHTING);
-
-	//glEnable(GL_LIGHT0);
 
 	glEnable(GL_NORMALIZE);
 

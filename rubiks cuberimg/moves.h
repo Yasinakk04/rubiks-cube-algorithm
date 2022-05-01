@@ -8,7 +8,7 @@
 #include "enums.h"
 #include "cubie.h"
 
-cubie U_turn({ UBR, URF, UFL, ULB, DFR, DLF, DBL, DRB },
+cubie U_turn({ UBR, URF, UFL, ULB, DFR, DLF, DBL, DRB },		//these define the cubes for each of the 6 turns
 		{ 0, 0, 0, 0, 0, 0, 0, 0 },
 		{ UB, UR, UF, UL, DR, DF, DL, DB, FR, FL, BL, BR },
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });

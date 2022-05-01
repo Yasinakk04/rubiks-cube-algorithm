@@ -1,4 +1,3 @@
-
 /*
  * GL03Viewport.cpp: Clipping-area and Viewport
  * Implementing reshape to ensure same aspect ratio between the
@@ -57,7 +56,6 @@ int main(int argc, char** argv) {
 
 	// enter GLUT event processing cycle
 	glutMainLoop();
-
 
 	return 1;
 }

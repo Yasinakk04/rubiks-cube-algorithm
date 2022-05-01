@@ -83,16 +83,3 @@ _________________________________
 enum move : unsigned short {
 	U, R, F, D, L, B
 };
-
-//const std::array <std::array <short, 3>, 8>  cornerFacelet = {
-// {facelets.F3, facelets.U9, facelets.R1},
-// {facelets.R3, facelets.U3, facelets.B9},
-// {facelets.L1, facelets.U1, facelets.B7},
-// {facelets.F1, facelets.U7, facelets.L3},
-// {facelets.F9, facelets.R7, facelets.D3},
-// {facelets.R9, facelets.D9, facelets.B3},
-// {facelets.L7, facelets.D7, facelets.B1},
-// {facelets.D7, facelets.B1, facelets.L9}
-//};
-
-//std::array <std::array <int, 3>, 12>  edgeFacelet =

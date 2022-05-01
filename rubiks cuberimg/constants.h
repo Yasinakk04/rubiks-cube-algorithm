@@ -1,9 +1,7 @@
 #pragma once
-
 #include "enums.h"
 #include <string>
 #include <array>
-
 
 const short No_corner = 8;
 const short No_edge = 12;
